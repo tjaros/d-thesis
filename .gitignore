@@ -1,0 +1,13 @@
+*
+
+!.gitignore
+!*.tex
+!*.bib
+!makefile
+!english-mimosis.lbx
+!mimosis.cls
+!Sources/
+!Sources/*.pdf
+!Sources/*.tex
+!img
+!img/*
