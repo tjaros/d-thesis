@@ -37,6 +37,17 @@
 % correctly.
 \usepackage{etoolbox}
 \usepackage{listings}
+\lstset{
+  basicstyle=\ttfamily,
+  columns=fullflexible,
+  frame=single,
+  keywordstyle=\color{red},
+  breaklines=true,
+  postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+}
+
+
+\usepackage{dirtree}
 
 \usepackage[binary-units=true]{siunitx}
 \DeclareSIUnit\px{px}
@@ -146,9 +157,10 @@
 
   %\include{Sources/Practical}
   %\include{Sources/Analysis}
-
+  
+  \include{Sources/Implementation}
+  
   \bookmarksetup{startatroot}
-
 
   %\include{Sources/Conclusion}
   %\include{Sources/Appendix}
@@ -156,7 +168,7 @@
   \printindex
   \begingroup
   \sloppy
-  \printbibliography
+  %\printbibliography
 \endgroup
 
 

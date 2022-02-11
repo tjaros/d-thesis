@@ -1,0 +1,153 @@
+\chapter{AlgTest process tool}
+In this chapter, we describe the development details of the tool called \texttt{AlgTest Process} of which re-implementation was performed. The tasks for which the tool is responsible are processing the datasets created by automatic testing tools targeted at JavaCard smart cards and Trusted Platform Modules and generating various outputs from these datasets in HTML files.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{img/scheme.png}
+    \caption{Scheme of AlgTest process application}
+    \label{fig:algtest-process-scheme}
+\end{figure}
+\todo{Schema je WIP a toto je skor placeholder}
+
+\section{Device profiles}
+The data we are working with is in the form of CSV files. Each file represents the test results of a particular device, a so-called profile. Currently, supported profiles are JavaCard smart cards or Trusted Platform Modules.
+
+\subsection{Device profile types}
+There are two types of profiles for JavaCard smart cards.
+\begin{enumerate}
+    \item \textbf{Support} Contains information about support for specific cryptographic algorithms defined in JavaCard API. The algorithm may be supported, unsupported, or not successfully tested.
+    \item \textbf{Performance} Contain run time benchmarks for each algorithm defined in JavaCard API and is further divided into
+    \begin{enumerate}
+        \item \textbf{Fixed} Each algorithm is benchmarked for fixed data length of input data
+        \item \textbf{Variable} Each algorithm is benchmarked for variable data lengths of input data
+    \end{enumerate}
+\end{enumerate}
+
+Profiles for Trusted Platform Modules are similarly divided into Performance and Support profiles, except there are no further divisions for performance profiles.
+
+\subsection{Parsing}
+The data, namely the run time results we are working with, were collected over the years in parallel with the development of the tools which generate them. Consequentially the data does not have the same form, as there is no prescribed schema. Therefore it is convenient to design suitable means of accessing it. In the re-implementation of the app, the mapping of CSV files into corresponding classes was introduced. This approach makes it significantly easier to manipulate the data, and the resulting code readability is better.
+
+\section{Results}
+The tool produces various types of visualization and tables in HTML pages. These results simplify getting information about the tested devices for the human reader. The contents are made responsive, and some visualizations are more interactive.
+
+This section describes each output of the tool.
+
+\subsection{Algorithm execution time}
+Algorithm execution time pages are generated for each card separately and present an alternative for searching in the corresponding raw CSV file. The page contains metadata detailing the test performed on this smart card, followed by tables containing algorithm measurement values. There are multiple tables because the tested algorithms are divided into numerous categories. A quick link for each of these categories is provided as a utility to aid searching on the page.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{img/NXP JCOP4 P71D321 execution-time table.png}
+    \caption{Algorithm execution timetable of NXP JCOP4 P71D321}
+    \label{fig:execution-time-table}
+\end{figure}
+
+\subsection{Comparative table}
+The comparative table allows for a simple comparison between cards. Multiple comparative tables are generated in one file divided into symmetric, asymmetric cryptography, and frequently used algorithms, also called Top Functions. The tables themselves allow for sorting of the cards just by simply clicking on the column containing values according to which rows will be sorted.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{img/comparative-table.png}
+    \caption{Comparative table}
+    \label{fig:comparative-table}
+\end{figure}
+
+\subsection{Scalability graphs}
+Scalability graphs illustrate a single card's performance for a specific algorithm depending on input data length. The graph is generated for each method that was measured. The time scale from minimum to maximum measurement value for each measurement of the given algorithm and average time both in milliseconds can be found by simply hovering over the point in the graph.
+
+\begin{figure}[H]
+    \centering  
+    \includegraphics[width=\textwidth-3.5cm]{img/NXP_JCOP_J3D081_v2.4.2R2 scalability graph.png}
+    \caption{
+    Scalability chart of NXP JCOP J3D081 v2.4.2R2 showing performance of DES algorithm in CBC mode, for data lengths We can observe 16, 32, 64, 128 bits the performance seems to be constant, following 256, 512 bits an almost linear increase.
+    }
+    \label{fig:scalability-chart}
+\end{figure}
+
+\subsection{Radar graphs}
+Radar graphs visualize the card's performance compared to all other tested cards. A percentage describes overall performance on a scale of 0 to 100, where closer to 100 is faster. Zero value signifies either that the algorithm is not supported or not successfully tested. By hovering over the points on edge, we can see the actual average operation time for the chosen algorithm. The algorithms chosen for comparison were selected as most frequently used, and in the context of the tool, we call them Top Functions. 
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{img/JC30M48CR radar graph.png}
+    \caption{
+    The radar graph of the JC30M48CR card  can be considered excellent, apart from no evident support for algorithms involving Elliptic Curve Cryptography signified by a cut-out at the bottom of the graph.
+    }
+    \label{fig:radar-graph}
+\end{figure}
+
+\subsection{Support table}
+The support table contains information about support for a particular algorithm from the specific smart card. During the test for algorithm support, we can get multiple results. Either the algorithm is supported,  unsupported, error was returned, or lastly, the algorithm was not tested. Each of these results is denoted by the content and the color of the cell. By hovering over the error cell, we can find out what kind of exception or error was returned from the card. The table also provides means to filter the cards according to their support for categories of algorithms.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{img/support-table.png}
+    \caption{Support table}
+    \label{fig:support-table}
+\end{figure}
+
+\subsection{Similarity table}
+The similarity table shows how a chosen pair of cards differ in the performance of a selected group of operations. The similarity is computed for six different categories of algorithms and results in a percentage on a scale of 0 to 100, also signified by the color of each cell. The higher number indicates higher performance similarity. The cards in the table are sorted so that most similar cards are in the top left corner and the least similar are in the bottom right corner.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{img/similarity-table.png}
+    \caption{Similarity table}
+    \label{fig:similarity-table}
+\end{figure}
+
+\section{Tools}
+The \texttt{AlgTest process} tool incorporates various instruments to produce desired outputs. As the tool itself is written in Python it is able to utilize various packages from \texttt{PyPI}\footnote{\url{https://pypi.org/}} to aid future extensions.
+
+\begin{itemize}
+    \item For creation and manipulation of HTML documents a Python library called \texttt{dominate}\footnote{\url{https://pypi.org/project/dominate/}} is used. Its usage is relatively straightforward, and the code you write is in pure python instead of using additional templating language as in popular web frameworks.
+    \item The styling is taken care of by a CSS framework called \texttt{bootstrap}\footnote{\url{https://getbootstrap.com/}} which allows for designing responsive web pages using premade CSS classes and Javascript. The framework itself is extensively used and regularly updated with new versions.
+    \item \texttt{Google Charts API}\footnote{\url{https://developers.google.com/chart}}  is utilized for Scalability graph visualisation.
+    \item \texttt{D3.js library}\footnote{\url{https://d3js.org/}}  is used for visualisation of Radar graphs.
+\end{itemize}
+
+\section{Installation and usage}
+\subsection{Installation}
+After cloning into repository containing \texttt{AlgTest process} tool, it is necessary to install a few dependencies. The project includes a script called \texttt{setup.py} which, when ran installs required packages. It may be convenient to create a Python virtual environment that allows us to install and manage Python project packages locally without unnecessary global installation. It is important to create and source a virtual environment before running the setup script.
+\begin{lstlisting}[language=bash]
+    $ python -m venv venv
+    $ source venv/bin/activate
+    $ python setup.py
+\end{lstlisting}
+
+\subsection{Folder structure}
+\begin{itemize}
+    \item \texttt{algtestprocess}
+        \begin{itemize}
+            \item \texttt{modules} -- folder containing \texttt{algtestprocess} modules.
+                \begin{itemize}
+                    \item \texttt{components} -- folder containing reusable code for parts of HTML documents. Each file contains classes, constants related to one component.
+                    \item \texttt{pages} -- folder containing files with classes corresponding to generated HTML pages, each page has a separate file containing class which is responsible for page creation.
+                    \item \texttt{parser}
+                        \begin{itemize}
+                            \item \texttt{javacard} -- folder containing parser implementations for JavaCard profiles
+                            \item \texttt{tpm} -- folder containing parser implementations for TPM profiles
+                        \end{itemize}
+                    \item \texttt{config.py} -- file containing classes for choice of algorithms used in specific pages
+                    \item \texttt{jcalgtest.py} -- file containing classes for storage of Java Card profiles
+                    \item \texttt{tpmalgtest.py} -- file containing classes for storage of TPM profiles
+                \end{itemize}
+        \end{itemize}
+    \item \texttt{setup.py} -- script for installation of dependencies and download of results from their official GitHub repository\footnote{\url{https://github.com/crocs-muni/jcalgtest_results}}
+    \item \texttt{process.py} -- main entrypoint for generation of outputs, its usage is described in following section
+\end{itemize}
+
+\subsection{Usage}
+The script process.py provides a CLI in the following way:
+
+\begin{itemize}
+    \item Set of operations from \texttt{process, all, execution-time, comparative, radar, scalability, similarity, support}. We can select multiple operations; however, \texttt{process} operation needs to be run at least once so that some issues with CSV files are fixed, and JSON outputs are generated for the following operations which use them. In the subsequent runs the \texttt{process} argument is not necessary.
+    \item \texttt{-i/-{}-results-dir} A directory with measurement results.
+    \item \texttt{-o/-{}-output-dir} Output directory to which the HTML outputs are stored.
+\end{itemize}
+
+\begin{lstlisting}[language=bash]
+    $ python process.py process all --results-dir ./jcalgtest_results/ --output-dir ./jcalgtest_results/javacard/web
+    $ python process.py radar scalability -i ./jcalgtest_results/ -o ./jcalgtest_results/javacard/web
+\end{lstlisting}
