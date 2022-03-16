@@ -1,0 +1,22 @@
+\chapter{JCAlgTest process}
+\section{JCAlgTest}
+The \texttt{JCAlgTest}\footnote{https://github.com/crocs-muni/JCAlgTest} is a suite of tools used for automated analysis
+of cryptographic smartcards, specifically those running JavaCard platform. It takes advantage of officially available
+JavaCard API to test for support of specific algorithms, measures their perfomance characteristics, and collects general information about the tested smart card.
+
+Suite consists of three modules:
+\begin{itemize}
+  \item
+        \texttt{JCAlgTestJavaCard} A JavaCard applet which needs to be uploaded onto the smart card we want to test. According to instructions from \texttt{JCAlgTestClient} application to execute code for specified operation. Firstly it tries to instantiate particular object belonging to the operation. If it succeeds, that means that the operation is supported and in case of performance testing it can proceed further with the execution. If the instantiation was unsuccessful, a specific exception is thrown, which usually means that the operation is not supported.
+  \item
+        \texttt{JCAlgTestClient} A host application which is responsible for communication with \texttt{JCAlgTestJavaCard} applet via APDU commands and responses. The information is gathered and recorded. The execution time measurement during the performance testing  is estimated externally due to the limitations of JavaCard platform which does not support for any time measurement methods.
+  \item
+        \texttt{JCAlgTestProcess} Application which is used for visualisation of JavaCard and TPM results. Results in the form of CSV files are processed into various kinds of visualisations and tabular data. As the state of the tool is deemed obsolete, its reimplementation was needed and was performed as one of the goals of this thesis. In the following sections the reasons behind the reimplementation and the new design will be discussed.
+\end{itemize}
+
+\section{JCAlgTest process}
+\subsection{History}
+\subsection{Current state}
+\subsection{Problems}
+
+\section{Improvements}
