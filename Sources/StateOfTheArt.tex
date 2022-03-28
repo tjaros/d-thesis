@@ -29,28 +29,82 @@ The hardware specification was not standardized in TPM 1.1b. This caused various
 
 While being in development from 2005 to 2009, the TPM 1.2 specification went through numerous releases. Regarding the need to store shipped certificates for TPM's endorsement keys on a hard disk, about 2KB of non-volatile RAM was added. A new design needed to be made to support key migration between different TPMs because the old design of key migration would in TPM 1.12 require users to have TPM owner authorization. The new idea enabled users to create migratable keys and then relied on a designated third party that could exclusively migrate such keys. Said keys could also be certified. Thus, they were called Certified Migratable keys. An internal timer able to synchronize with the external one was added in 1.12, which has its use when signing data due to timestamps. Version 1.12 required API to provide backward compatibility for 1.1b. This increased the complexity of the new specification. The TPM 1.12 became widely used in x86 personal computers starting 2005 and later in 2008 also in servers~\cite[p.~3]{arthur2015practical}.
 
-One factor contributing to the need for yet another specification after TPM 1.12 was that in 2005, some substantial collision attacks were found against the SHA-1 hash function. Analysis regarding the use of SHA-1 in TPM revealed the attacks not being applicable~\cite{tcg_tpm1.12_sha-1_uses}. Due to the extensive use of SHA-1 in TPM 1.12, the new specification had to permit any hashing algorithm without making any changes to the specification. A so-called \texttt{digest agility}. Another problem was the lack of a symmetric algorithm required in the TPM specification. The use of RSA for encryption of serialized data was impractical because RSA operations are slow. Neither would help support bigger-sized RSA keys because that would cause a higher chip cost, incompatibility issues, and lower performance. That's why it was decided that the following specification would adopt support for symmetric encryption, which is faster and more suitable for encryption of large byte streams. Having this many problems, an overhaul of the specification would be convenient. And the architects of TPM 2.0 took advantage of the situation~\cite[p.~4]{arthur2015practical}.
+One factor contributing to the need for yet another specification after TPM 1.12 was that in 2005, some substantial collision attacks were found against the SHA-1 hash function. Analysis regarding the use of SHA-1 in TPM revealed the attacks not being applicable~\cite{tcg_tpm1.12_sha-1_uses}. Due to the extensive use of SHA-1 in TPM 1.12, the new specification had to permit any hashing algorithm without making any changes to the specification. A so-called digest agility. Another problem was the lack of a symmetric algorithm required in the TPM specification. The use of RSA for encryption of serialized data was impractical because RSA operations are slow. Neither would help support bigger-sized RSA keys because that would cause a higher chip cost, incompatibility issues, and lower performance. That's why it was decided that the following specification would adopt support for symmetric encryption, which is faster and more suitable for encryption of large byte streams. Having this many problems, an overhaul of the specification would be convenient~\cite[p.~4]{arthur2015practical}.
+
+
 
 \section{TPM 2.0}
+The chance to overhaul the specification given to TPM 2.0 architects and developers, was turned into much more than support for digest agility and for symmetric cryptography algorithms. A support for algorithm agility was added which allows for various cryptographic primitives to be implemented with different algorithms. Authorization methods were unified and expanded, to allow for building of complex authorization policies. TPM management was simplified in order for the TPM to be more useful to applications.
+
 %First sentence is prob a nonsense
 The main goal of the new specification was to provide a library describing features and commands available for implementation. This architecture allows designers to choose the required level of security, which may vary for different use cases. 
 
+This section describes various types of TPMs, their basic features and use cases.
+
 \subsection{Types}
-There is no single correct way how should TPM 2.0 be implemented. Different usage scenarios may require a different type of TPM. They may come in different shapes assuming they are hardware-based, may be integrated into another chip, or may be implemented in software. According to \cite{tcg_tpm2_briefintro}, there are five main types of a TPM.
+There is no single correct way on how should TPM 2.0 be implemented. TPM specification does not dictate if a TPM should be implemented in hardware or software. Different usage scenarios may require a different type of TPM. The TPM specification only defines functionality to be adhered by its implementations. 
+
+According to \cite{tcg_tpm2_briefintro}, five types of a TPM are considered.
 
 \begin{itemize}
-    \item \textbf{Discrete TPM} is a hardware implementation of TPM specification. It is implemented as a standalone chip designed to be highly secure and tamper-proof and used to protect even against very advanced attacks in security-critical infrastructures.
+    \item \textbf{Discrete TPM} is a hardware implementation of TPM specification. It is implemented as a standalone chip designed to be highly secure and tamper-proof. It can be used to protect even against very advanced attacks in security-critical infrastructures.
     \item \textbf{Integrated TPM} is still implemented in hardware, although as a part of a more complex chip, such as CPU, which may have other responsibilities than security. They are not required to be tamper-resistant because such a requirement may immensely increase such chips' cost.
     \item \textbf{Firmware TPM} runs in the CPU's trusted execution environment (TEE), which protects and isolates the code and data along with providing confidentiality and integrity guarantees. Firmware TPM's security is very dependent on the TEE's security.
-    \item \textbf{Software TPM} is implemented as an emulator ideally used for testing and system prototyping purposes due to its weak security.
     \item \textbf{Virtual TPM} does not require a physical chip to be present. It  entirely relies on the fact, its users will be hypervisors, and the Virtual TPM itself will be isolated from the software running on the virtual machine to protect its code. Virtual TPMs may provide the same level of security as discrete TPMs.
+    \item \textbf{Software TPM} is implemented as an emulator ideally used for testing and system prototyping purposes due to its weak security.
 \end{itemize}
 
+\subsection{Architecture}
+Although there is no prescribed form of TPM in terms of hardware or software, the specification requires its implementations to posses select few functional components \cite{tcg_p1_architecture}. Selection of important building blocks of TPM is shown in \myref{Figure}{fig:tpm-arch-scheme}.
 
-\subsection{Functionality}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth-6cm]{img/tpm-arch-diagram.png}
+    \caption{Important blocks of TPM architecture}
+    \label{fig:tpm-arch-scheme}
+\end{figure}
+
+\subsubsection{Cryptography Subsystem}
+Provides implementations of various cryptographic primitives, most of which may be used by other modules. These primitives generally consist of 
+\begin{itemize}
+    \item Hash functions which may be used by external software or another TPM operations and primitives.
+    \item Message Authentication Codes use either beforementioned Hashing capabilities (HMAC).
+    \item Symmetric cryptography
+        \begin{itemize}
+            \item Symmetric block cipher encryption/decryption
+            \item Symmetric block cipher modes of operation
+        \end{itemize}
+    \item Asymmetric cryptography
+        \begin{itemize}
+            \item Signatures and Signature verification
+            \item Shared secret establishment
+        \end{itemize}
+    \item Random Number Generation
+    \item Key Generation
+\end{itemize}
+
+\subsubsection{Authorization Subsystem}
+
+\subsubsection{Non-Volatile Memory}
+
+\subsubsection{Random Access Memory}
+
+\subsubsection{Power Detection Module}
 
 
-\section{Performance analysis}
+
+
+
+
+
+\subsection{Use cases}
+
+
+
+
+\section{Research}
+
+
 \subsection{tpm2-algtest}
 The \texttt{tpm2-algtest}\footnote{https://github.com/crocs-muni/tpm2-algtest} is a tool for automatic gathering of information about the TPM2 devices \cite{Struk2019thesis}. The tool uses libraries implementing Trusted Computing Group's TPM2 Software Stack\footnote{https://github.com/tpm2-software/tpm2-tss} which allows for simplification of development when programming applications supposed to interact with the TPM. The tool tests for support of specific commands and supporting routines, values of structures defined in the TPM 2.0 specification \cite{tcg_p3_commands, tcg_p4_supproutines, tcg_p2_structures}. Supported cryptographic algorithms are also subject to performance analysis where the time to execute such an algorithm is repeatedly measured and recorded. Additionally, the tool uses the TPM to generate key pairs for RSA and ECC-based algorithms so that they can be further analyzed by various means.
 goI
