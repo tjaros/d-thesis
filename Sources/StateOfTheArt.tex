@@ -64,34 +64,27 @@ Although there is no prescribed form of TPM in terms of hardware or software, th
     \label{fig:tpm-arch-scheme}
 \end{figure}
 
-\subsubsection{Cryptography Subsystem}
-Provides implementations of various cryptographic primitives, most of which may be used by other modules. These primitives generally consist of 
 \begin{itemize}
-    \item Hash functions which may be used by external software or another TPM operations and primitives.
-    \item Message Authentication Codes use either beforementioned Hashing capabilities (HMAC).
-    \item Symmetric cryptography
-        \begin{itemize}
-            \item Symmetric block cipher encryption/decryption
-            \item Symmetric block cipher modes of operation
-        \end{itemize}
-    \item Asymmetric cryptography
-        \begin{itemize}
-            \item Signatures and Signature verification
-            \item Shared secret establishment
-        \end{itemize}
-    \item Random Number Generation
-    \item Key Generation
+
+\item \textbf{Cryptography Subsystem} which provides implementations of various cryptographic primitives, most of which may be used by other modules. These primitives generally consist of 
+\begin{itemize}
+    \item Hash functions which may be used by external software, different TPM operations such as PCR extend, or other cryptographic primitives. 
+    \item Symmetric cryptography providing means of symmetric encryption and decryption along with various block cipher modes of operation.
+    \item Asymmetric cryptography used for signatures, signature verification, and shared secret establishment. The only supported algorithms are RSA and ECC.
+    \item Message Authentication Codes use either beforementioned Hashing capabilities (HMAC) or Symmetric ones (SMAC).
+    \item Random Number Generator is used as a source of randomness in TPM , because randomness is necessary for generation of nonces used in key generation and also takes an important place in signatures.
+    \item Key Generation using RNG value either directly as secret key or as a seed to derive from using some approved key derivation function.
 \end{itemize}
 
-\subsubsection{Authorization Subsystem}
+\item \textbf{Authorization Subsystem} which tests that each executed command has required authorisation to access Shielded Locations. 
 
-\subsubsection{Non-Volatile Memory}
+\item \textbf{Non-Volatile Memory} provides persistent storage space for allocation and contains Shielded Locations.
 
-\subsubsection{Random Access Memory}
+\item \textbf{Random Access Memory} provides storage space which is not required to be persistent. It also contains Shielded Locations, most notably PCRs of which accumulative property is used to process logs of system state which may be subsequently validated. This is particularly useful when we want to measure boot sequence of the system so that no malicious changes may be applied to it.
 
-\subsubsection{Power Detection Module}
+\item \textbf{Power Detection Module} handles TPM power states according to platform power state changes.
 
-
+\end{itemize}
 
 
 
