@@ -4,6 +4,12 @@ The Trusted Platform Module is a system component used as a cryptographic co-pro
 \section{Basic concepts}
 This section provides an overview of basic concepts mentioned trough in this work.
 
+\subsection{Trust}
+% Describe trust in trusted computing, TCG's definition and elaborate roots of trust
+
+\subsection{TPM protections}
+Abstractions called \texttt{Protected Capabilities} and \texttt{Protected Objects} were introduced by TCG in TPM specification. A \texttt{Protected Capability} is an operation that must be performed correctly for a TPM to be trusted, whereas a \texttt{Protected Object} is data that must be protected for a TPM operation to be trusted \cite[p.~31]{tcg_p1_architecture}. \texttt{Protected Objects} must be held in \texttt{Protected Locations} which are either in TPMs' \texttt{Shielded Locations} which are handled solely by \texttt{Protected Capabilities}, or encrypted to prevent disclosure of any sensitive information.
+
 \subsection{Platform Configuration Registers}
 Platform Configuration Registers (PCRs) are dynamic memory locations inside a TPM used to store integrity metrics of software and its configuration. These locations can only be updated using \texttt{extend} operation and also read for reporting or attestation. The \texttt{extend} operation makes use of the cryptographic hash function to combine the digest stored in the PCR and the new data. Cryptographic hash function map data of arbitrary size to the output of a fixed size. Such outputs are conventionally called hashes, message digests, or digests. These functions have one-way property: when given a message digest, it is difficult  to compute the message itself. The extend operation works in the following way:
 \begin{align*}
@@ -66,6 +72,8 @@ Although there is no prescribed form of TPM in terms of hardware or software, th
 
 \begin{itemize}
 
+\item \textbf{I/O Buffer} is location used for communication between host platform and TPM. Precise description of interfaces used for communication is left up to designers of such interfaces.
+
 \item \textbf{Cryptography Subsystem} which provides implementations of various cryptographic primitives, most of which may be used by other modules. These primitives generally consist of 
 \begin{itemize}
     \item Hash functions which may be used by external software, different TPM operations such as PCR extend, or other cryptographic primitives. 
@@ -86,11 +94,8 @@ Although there is no prescribed form of TPM in terms of hardware or software, th
 
 \end{itemize}
 
-
-
-
-
 \subsection{Use cases}
+
 
 
 
@@ -100,4 +105,3 @@ Although there is no prescribed form of TPM in terms of hardware or software, th
 
 \subsection{tpm2-algtest}
 The \texttt{tpm2-algtest}\footnote{https://github.com/crocs-muni/tpm2-algtest} is a tool for automatic gathering of information about the TPM2 devices \cite{Struk2019thesis}. The tool uses libraries implementing Trusted Computing Group's TPM2 Software Stack\footnote{https://github.com/tpm2-software/tpm2-tss} which allows for simplification of development when programming applications supposed to interact with the TPM. The tool tests for support of specific commands and supporting routines, values of structures defined in the TPM 2.0 specification \cite{tcg_p3_commands, tcg_p4_supproutines, tcg_p2_structures}. Supported cryptographic algorithms are also subject to performance analysis where the time to execute such an algorithm is repeatedly measured and recorded. Additionally, the tool uses the TPM to generate key pairs for RSA and ECC-based algorithms so that they can be further analyzed by various means.
-goI
