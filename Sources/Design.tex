@@ -1,22 +1,29 @@
-\chapter{JCAlgTest process}
-\section{JCAlgTest}
-The \texttt{JCAlgTest}\footnote{https://github.com/crocs-muni/JCAlgTest} is a suite of tools used for automated analysis
-of cryptographic smartcards, specifically those running the JavaCard platform. It takes advantage of officially available
-JavaCard API to test for support of specific algorithms measures their performance characteristics, and collects general information about the tested smart card.
+\chapter{Analysis and design}
+One of the objectives of this work was the creation of a tool for processing and visualization of results from TPM devices. Such a tool already exists, but it is hard to extend it, and it needs extensive refactoring, so it would be more beneficial to redesign it.
 
-The suite consists of three modules:
+This chapter describes the original tool for generating visualizations and discusses its problems and possible improvements. Then I discuss the design of the new application to replace the existing one.
+
+\section{JCAlgTest}
+The \texttt{JCAlgTest}\footnote{https://github.com/crocs-muni/JCAlgTest} is a suite of tools used for automated analysis of cryptographic smartcards, specifically those running the JavaCard platform. It takes advantage of the officially available JavaCard API to test for support of specific algorithms, measures their performance characteristics, and collects general information about the tested smart card. The suite consists of three modules:
 \begin{itemize}
   \item
-        \texttt{JCAlgTestJavaCard} A JavaCard applet that needs to be uploaded onto the smart card we want to test. According to instructions from \texttt{JCAlgTestClient} application to execute code for specified operation. Firstly it tries to instantiate a particular object belonging to the operation. If it succeeds, that means that the operation is supported and in the case of performance testing, it can proceed further with the execution. If the instantiation was unsuccessful, a specific exception is thrown, which usually means that the operation is not supported.
+        \texttt{JCAlgTestJavaCard} A JavaCard applet that needs to be uploaded onto the smart card we want to test. According to instructions from \texttt{JCAlgTestClient} application to execute code for specified operation. Firstly it tries to instantiate a particular object belonging to the operation. If it succeeds, that means that the operation is supported, and in the case of performance testing, it can proceed further with the execution. If the instantiation was unsuccessful, a specific exception is thrown, which usually means that the operation is not supported.
   \item
-        \texttt{JCAlgTestClient} A host application which is responsible for communication with \texttt{JCAlgTestJavaCard} applet via APDU commands and responses. The information is gathered and recorded. The execution time measurement during the performance testing  is estimated externally due to the limitations of the JavaCard platform which does not support any time measurement methods.
+        \texttt{JCAlgTestClient} A host application which is responsible for communication with \texttt{JCAlgTestJavaCard} applet via APDU commands and responses. The information is gathered and recorded. The execution time measurement during the performance testing  is estimated externally due to the limitations of the JavaCard platform, which does not support any time measurement methods.
   \item
-        \texttt{JCAlgTestProcess} Application which is used for visualization of JavaCard and TPM results. Results in the form of CSV files are processed into various kinds of visualizations and tabular data. As the state of the tool is deemed obsolete, its reimplementation was needed and was performed as one of the goals of this thesis. In the following sections, the reasons behind the reimplementation and the new design will be discussed.
+        \texttt{JCAlgTestProcess} Application which is used for visualization of JavaCard and TPM results. Results in the form of CSV files are processed into various kinds of visualizations and tabular data. As the state of the tool is deemed obsolete, its reimplementation was needed and was performed as one of the goals of this thesis. The reasons behind the reimplementation and the new design will be discussed in the following sections.
 \end{itemize}
 
 \section{JCAlgTest process}
-\subsection{History}
+The \texttt{JCAlgTest process} is an application used for tabular and chart visualisations of JavaCard smart card and TPM 2.0 run time data created by \texttt{JCAlgTest} and \texttt{tpm2-algtest} tools respectively. 
+
+This section will describe the application's current state and its problems.
 \subsection{Current state}
+The application is written in Java programming language. It is designed mainly as a command-line tool for generating HTML visualizations for JavaCard smart card run time data. Still, it also contains means of visualizing TPM 2.0 run time data. The project's website\footnote{\url{http://jcalgtest.org}} shows JavaCart smart card visualisations. Each type of visualization is performed by building an HTML file and either by embedding JavaScript calls to visualization functions contained in  \texttt{D3.js library} or \texttt{Google Charts API} or by creating a basic HTML table with added CSS styling and quality of life improvements such as sorting or filtering of entries using JavaScript. An \texttt{Apache Ant} command-line tool is used to build the application. The command line API is straightforward. The user needs to provide input and output directories and the type of visualization he wants to generate. 
+
 \subsection{Problems}
+Whole \texttt{JCAlgTest} suite was developed over several years by various people. Initial version of \texttt{JCAlgTest process} was created by Petr Švenda, my supervisor, along with rest of \texttt{JCAlgTest} suite. Then Rudolf Kvašňovský further developed the \texttt{JCAlgTest process} tool as a part of his bachelors thesis. From there on several smaller updates from various people were performed. The app serves its intended purpose, however there are some problems which make hard to expand it.
+
+One of the problems of the application is that there is no object representation of device profiles. The data is mostly stored in simple arrays. That is the reason why a relatively simple task of extending functionality may prove very difficult. Another problem is the amount of hard coded HTML tags into strings. One unintentional mistake of deleted angle bracket may corrupt whole HTML output.
 
 \section{Improvements}
