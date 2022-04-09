@@ -19,11 +19,33 @@ The \texttt{JCAlgTest process} is an application used for tabular and chart visu
 
 This section will describe the application's current state and its problems.
 \subsection{Current state}
-The application is written in Java programming language. It is designed mainly as a command-line tool for generating HTML visualizations for JavaCard smart card run time data. Still, it also contains means of visualizing TPM 2.0 run time data. The project's website\footnote{\url{http://jcalgtest.org}} shows JavaCart smart card visualisations. Each type of visualization is performed by building an HTML file and either by embedding JavaScript calls to visualization functions contained in  \texttt{D3.js library} or \texttt{Google Charts API} or by creating a basic HTML table with added CSS styling and quality of life improvements such as sorting or filtering of entries using JavaScript. An \texttt{Apache Ant} command-line tool is used to build the application. The command line API is straightforward. The user needs to provide input and output directories and the type of visualization he wants to generate. 
+The application is written in Java programming language. It is designed mainly as a command-line tool for generating HTML visualizations for JavaCard smart card run time data. Still, it also contains means of visualizing TPM 2.0 run time data. The project's website\footnote{\url{http://jcalgtest.org}} shows JavaCart smart card visualisations. Each type of visualization is performed by building an HTML file and either by embedding JavaScript calls to visualization functions contained in  \texttt{D3.js library} or \texttt{Google Charts API} or by creating a basic HTML table with added CSS styling and quality of life improvements such as sorting or filtering of entries using JavaScript. 
 
-\subsection{Problems}
-Whole \texttt{JCAlgTest} suite was developed over several years by various people. Initial version of \texttt{JCAlgTest process} was created by Petr Švenda, my supervisor, along with rest of \texttt{JCAlgTest} suite. Then Rudolf Kvašňovský further developed the \texttt{JCAlgTest process} tool as a part of his bachelors thesis. From there on several smaller updates from various people were performed. The app serves its intended purpose, however there are some problems which make hard to expand it.
+An \texttt{Apache Ant} command-line tool is used to build the application. It uses XML files to describe the build processes such as compiling, running, or testing. It is also supported by many programming IDEs, most notably Netbeans IDE or IntelliJ IDEA.
 
-One of the problems of the application is that there is no object representation of device profiles. The data is mostly stored in simple arrays. That is the reason why a relatively simple task of extending functionality may prove very difficult. Another problem is the amount of hard coded HTML tags into strings. One unintentional mistake of deleted angle bracket may corrupt whole HTML output.
+The \texttt{JCAlgTest process} provides a command-line API. The users can specify the input, output directory, and the type of visualization they want to generate.
+
+\subsection{Problems}\label{subsec:design-problems}
+The whole \texttt{JCAlgTest} suite was developed over several years by various people. An initial version of \texttt{JCAlgTest process} was created by Petr Švenda, my supervisor, along with the rest of \texttt{JCAlgTest} suite. Then Rudolf Kvašňovský further developed the \texttt{JCAlgTest process} tool as a part of his bachelor's thesis. From there on, several more minor updates from various people were performed. The application serves its intended purpose well. However, there are some problems that make it hard to expand it.
+
+One of the problems of the application is that there is no object representation of device profiles. The data is primarily stored in simple Java array lists or maps. That is why a relatively simple task of extending functionality may prove to be very difficult. 
+
+Another problem is the amount of hard-coded HTML tags into strings. One unintentional mistake of deleted angle bracket may corrupt the whole HTML output. If we want to change, for example, something in the metadata of each generated HTML, we would need to manually change the string, which creates the body part of the HTML document. 
 
 \section{Improvements}
+In this section, the improvements for the \texttt{JCAlgTest process} tool will be discussed along with how they have been applied to its reimplementation.
+
+\subsection{Object design}
+As mentioned in \myref{Section}{subsec:design-problems}, the object design of the tool needed some improvements. The new design should provide classes representing the input files we work with. They will be referred to as device profiles. The device stands for either TPM 2.0 or JavaCard smart card. The data is in the form of CSV files. However, the format of some files does not conform to any specific implementation for CSV format. Because there is no header for the data, the count of delimiters is variable on each line.
+
+\subsubsection{Device profile types}
+There are two main types of device profiles:
+\begin{enumerate}
+    \item \textbf{Support} In the case of TPM devices, it contains information about the support of specific algorithms, commands, or structures defined in the TPM 2.0 specification. However, in the case of JavaCard smart cards, the information is about supported cryptographic algorithms defined in JavaCard API. Along with this information, it also contains basic information about the devices. This information ranges from vendor information to memory limits.
+    
+    \item \textbf{Performance} Contain run time benchmarks for cryptographic algorithms. Also dependent on the device defined in either TPM 2.0 specification or JavaCard API. In the case of JavaCard smart cards, the performance results are divided into fixed and variable results. Variable-length performance results measure data length dependant performance, whereas fixed-length performance results measure it with static data length depending on a particular algorithm.
+\end{enumerate}
+
+In the reimplementation the object design of these profiles is very straightforward. The classes were modelled according to the information contained in the CSV files. The following diagrams illustrate inheritance relationships between these classes and also their attributes.
+
+

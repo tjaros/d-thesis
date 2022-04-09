@@ -9,23 +9,8 @@ In this chapter, we describe the development details of the tool called \texttt{
 \end{figure}
 \todo{Schema je WIP a toto je skor placeholder}
 
-\section{Device profiles}
-The data we are working with is in the form of CSV files. Each file represents the test results of a particular device, a so-called profile. Currently, supported profiles are JavaCard smart cards or Trusted Platform Modules.
 
-\subsection{Device profile types}
-There are two types of profiles for JavaCard smart cards.
-\begin{enumerate}
-    \item \textbf{Support} Contains information about support for specific cryptographic algorithms defined in JavaCard API. The algorithm may be supported, unsupported, or not successfully tested.
-    \item \textbf{Performance} Contain run time benchmarks for each algorithm defined in JavaCard API and is further divided into
-    \begin{enumerate}
-        \item \textbf{Fixed} Each algorithm is benchmarked for fixed data length of input data
-        \item \textbf{Variable} Each algorithm is benchmarked for variable data lengths of input data
-    \end{enumerate}
-\end{enumerate}
-
-Profiles for Trusted Platform Modules are similarly divided into Performance and Support profiles, except there are no further divisions for performance profiles.
-
-\subsection{Parsing}
+\section{Parsing}
 The data, namely the run time results we are working with, were collected over the years in parallel with the development of the tools which generate them. Consequentially the data does not have the same form, as there is no prescribed schema. Therefore it is convenient to design suitable means of accessing it. In the re-implementation of the app, the mapping of CSV files into corresponding classes was introduced. This approach makes it significantly easier to manipulate the data, and the resulting code readability is better.
 
 \section{Results}

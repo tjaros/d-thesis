@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="487px" preserveAspectRatio="none" style="width:1702px;height:487px;background:#FFFFFF;" version="1.1" viewBox="0 0 1702 487" width="1702px" zoomAndPan="magnify"><defs/><g><rect height="26.2969" style="stroke:#00000000;stroke-width:1.0;fill:none;" width="460" x="614.25" y="5"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="450" x="619.25" y="22.9951">AlgTest pyProcess object diagram for JavaCard profiles</text><!--MD5=[cf3f5c26117295436d01ab4fe1689579]
+class Object\ProfileJC--><g id="elem_Object\ProfileJC"><rect codeLine="23" fill="#FFF8DC" height="92.5" id="Object\ProfileJC" rx="2.5" ry="2.5" style="stroke:#696969;stroke-width:1.0;" width="232" x="507.5" y="44.2969"/><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="79" x="584" y="64.1484">ProfileJC</text><line style="stroke:#696969;stroke-width:1.0;" x1="508.5" x2="738.5" y1="72.9219" y2="72.9219"/><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="83" x="513.5" y="91.7734">test_info</text><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="129" x="596.5" y="91.7734">: dict[str, str]</text><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="91" x="513.5" y="110.3984">jc_system</text><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="129" x="604.5" y="110.3984">: dict[str, str]</text><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="36" x="513.5" y="129.0234">cplc</text><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="129" x="549.5" y="129.0234">: dict[str, str]</text></g><!--MD5=[17f7b0231912b28332b4f63dab912542]
+class Object\ProfilePerformanceFixedJC--><g id="elem_Object\ProfilePerformanceFixedJC"><rect codeLine="29" fill="#FFF8DC" height="55.25" id="Object\ProfilePerformanceFixedJC" rx="2.5" ry="2.5" style="stroke:#696969;stroke-width:1.0;" width="373" x="7" y="341.2969"/><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="245" x="71" y="361.1484">ProfilePerformanceFixedJC</text><line style="stroke:#696969;stroke-width:1.0;" x1="8" x2="379" y1="369.9219" y2="369.9219"/><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="64" x="13" y="388.7734">results</text><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="297" x="77" y="388.7734">: dict[str, PerformanceResultJC]</text></g><!--MD5=[da1401921d6bbadb436e0de5183958f6]
+class Object\ProfilePerformanceVariableJC--><g id="elem_Object\ProfilePerformanceVariableJC"><rect codeLine="33" fill="#FFF8DC" height="55.25" id="Object\ProfilePerformanceVariableJC" rx="2.5" ry="2.5" style="stroke:#696969;stroke-width:1.0;" width="416" x="415.5" y="341.2969"/><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="272" x="487.5" y="361.1484">ProfilePerformanceVariableJC</text><line style="stroke:#696969;stroke-width:1.0;" x1="416.5" x2="830.5" y1="369.9219" y2="369.9219"/><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="64" x="421.5" y="388.7734">results</text><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="340" x="485.5" y="388.7734">: dict[str, list[PerformanceResultJC]]</text></g><!--MD5=[0cd9c772d79fb3ae061bcc05b9d8c299]
+class Object\ProfileSupportJC--><g id="elem_Object\ProfileSupportJC"><rect codeLine="37" fill="#FFF8DC" height="55.25" id="Object\ProfileSupportJC" rx="2.5" ry="2.5" style="stroke:#696969;stroke-width:1.0;" width="327" x="867" y="341.2969"/><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="152" x="954.5" y="361.1484">ProfileSupportJC</text><line style="stroke:#696969;stroke-width:1.0;" x1="868" x2="1193" y1="369.9219" y2="369.9219"/><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="64" x="873" y="388.7734">results</text><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="251" x="937" y="388.7734">: dict[str, SupportResultJC]</text></g><!--MD5=[b3cb59f6bb34171bf4307b6b9dbf7944]
+class Object\MeasurementResultJC--><g id="elem_Object\MeasurementResultJC"><rect codeLine="42" fill="#FFF8DC" height="92.5" id="Object\MeasurementResultJC" rx="2.5" ry="2.5" style="stroke:#696969;stroke-width:1.0;" width="207" x="1352" y="44.2969"/><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="201" x="1355" y="64.1484">MeasurementResultJC</text><line style="stroke:#696969;stroke-width:1.0;" x1="1353" x2="1558" y1="72.9219" y2="72.9219"/><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="50" x="1358" y="91.7734">name</text><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="40" x="1408" y="91.7734">: str</text><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="82" x="1358" y="110.3984">category</text><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="40" x="1440" y="110.3984">: str</text><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="60" x="1358" y="129.0234">status</text><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="40" x="1418" y="129.0234">: str</text></g><!--MD5=[691ccae5b92b11b766379f3bbb4dbddb]
+class Object\PerformanceResultJC--><g id="elem_Object\PerformanceResultJC"><rect codeLine="48" fill="#FFF8DC" height="222.875" id="Object\PerformanceResultJC" rx="2.5" ry="2.5" style="stroke:#696969;stroke-width:1.0;" width="203" x="1229" y="257.2969"/><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="195" x="1233" y="277.1484">PerformanceResultJC</text><line style="stroke:#696969;stroke-width:1.0;" x1="1230" x2="1431" y1="285.9219" y2="285.9219"/><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="105" x="1235" y="304.7734">prepare_ins</text><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="40" x="1340" y="304.7734">: str</text><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="113" x="1235" y="323.3984">measure_ins</text><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="40" x="1348" y="323.3984">: str</text><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="57" x="1235" y="342.0234">config</text><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="40" x="1292" y="342.0234">: str</text><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="6" x="1235" y="360.6484"> </text><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="75" x="1235" y="379.2734">baseline</text><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="101" x="1310" y="379.2734">: list[float]</text><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="90" x="1235" y="397.8984">operation</text><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="101" x="1325" y="397.8984">: list[float]</text><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="6" x="1235" y="416.5234"> </text><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="108" x="1235" y="435.1484">data_length</text><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="38" x="1343" y="435.1484">: int</text><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="91" x="1235" y="453.7734">iterations</text><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="38" x="1326" y="453.7734">: int</text><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="106" x="1235" y="472.3984">invocations</text><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="38" x="1341" y="472.3984">: int</text></g><!--MD5=[004903aeec1f44b30306185237bd1c85]
+class Object\SupportResultJC--><g id="elem_Object\SupportResultJC"><rect codeLine="61" fill="#FFF8DC" height="129.75" id="Object\SupportResultJC" rx="2.5" ry="2.5" style="stroke:#696969;stroke-width:1.0;" width="228" x="1467.5" y="303.7969"/><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="149" x="1507" y="323.6484">SupportResultJC</text><line style="stroke:#696969;stroke-width:1.0;" x1="1468.5" x2="1694.5" y1="332.4219" y2="332.4219"/><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="72" x="1473.5" y="351.2734">support</text><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="53" x="1545.5" y="351.2734">: bool</text><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="120" x="1473.5" y="369.8984">time_elapsed</text><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="58" x="1593.5" y="369.8984">: float</text><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="178" x="1473.5" y="388.5234">persistent_memory</text><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="38" x="1651.5" y="388.5234">: int</text><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="122" x="1473.5" y="407.1484">ram_deselect</text><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="38" x="1595.5" y="407.1484">: int</text><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="93" x="1473.5" y="425.7734">ram_reset</text><text fill="#000000" font-family="Aapex" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="38" x="1566.5" y="425.7734">: int</text></g><!--MD5=[df1a0876d80cf1add7eda65fa4f41784]
+reverse link Object\MeasurementResultJC to Object\PerformanceResultJC--><g id="link_Object\MeasurementResultJC_Object\PerformanceResultJC"><path codeLine="69" d="M1426.82,154.7259 C1413.1,185.0779 1396.27,222.3159 1380.53,257.1229 " fill="none" id="Object\MeasurementResultJC-backto-Object\PerformanceResultJC" style="stroke:#696969;stroke-width:1.0;"/><polygon fill="none" points="1420.52,151.6779,1435.14,136.3369,1433.28,157.4449,1420.52,151.6779" style="stroke:#696969;stroke-width:1.0;"/></g><!--MD5=[dfc7677ebb93caf4e3175ff944c8c0ee]
+reverse link Object\MeasurementResultJC to Object\SupportResultJC--><g id="link_Object\MeasurementResultJC_Object\SupportResultJC"><path codeLine="71" d="M1484.43,154.7719 C1504.76,199.4009 1531.88,258.9019 1552.28,303.6739 " fill="none" id="Object\MeasurementResultJC-backto-Object\SupportResultJC" style="stroke:#696969;stroke-width:1.0;"/><polygon fill="none" points="1477.95,157.4389,1476.02,136.3369,1490.69,151.6339,1477.95,157.4389" style="stroke:#696969;stroke-width:1.0;"/></g><!--MD5=[11edaeb0d0fd787b934e2c9f5a27d8d3]
+reverse link Object\ProfileJC to Object\ProfileSupportJC--><g id="link_Object\ProfileJC_Object\ProfileSupportJC"><path codeLine="73" d="M706.523,147.6999 C793.37,206.6999 925.962,296.7779 991.308,341.1709 " fill="none" id="Object\ProfileJC-backto-Object\ProfileSupportJC" style="stroke:#696969;stroke-width:1.0;"/><polygon fill="none" points="702.407,153.3659,689.797,136.3369,710.275,141.7859,702.407,153.3659" style="stroke:#696969;stroke-width:1.0;"/></g><!--MD5=[d96d38720ad6c7c47595afbb3c989e26]
+reverse link Object\ProfileJC to Object\ProfilePerformanceVariableJC--><g id="link_Object\ProfileJC_Object\ProfilePerformanceVariableJC"><path codeLine="75" d="M623.5,156.3869 C623.5,215.2279 623.5,298.9049 623.5,341.1709 " fill="none" id="Object\ProfileJC-backto-Object\ProfilePerformanceVariableJC" style="stroke:#696969;stroke-width:1.0;"/><polygon fill="none" points="616.5,156.3369,623.5,136.3369,630.5,156.3369,616.5,156.3369" style="stroke:#696969;stroke-width:1.0;"/></g><!--MD5=[670d9894c698f7a1b6e6f4a900743512]
+reverse link Object\ProfileJC to Object\ProfilePerformanceFixedJC--><g id="link_Object\ProfileJC_Object\ProfilePerformanceFixedJC"><path codeLine="77" d="M536.358,147.3319 C444.614,206.3249 304.089,296.6859 234.907,341.1709 " fill="none" id="Object\ProfileJC-backto-Object\ProfilePerformanceFixedJC" style="stroke:#696969;stroke-width:1.0;"/><polygon fill="none" points="532.848,141.2659,553.456,136.3369,540.42,153.0419,532.848,141.2659" style="stroke:#696969;stroke-width:1.0;"/></g><!--MD5=[eb1896d9385ca736c8073db27f90fb61]
+@startuml
+hide empty attributes
+hide empty methods
+hide circle
+
+skinparam shadowing false
+skinparam classFontStyle Bold
+skinparam classFontSize 16
+skinparam classFontName Aapex
+skinparam ActivityBackgroundColor Silver
+skinparam ActivityBorderColor DimGray
+
+skinparam class {
+    BackgroundColor Cornsilk
+    ArrowColor DimGray
+    BorderThickness 1
+    BorderColor DimGray
+}
+
+title "AlgTest pyProcess object diagram for JavaCard profiles"
+
+
+
+class "ProfileJC" as Object\ProfileJC {
+    **test_info**: dict[str, str] 
+    **jc_system**: dict[str, str]
+    **cplc**: dict[str, str]
+}
+
+class "ProfilePerformanceFixedJC" as Object\ProfilePerformanceFixedJC {
+    **results**: dict[str, PerformanceResultJC]
+}
+
+class "ProfilePerformanceVariableJC" as Object\ProfilePerformanceVariableJC {
+    **results**: dict[str, list[PerformanceResultJC]]
+}
+
+class "ProfileSupportJC" as Object\ProfileSupportJC {
+    **results**: dict[str, SupportResultJC]
+}
+
+
+class "MeasurementResultJC" as Object\MeasurementResultJC {
+    **name**: str
+    **category**: str
+    **status**: str
+}
+
+class "PerformanceResultJC" as Object\PerformanceResultJC {
+    **prepare_ins**: str
+    **measure_ins**: str
+    **config**: str
+
+    **baseline**: list[float]
+    **operation**: list[float]
+
+    **data_length**: int
+    **iterations**: int
+    **invocations**: int
+}
+
+class "SupportResultJC" as Object\SupportResultJC {
+    **support**: bool
+    **time_elapsed**: float
+    **persistent_memory**: int
+    **ram_deselect**: int
+    **ram_reset**: int
+}
+
+Object\MeasurementResultJC <|- - - Object\PerformanceResultJC
+
+Object\MeasurementResultJC <|- - - Object\SupportResultJC
+
+Object\ProfileJC <|- - -  Object\ProfileSupportJC
+
+Object\ProfileJC <|- - -  Object\ProfilePerformanceVariableJC
+
+Object\ProfileJC <|- - -  Object\ProfilePerformanceFixedJC
+@enduml
+
+PlantUML version 1.2022.4beta2(Unknown compile time)
+(GPL source distribution)
+Java Runtime: Java(TM) SE Runtime Environment
+JVM: Java HotSpot(TM) 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>

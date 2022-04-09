@@ -1,0 +1,80 @@
+@startuml
+hide empty attributes
+hide empty methods
+hide circle
+
+skinparam shadowing false
+skinparam classFontStyle Bold
+skinparam classFontSize 16
+skinparam classFontName Aapex
+skinparam ActivityBackgroundColor Silver
+skinparam ActivityBorderColor DimGray
+
+skinparam class {
+    BackgroundColor Cornsilk
+    ArrowColor DimGray
+    BorderThickness 1
+    BorderColor DimGray
+}
+
+title "AlgTest pyProcess object diagram for JavaCard profiles"
+
+
+
+class "ProfileJC" as Object\ProfileJC {
+    **test_info**: dict[str, str] 
+    **jc_system**: dict[str, str]
+    **cplc**: dict[str, str]
+}
+
+class "ProfilePerformanceFixedJC" as Object\ProfilePerformanceFixedJC {
+    **results**: dict[str, PerformanceResultJC]
+}
+
+class "ProfilePerformanceVariableJC" as Object\ProfilePerformanceVariableJC {
+    **results**: dict[str, list[PerformanceResultJC]]
+}
+
+class "ProfileSupportJC" as Object\ProfileSupportJC {
+    **results**: dict[str, SupportResultJC]
+}
+
+
+class "MeasurementResultJC" as Object\MeasurementResultJC {
+    **name**: str
+    **category**: str
+    **status**: str
+}
+
+class "PerformanceResultJC" as Object\PerformanceResultJC {
+    **prepare_ins**: str
+    **measure_ins**: str
+    **config**: str
+
+    **baseline**: list[float]
+    **operation**: list[float]
+
+    **data_length**: int
+    **iterations**: int
+    **invocations**: int
+}
+
+class "SupportResultJC" as Object\SupportResultJC {
+    **support**: bool
+    **time_elapsed**: float
+    **persistent_memory**: int
+    **ram_deselect**: int
+    **ram_reset**: int
+}
+
+Object\MeasurementResultJC <|--- Object\PerformanceResultJC
+
+Object\MeasurementResultJC <|--- Object\SupportResultJC
+
+Object\ProfileJC <|---  Object\ProfileSupportJC
+
+Object\ProfileJC <|---  Object\ProfilePerformanceVariableJC
+
+Object\ProfileJC <|---  Object\ProfilePerformanceFixedJC
+
+@enduml
