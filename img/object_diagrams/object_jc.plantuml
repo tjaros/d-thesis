@@ -9,6 +9,7 @@ skinparam classFontSize 16
 skinparam classFontName Aapex
 skinparam ActivityBackgroundColor Silver
 skinparam ActivityBorderColor DimGray
+left to right direction
 
 skinparam class {
     BackgroundColor Cornsilk
@@ -22,8 +23,9 @@ title "AlgTest pyProcess object diagram for JavaCard profiles"
 
 
 class "ProfileJC" as Object\ProfileJC {
-    **test_info**: dict[str, str] 
+    **test_info**: dict[str, str]
     **jc_system**: dict[str, str]
+
     **cplc**: dict[str, str]
 }
 
@@ -67,14 +69,16 @@ class "SupportResultJC" as Object\SupportResultJC {
     **ram_reset**: int
 }
 
-Object\MeasurementResultJC <|--- Object\PerformanceResultJC
 
-Object\MeasurementResultJC <|--- Object\SupportResultJC
 
 Object\ProfileJC <|---  Object\ProfileSupportJC
 
 Object\ProfileJC <|---  Object\ProfilePerformanceVariableJC
 
 Object\ProfileJC <|---  Object\ProfilePerformanceFixedJC
+
+Object\MeasurementResultJC <|--- Object\PerformanceResultJC
+
+Object\MeasurementResultJC <|--- Object\SupportResultJC
 
 @enduml
