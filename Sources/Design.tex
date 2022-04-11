@@ -1,10 +1,10 @@
 \chapter{Analysis and design}
-One of the objectives of this work was the creation of a tool for processing and visualization of results from TPM devices. Such a tool already exists, but it is hard to extend it, and it needs extensive refactoring, so it would be more beneficial to redesign it.
+One of the objectives of this work was the creation of a tool for processing and visualization of results from TPM devices. Such a tool already exists, but it has some problems which make it difficult to extend it. To solve those problems, extensive refactoring could help, however, a complete rework proved more effective in this case.
 
-This chapter describes the original tool for generating visualizations and discusses its problems and possible improvements. Then I discuss the design of the new application to replace the existing one.
+This chapter describes the original tool for generating visualizations and discusses its problems. Then solutions to those problems are proposed and described how they have been used in the reimplementation.
 
 \section{JCAlgTest}
-The \texttt{JCAlgTest}\footnote{https://github.com/crocs-muni/JCAlgTest} is a suite of tools used for automated analysis of cryptographic smartcards, specifically those running the JavaCard platform. It takes advantage of the officially available JavaCard API to test for support of specific algorithms, measures their performance characteristics, and collects general information about the tested smart card. The suite consists of three modules:
+The \texttt{JCAlgTest}\footnote{\url{https://github.com/crocs-muni/JCAlgTest}} is a suite of tools used for automated analysis of cryptographic smartcards, specifically those running the JavaCard platform. It takes advantage of the officially available JavaCard API to test for support of specific algorithms, measures their performance characteristics, and collects general information about the tested smart card. The suite consists of three modules:
 \begin{itemize}
   \item
         \texttt{JCAlgTestJavaCard} A JavaCard applet that needs to be uploaded onto the smart card we want to test. According to instructions from \texttt{JCAlgTestClient} application to execute code for specified operation. Firstly it tries to instantiate a particular object belonging to the operation. If it succeeds, that means that the operation is supported, and in the case of performance testing, it can proceed further with the execution. If the instantiation was unsuccessful, a specific exception is thrown, which usually means that the operation is not supported.
@@ -26,7 +26,7 @@ An \texttt{Apache Ant} command-line tool is used to build the application. It us
 The \texttt{JCAlgTest process} provides a command-line API. The users can specify the input, output directory, and the type of visualization they want to generate.
 
 \subsection{Problems}\label{subsec:design-problems}
-The whole \texttt{JCAlgTest} suite was developed over several years by various people. An initial version of \texttt{JCAlgTest process} was created by Petr Švenda, my supervisor, along with the rest of \texttt{JCAlgTest} suite. Then Rudolf Kvašňovský further developed the \texttt{JCAlgTest process} tool as a part of his bachelor's thesis. From there on, several more minor updates from various people were performed. The application serves its intended purpose well. However, there are some problems that make it hard to expand it.
+The whole \texttt{JCAlgTest} suite was developed over several years by various people. An initial version of \texttt{JCAlgTest process} was created by Petr Švenda, my supervisor, along with the rest of \texttt{JCAlgTest} suite. Then Rudolf Kvašňovský further developed the \texttt{JCAlgTest process} tool as a part of his bachelor's thesis. From there on, several more minor updates from various people were performed. The application serves its intended purpose well, however any extensions to it require lots of code analysis and patience so that nothing breaks and no new issues arise.
 
 One of the problems of the application is that there is no object representation of device profiles. The data is primarily stored in simple Java array lists or maps. That is why a relatively simple task of extending functionality may prove to be very difficult. 
 
@@ -36,7 +36,7 @@ Another problem is the amount of hard-coded HTML tags into strings. One unintent
 In this section, the improvements for the \texttt{JCAlgTest process} tool will be discussed along with how they have been applied to its reimplementation.
 
 \subsection{Object design}
-As mentioned in \myref{Section}{subsec:design-problems}, the object design of the tool needed some improvements. The new design should provide classes representing the input files we work with. They will be referred to as device profiles. The device stands for either TPM 2.0 or JavaCard smart card. The data is in the form of CSV files. However, the format of some files does not conform to any specific implementation for CSV format. Because there is no header for the data, the count of delimiters is variable on each line.
+As mentioned in \myref{Section}{subsec:design-problems}, the object design of the tool needed some improvements. The new design should provide classes representing the input files we work with. They will be referred to as device profiles. The device stands for either TPM 2.0 or JavaCard smart card. The data is in the form of CSV files. However, the format of some files does not conform to any specific implementation for CSV format, as there is no header for the data and the count of delimiters is variable on each line. This effectively results in the need to parse files using custom-made parser procedures instead of relying on library functions.
 
 \subsubsection{Device profile types}
 There are two main types of device profiles:
@@ -46,4 +46,12 @@ There are two main types of device profiles:
     \item \textbf{Performance} Contain run time benchmarks for cryptographic algorithms. Also dependent on the device defined in either TPM 2.0 specification or JavaCard API. In the case of JavaCard smart cards, the performance results are divided into fixed and variable results. Variable-length performance results measure data length dependant performance, whereas fixed-length performance results measure it with static data length depending on a particular algorithm.
 \end{enumerate}
 
-In the reimplementation the object design of these profiles is very straightforward. The classes were modelled according to the information contained in the CSV files. The following diagrams illustrate inheritance relationships between these classes and also their attributes.
+In the implementation, the object design of these profiles is very straightforward. The classes were modeled according to the information contained in the CSV files. Their objective is only to store the data so that it can be later manipulated. That is why there was no need for any complex abstractions in design. However, even such basic improvement by creating a class representation makes it easier to work with the data and the resulting code more readable compared to using array lists and indexes.
+
+As can be seen from \myref{Figure}{fig:device_profile_classes}, the profile classes are very similar. They all have to store specific results and other information inherited from their abstract base class. The results are dictionaries where we associate the identification of a result with its object or a list of these objects for easier checking if a specific result was measured.
+
+
+\subsection{Building outputs}
+Another problem to resolve was to find a way to build HTML outputs in a way where a small mistake does not result in a corrupted file and hours of debugging. One solution is some kind of templating engine where we prepare a special file very similar to pure HTML with the exception of the special syntax that takes care of populating the template with data. This is the way often used in modern front-end frameworks such as React or Vue. But templating may not always be the best idea. It steepens the learning curve for understanding the code. That is because everyone needs to understand the new syntax used in the templates. The solution used in the reimplementation was the use of a library called \texttt{dominate}\footnote{\url{https://pypi.org/project/dominate/}} which makes us able to create HTML documents and fragments using pure Python language. Additionally, it was used in another project which also works with JavaCards called \texttt{scrutiny}\footnote{\url{https://github.com/crocs-muni/scrutiny}}. The reimplementation also uses some code from this project in case future extensions want to integrate some functionality from \texttt{scrutiny} into it.
+
+%\todo{Pridaj porovnanie kodu na vytvorenie toho isteho}
