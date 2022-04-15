@@ -1,7 +1,7 @@
 \chapter{Analysis and design}
-One of the objectives of this work was the creation of a tool for processing and visualization of results from TPM devices. Such a tool already exists, but it has some problems which make it difficult to extend it. To solve those problems, extensive refactoring could help, however, a complete rework proved more effective in this case.
+One of the objectives of this work was the creation of a tool for processing and visualization of results from TPM devices. Such a tool already exists, and it is called \texttt{JCAlgTest process}. However, the tool's current design makes it difficult to extend it. Extensive refactoring could help in gaining more extensibility. Nevertheless, a complete rework proved more effective in this case.
 
-This chapter describes the original tool for generating visualizations and discusses its problems. Then solutions to those problems are proposed and described how they have been used in the reimplementation.
+This chapter describes the original tool for generating visualizations and discusses its problems. Then solutions to those problems are proposed, and then it is described how they have been used in the reimplementation.
 
 \section{JCAlgTest}
 The \texttt{JCAlgTest}\footnote{\url{https://github.com/crocs-muni/JCAlgTest}} is a suite of tools used for automated analysis of cryptographic smartcards, specifically those running the JavaCard platform. It takes advantage of the officially available JavaCard API to test for support of specific algorithms, measures their performance characteristics, and collects general information about the tested smart card. The suite consists of three modules:
@@ -19,7 +19,9 @@ The \texttt{JCAlgTest process} is an application used for tabular and chart visu
 
 This section will describe the application's current state and its problems.
 \subsection{Current state}
-The application is written in Java programming language. It is designed mainly as a command-line tool for generating HTML visualizations for JavaCard smart card run time data. Still, it also contains means of visualizing TPM 2.0 run time data. The project's website\footnote{\url{http://jcalgtest.org}} shows JavaCard smart card visualisations. Each type of visualization is performed by building an HTML file and either by embedding JavaScript calls to visualization functions contained in  \texttt{D3.js library} or \texttt{Google Charts API} or by creating a basic HTML table with added CSS styling and quality of life improvements such as sorting or filtering of entries using JavaScript. 
+\todo{Add diagram visualising basic parts of the old app}
+
+The application is written in Java programming language. It is designed mainly as a command-line tool for generating HTML visualizations for JavaCard smart card run time data. Still, it also contains means of visualizing TPM 2.0 run time data. The project's website\footnote{\url{http://jcalgtest.org}} shows JavaCard smart card visualisations. Each type of visualization is performed by building an HTML file and either by embedding JavaScript calls to visualization functions contained in  \texttt{D3.js library} or \texttt{Google Charts API} or by creating a basic HTML table with added CSS styling and usability improvements such as sorting or filtering of entries using JavaScript. 
 
 An \texttt{Apache Ant} command-line tool is used to build the application. It uses XML files to describe the build processes such as compiling, running, or testing. It is also supported by many programming IDEs, most notably Netbeans IDE or IntelliJ IDEA.
 
@@ -39,11 +41,13 @@ In this section, the improvements for the \texttt{JCAlgTest process} tool will b
 As mentioned in \myref{Section}{subsec:design-problems}, the object design of the tool needed some improvements. The new design should provide classes representing the input files we work with. They will be referred to as device profiles. The device stands for either TPM 2.0 or JavaCard smart card. The data is in the form of CSV files. However, the format of some files does not conform to any specific implementation for CSV format, as there is no header for the data and the count of delimiters is variable on each line. This effectively results in the need to parse files using custom-made parser procedures instead of relying on library functions.
 
 \subsubsection{Device profile types}
-There are two main types of device profiles:
+There are three main types of device profiles:
 \begin{enumerate}
     \item \textbf{Support} In the case of TPM devices, it contains information about the support of specific algorithms, commands, or structures defined in the TPM 2.0 specification. However, in the case of JavaCard smart cards, the information is about supported cryptographic algorithms defined in JavaCard API. Along with this information, it also contains basic information about the devices. This information ranges from vendor information to memory limits.
     
     \item \textbf{Performance} Contain run time benchmarks for cryptographic algorithms. Also dependent on the device defined in either TPM 2.0 specification or JavaCard API. In the case of JavaCard smart cards, the performance results are divided into fixed and variable results. Variable-length performance results measure data length dependant performance, whereas fixed-length performance results measure it with static data length depending on a particular algorithm.
+    
+    \item \textbf{Cryptographic Properties}
 \end{enumerate}
 
 In the implementation, the object design of these profiles is very straightforward. The classes were modeled according to the information contained in the CSV files. Their objective is only to store the data so that it can be later manipulated. That is why there was no need for any complex abstractions in design. However, even such basic improvement by creating a class representation makes it easier to work with the data and the resulting code more readable compared to using array lists and indexes.
@@ -52,6 +56,6 @@ The profile classes are very similar. They all have to store specific results an
 
 
 \subsection{Building outputs}
-Another problem to resolve was to find a way to build HTML outputs in a way where a small mistake does not result in a corrupted file and hours of debugging. One solution is some kind of templating engine where we prepare a special file very similar to pure HTML with the exception of the special syntax that takes care of populating the template with data. This is the way often used in modern front-end frameworks such as React or Vue. But templating may not always be the best idea. It steepens the learning curve for understanding the code. That is because everyone needs to understand the new syntax used in the templates. The solution used in the reimplementation was the use of a library called \texttt{dominate}\footnote{\url{https://pypi.org/project/dominate/}} which makes us able to create HTML documents and fragments using pure Python language. Additionally, it was used in another project which also works with JavaCards called \texttt{scrutiny}\footnote{\url{https://github.com/crocs-muni/scrutiny}}. The reimplementation also uses some code from this project in case future extensions want to integrate some functionality from \texttt{scrutiny} into it.
+Another problem to resolve was to find a way to build HTML outputs in a way where a small mistake does not result in a corrupted file and hours of debugging. One solution is some kind of templating engine where we prepare a special file very similar to pure HTML with the exception of the special syntax that takes care of populating the template with data. This is the way more often used in modern front-end frameworks such as React or Vue. But templating may not always be the best idea. It steepens the learning curve for understanding the code. That is because everyone needs to understand the new syntax used in the templates. The solution used in the reimplementation was the use of a library called \texttt{dominate}\footnote{\url{https://pypi.org/project/dominate/}} which makes us able to create HTML documents and fragments using pure Python language. Additionally, it was used in another project which also works with JavaCards called \texttt{scrutiny}\footnote{\url{https://github.com/crocs-muni/scrutiny}}. The reimplementation also uses some code from this project in case future extensions want to integrate some functionality from \texttt{scrutiny} into it.
 
 %\todo{Pridaj porovnanie kodu na vytvorenie toho isteho}
