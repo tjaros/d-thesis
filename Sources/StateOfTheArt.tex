@@ -24,7 +24,7 @@ Trusted Computing has the following features:
 
 \item \textbf{Sealed Storage} is used for data protection. It enables the sealers to specify policies so that only designated parties can access the sealed data. This primitive uses two operations called Seal and Unseal. The Seal operation enables us to specify the access policy and seals the data. The Unseal operation checks if the unsealing entity adheres to the policy specified during sealing. If yes, then it unseals the data.
 
-\item \textbf{Remote Attestation} is a process of proving some kind of claim to the third party. Attestation literally means vouching for something. In the Trusted Computing scenario, the claim to prove through remote attestation can be for example, that the system runs only valid and unmodified software.
+\item \textbf{Remote Attestation} is a process of proving some claim to the third party. The prover gathers the evidence to support their claim and presents it to the verifier, who, based on the evidence, decides if the prover is trustworthy for further interaction. In the Trusted Computing scenario, the claim to prove through remote attestation can be that the system runs only valid and unmodified software. 
 
 \end{itemize}
 

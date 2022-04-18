@@ -47,7 +47,7 @@ There are three main types of device profiles:
     
     \item \textbf{Performance} Contain run time benchmarks for cryptographic algorithms. Also dependent on the device defined in either TPM 2.0 specification or JavaCard API. In the case of JavaCard smart cards, the performance results are divided into fixed and variable results. Variable-length performance results measure data length dependant performance, whereas fixed-length performance results measure it with static data length depending on a particular algorithm.
     
-    \item \textbf{Cryptographic Properties}
+    \item \textbf{Cryptographic Properties} They are recorded only for the TPM devices. They are split into multiple data sets, and each data set contains only specific information about the tested TPM. Most notable are execution time duration information for cryptographic algorithms and generated RSA or ECC key pairs. 
 \end{enumerate}
 
 In the implementation, the object design of these profiles is very straightforward. The classes were modeled according to the information contained in the CSV files. Their objective is only to store the data so that it can be later manipulated. That is why there was no need for any complex abstractions in design. However, even such basic improvement by creating a class representation makes it easier to work with the data and the resulting code more readable compared to using array lists and indexes.
