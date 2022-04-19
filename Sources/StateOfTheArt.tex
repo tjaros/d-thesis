@@ -28,23 +28,21 @@ Schoen in \cite{schoen2003trusted} mentions these features of Trusted Computing:
 \end{itemize}
 
 
-\subsection{Trusted Platform}
-To establish trust in a computing platform, TCG, according to \cite[p.~25]{tcg_p1_architecture} requires the trusted platform to provide the following features:
-
-\subsubsection{Roots of Trust}
+\subsection{Roots of Trust}
 Trust is a transitive relationship; if component A trusts component B, and component B trusts component C, then component A must trust component C. If this concept is applied to a trusted platform, then one component trusts another, and so on. A chain of trust is created. This chain must end somewhere, that is at a so-called root of trust. However, if this root is not trustworthy and fails, it renders the whole chain meaningless.
 
 The trustworthiness of the roots of trust is essential. According to the TPM specification, the roots of trust "are system elements that must be trusted because misbehavior is not detectable" \cite[p.~23]{tcg_p1_architecture}, but their trustworthiness can be assured by knowing their implementation and providing the certification of this implementation.
 
 There are three kinds of roots of trust required:
 \begin{itemize}
-    \item \textbf{Root of Trust for Measurement (RTM)} is trusted to reliably generate integrity measurements of software running on the platform. Ideally, such measurement should proceed right from the boot of the platform, such entry-point is called the Core Root of Trust for Measurement (CRTM). Generated integrity measurements are extended into PCR (see \myref{Section}{sec:pcr} for the purpose of reporting.
-    \item \textbf{Root of Trust for Storage (RTS)}
-    \item \textbf{Root of Trust for Reporting (RTR)}
+    \item \textbf{Root of Trust for Measurement (RTM)} is trusted to reliably generate integrity measurements of software running on the platform. The measurements should ideally proceed from the boot of the platform. Entrypoint for the measurement is called Core Root of Trust for Measurement (CRTM) and it is generally found in the Bios boot block \cite[p.~185]{Tomlinson2017}. Generated integrity measurements are extended into PCR (see \myref{Section}{sec:pcr}) for the purpose of reporting.
+    \item \textbf{Root of Trust for Storage (RTS)} is trusted to provide memory access control. The whole data it may protect is generally not stored in the Shielded Locations directly, but the TPM only guards a key to access the data stored externally. Although some memory locations in the TPM are not so sensitive to disclosure, such as a PCR an its current contents. 
+    \item \textbf{Root of Trust for Reporting (RTR)} is trusted for reporting the current system state stored in RTS and attests the autenthicity of this information.
 \end{itemize}
 
 \subsubsection{Protected Locations}
-\subsubsection{Integrity measurement and reporting}
+When it comes to Protected Locations, the TPM specification introduces the notion of Protected Capabilities and Shielded locations. According to \cite[]{tcg_p1_architecture} 
+
 
 \subsection{Platform Configuration Registers}\label{sec:pcr}
 Platform Configuration Registers (PCRs) are dynamic memory locations inside a TPM used to store integrity metrics of software and its configuration. These locations can only be updated using \texttt{extend} operation and also read for reporting or attestation. The \texttt{extend} operation makes use of the cryptographic hash function to combine the digest stored in the PCR and the new data. Cryptographic hash function map data of arbitrary size to the output of a fixed size. Such outputs are conventionally called hashes, message digests, or digests. These functions have one-way property: when given a message digest, it is difficult  to compute the message itself. The extend operation works in the following way:
