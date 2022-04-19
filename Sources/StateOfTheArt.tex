@@ -7,29 +7,46 @@ This chapter introduces the basic concepts pertaining to TPMs, summarizes the hi
 This section provides an overview of basic concepts mentioned throughout this work.
 
 \subsection{Trust, trusted, and trustworthy}\label{sec:trust-def}
-The term "trust" has no uniformly formalized definition. Its interpretations vary even in the same field of studies such as computer science and its subfields. The most relevant one for our needs is the TCGs' definition which states that trust is "the expectation that a device will behave in a particular manner for a specific purpose" \cite{tcg_arch_overview}. It is, however, important to note that this definition does not mention anything about the device being worthy of our trust. We only expect the specific behavior, and the device does not guarantee anything about its behavior. This means that a trusted device may fail us, whereas a trustworthy device is worthy of our trust and does not fail.
+The term "trust" has no uniformly formalized definition. Its interpretations vary even in the same field of study such as computer science and its subfields. The most relevant one for our needs is the TCGs' definition which states that trust is "the expectation that a device will behave in a particular manner for a specific purpose" \cite{tcg_arch_overview}. It is, however, important to note that this definition does not mention anything about the device being worthy of our trust. We only expect the specific behavior, and the device does not guarantee anything about its behavior. This means that a trusted device may fail us, whereas a trustworthy device is worthy of our trust and does not fail.
 
-\subsection{Trusted Computing and its features}
+\subsection{Trusted Computing}
 "Trusted computing refers to a computer system for which an entity has some level of assurance that the (part or all of) computer system behaves as expected" \cite{mitchell2005trusted}. In a sense, the definition of Trusted Computing presents a concept of trust in computing.
 
-Trusted Computing has the following features:
+Schoen in \cite{schoen2003trusted} mentions these features of Trusted Computing:
 
 \begin{itemize}
 
-\item \textbf{Endorsement Key} (EK) is a key stored permanently in TPM and is unique to each TPM. It is typically installed physically into the TPM during the manufacturing process. The EK consists of public and private key pair, where the private part never leaves the TPM. A certificate containing a public portion of EK and information about TPM can be signed by a certification authority to attest to the validity of EK and TPM itself. The EK is directly used only for the process of taking ownership of TPM and creating Attestation Identity Key  certificates \cite[p.~179-180]{Tomlinson2017}.
+%\item \textbf{Endorsement Key} (EK) is a key stored permanently in TPM and is unique to each TPM. It is typically installed physically into the TPM during the manufacturing process. The EK consists of public and private key pair, where the private part never leaves the TPM. A certificate containing a public portion of EK and information about TPM can be signed by a certification authority to attest to the validity of EK and TPM itself. The EK is directly used only for the process of taking ownership of TPM and creating Attestation Identity Key  certificates \cite[p.~179-180]{Tomlinson2017}.
 
 \item \textbf{Secure I/O} goal is to prevent spyware threats such as key loggers that record every keystroke or screen grabbers that adversaries may use to monitor user activities. Secure I/O provides a hardware "tunnel" between the user and the application so that no spying on the contents of their communication is possible.
 
-\item \textbf{Memory Curtaining} pertains to a hardware memory isolation of processes so that they cannot modify each other's memory. According to the Trusted Computing design, even the operating system cannot access curtained memory. That means even if an attacker gains access to the system, he or she will not be able to tamper with curtained memory.
+\item \textbf{Memory Curtaining} pertains to a hardware memory isolation of processes so that they cannot modify each other's memory. According to the Trusted Computing design, even the operating system cannot access curtained memory. That means even if an attacker gains access to the system, they will not be able to tamper with curtained memory.
 
 \item \textbf{Sealed Storage} is used for data protection. It enables the sealers to specify policies so that only designated parties can access the sealed data. This primitive uses two operations called Seal and Unseal. The Seal operation enables us to specify the access policy and seals the data. The Unseal operation checks if the unsealing entity adheres to the policy specified during sealing. If yes, then it unseals the data.
 
 \item \textbf{Remote Attestation} is a process of proving some claim to the third party. The prover gathers the evidence to support their claim and presents it to the verifier, who, based on the evidence, decides if the prover is trustworthy for further interaction. In the Trusted Computing scenario, the claim to prove through remote attestation can be that the system runs only valid and unmodified software. 
-
 \end{itemize}
 
 
-\subsection{Platform Configuration Registers}
+\subsection{Trusted Platform}
+To establish trust in a computing platform, TCG, according to \cite[p.~25]{tcg_p1_architecture} requires the trusted platform to provide the following features:
+
+\subsubsection{Roots of Trust}
+Trust is a transitive relationship; if component A trusts component B, and component B trusts component C, then component A must trust component C. If this concept is applied to a trusted platform, then one component trusts another, and so on. A chain of trust is created. This chain must end somewhere, that is at a so-called root of trust. However, if this root is not trustworthy and fails, it renders the whole chain meaningless.
+
+The trustworthiness of the roots of trust is essential. According to the TPM specification, the roots of trust "are system elements that must be trusted because misbehavior is not detectable" \cite[p.~23]{tcg_p1_architecture}, but their trustworthiness can be assured by knowing their implementation and providing the certification of this implementation.
+
+There are three kinds of roots of trust required:
+\begin{itemize}
+    \item \textbf{Root of Trust for Measurement (RTM)} is trusted to reliably generate integrity measurements of software running on the platform. Ideally, such measurement should proceed right from the boot of the platform, such entry-point is called the Core Root of Trust for Measurement (CRTM). Generated integrity measurements are extended into PCR (see \myref{Section}{sec:pcr} for the purpose of reporting.
+    \item \textbf{Root of Trust for Storage (RTS)}
+    \item \textbf{Root of Trust for Reporting (RTR)}
+\end{itemize}
+
+\subsubsection{Protected Locations}
+\subsubsection{Integrity measurement and reporting}
+
+\subsection{Platform Configuration Registers}\label{sec:pcr}
 Platform Configuration Registers (PCRs) are dynamic memory locations inside a TPM used to store integrity metrics of software and its configuration. These locations can only be updated using \texttt{extend} operation and also read for reporting or attestation. The \texttt{extend} operation makes use of the cryptographic hash function to combine the digest stored in the PCR and the new data. Cryptographic hash function map data of arbitrary size to the output of a fixed size. Such outputs are conventionally called hashes, message digests, or digests. These functions have one-way property: when given a message digest, it is difficult  to compute the message itself. The extend operation works in the following way:
 \begin{align*}
     d_{n+1} = h(d_{n}\ ||\ data)
@@ -43,6 +60,8 @@ Platform Configuration Registers (PCRs) are dynamic memory locations inside a TP
 \end{itemize}
 
 We can always recompute the final value if we possess the knowledge of members previously used in the chain and detect potential alterations.
+
+
 
 \section{History}
 In this section, a TPM specification's history of development will be described. Firstly, versions 1.1b and 1.2 will be shortly described. Then reasoning behind the latest version of the TPM specification, the TPM 2.0 specification, will be discussed. The TPM 2.0 specification itself is described in a separate \myref{Section}{sec:tpm2}.
@@ -84,7 +103,9 @@ According to \cite{tcg_tpm2_briefintro}, five types of a TPM are considered:
 \end{itemize}
 
 \subsection{Features}
-\subsubsection{Enhanced Authorization}
+
+
+
 
 \subsection{Architecture}
 Although there is no prescribed form of TPM in terms of hardware or software, the specification requires its implementations to possess several functional components for its operation~\cite{tcg_p1_architecture}. Selection of important building blocks of TPM is shown in \myref{Figure}{fig:tpm-arch-scheme}.
