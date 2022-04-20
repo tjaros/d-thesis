@@ -1,0 +1,26 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
+!include DEVICONS/python.puml
+!include FONTAWESOME/users.puml
+!include FONTAWESOME/file.puml
+
+
+
+Person(user, "User", "Person who needs visualisations", $sprite="users")
+
+Container(app, "AlgTest pyProcess", "python", "Generates visualisations", $sprite="python")
+
+ContainerDb(db, "Profile database", ".csv .json", "Device profiles for visualisation", $sprite="file")
+
+ContainerDb(vis, "Visualisations", ".html .png", , $sprite="file")
+
+Rel(user, app, "Uses", "bash/powershell")
+Rel_R(app, vis, "Writes")
+Rel_R(app, db, "Reads/Writes")
+
+
+
+@enduml

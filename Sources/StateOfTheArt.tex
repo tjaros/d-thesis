@@ -29,57 +29,54 @@ Schoen in \cite{schoen2003trusted} mentions these features of Trusted Computing:
 
 
 \subsection{Roots of Trust}
-Trust is a transitive relationship; if component A trusts component B, and component B trusts component C, then component A must trust component C. If this concept is applied to a trusted platform, then one component trusts another, and so on. A chain of trust is created. This chain must end somewhere, that is at a so-called root of trust. However, if this root is not trustworthy and fails, it renders the whole chain meaningless.
+Trust is a transitive relation; if component A trusts component B, and component B trusts component C, then component A must trust component C. If this relation is applied to a trusted platform, then one component trusts another, and so on. A chain of trust is created. This chain must end somewhere, that is at a so-called root of trust. However, if this root is not trustworthy and fails, it renders the whole chain meaningless.
 
 The trustworthiness of the roots of trust is essential. According to the TPM specification, the roots of trust "are system elements that must be trusted because misbehavior is not detectable" \cite[p.~23]{tcg_p1_architecture}, but their trustworthiness can be assured by knowing their implementation and providing the certification of this implementation.
 
 There are three kinds of roots of trust required:
 \begin{itemize}
-    \item \textbf{Root of Trust for Measurement (RTM)} is trusted to reliably generate integrity measurements of software running on the platform. The measurements should ideally proceed from the boot of the platform. Entrypoint for the measurement is called Core Root of Trust for Measurement (CRTM) and it is generally found in the Bios boot block \cite[p.~185]{Tomlinson2017}. Generated integrity measurements are extended into PCR (see \myref{Section}{sec:pcr}) for the purpose of reporting.
-    \item \textbf{Root of Trust for Storage (RTS)} is trusted to provide memory access control. The whole data it may protect is generally not stored in the Shielded Locations directly, but the TPM only guards a key to access the data stored externally. Although some memory locations in the TPM are not so sensitive to disclosure, such as a PCR an its current contents. 
-    \item \textbf{Root of Trust for Reporting (RTR)} is trusted for reporting the current system state stored in RTS and attests the autenthicity of this information.
+    \item \textbf{Root of Trust for Measurement (RTM)} is trusted to reliably generate integrity measurements of software running on the platform. The measurements should ideally proceed from the boot of the platform. The entry point for the measurement is called Core Root of Trust for Measurement (CRTM), and it is generally found in the Bios boot block \cite[p.~185]{Tomlinson2017}. Generated integrity measurements are extended into PCR (see \myref{Section}{sec:pcr}) for the purpose of reporting.
+    \item \textbf{Root of Trust for Storage (RTS)} is trusted to provide memory access control. The whole data it may protect is generally not stored in the Shielded Locations directly, but the TPM only guards a key to access the data stored externally. Although some memory locations in the TPM are not so sensitive to disclosure, such as a PCR and its current contents. 
+    \item \textbf{Root of Trust for Reporting (RTR)} is trusted for reporting the current system state stored in RTS and attests to the authenticity of this information.
 \end{itemize}
-
-\subsubsection{Protected Locations}
-When it comes to Protected Locations, the TPM specification introduces the notion of Protected Capabilities and Shielded locations. According to \cite[]{tcg_p1_architecture} 
-
-
-\subsection{Platform Configuration Registers}\label{sec:pcr}
-Platform Configuration Registers (PCRs) are dynamic memory locations inside a TPM used to store integrity metrics of software and its configuration. These locations can only be updated using \texttt{extend} operation and also read for reporting or attestation. The \texttt{extend} operation makes use of the cryptographic hash function to combine the digest stored in the PCR and the new data. Cryptographic hash function map data of arbitrary size to the output of a fixed size. Such outputs are conventionally called hashes, message digests, or digests. These functions have one-way property: when given a message digest, it is difficult  to compute the message itself. The extend operation works in the following way:
-\begin{align*}
-    d_{n+1} = h(d_{n}\ ||\ data)
-\end{align*}
-\begin{itemize}
-    \item $||$ is a concatenation of data in binary form
-    \item $ d_{n} $ is a digest stored in PCR before \texttt{extend} operation
-    \item $ d_{n+1} $ is a digest stored in PCR after \texttt{extend} operation
-    \item $ data $ is binary data to extend by
-    \item $ h $ is a cryptographic hash function
-\end{itemize}
-
-We can always recompute the final value if we possess the knowledge of members previously used in the chain and detect potential alterations.
-
 
 
 \section{History}
-In this section, a TPM specification's history of development will be described. Firstly, versions 1.1b and 1.2 will be shortly described. Then reasoning behind the latest version of the TPM specification, the TPM 2.0 specification, will be discussed. The TPM 2.0 specification itself is described in a separate \myref{Section}{sec:tpm2}.
+The development of the TPM specification spans multiple years and multiple versions of this specification. However, the most notable versions of the specification are TPM 1.1b, TPM 1.2, and the latest TPM 2.0. 
 
 \subsection{TPM 1.1b}
-The first broadly used specification was TPM 1.1b, released in 2003. TPMs released under this specification already provided some essential functions found in modern TPMs, consisting of key generation of RSA key pairs, storage, secure authorization, and device-health attestation. Anonymous identity keys based on certificates were used in order to assure privacy. However, the certificates needed to be provided with the TPM, and any generation of such keys was available only upon owner authorization. To prove the origin of the keys generated by TPM anonymously, a privacy certification authority was created. PCRs provide the integrity of measurements collected during the system's boot sequence. Both PCRs and identity keys might be used to prove the health of the system's boot sequence~\cite[p.~2]{arthur2015practical}.
-
-The hardware specification was not standardized in TPM 1.1b. This caused various incompatibilities. The TPMs across different vendors provided differing interfaces, which required different drivers. Pin-outs on the chips were not prescribed by any standard. Additionally, there were no countermeasures against dictionary attacks~\cite[p.~2]{arthur2015practical}.
+The TPM 1.1b released in 2003 was the first broadly used TPM version. This specification already defined some essential functionality found in modern TPMs, such as:
+\begin{itemize}
+    \item \textbf{Cryptography} consisting of hashing, asymmetric key operations and random number generation.
+    \item \textbf{Secure storage} to store secrets,
+    \item \textbf{Endorsement Key and Attestation Identity Keys} for platform identity and attestation with cooperation of privacy CA,
+    \item \textbf{Integrity collection and reporting} utilizing PCRs (see \myref{Section}{sec:pcr}).
+\end{itemize}
 
 \subsection{TPM 1.2}
-While being in development from 2005 to 2009, the TPM 1.2 specification went through numerous releases. Regarding the need to store shipped certificates for TPM's endorsement keys on a hard disk, about 2KB of non-volatile RAM was added. A new design was needed to support key migration between different TPMs because the old design of key migration would in TPM 1.1b require users to have TPM owner authorization. The new idea enabled users to create migratable keys and then relied on a designated third party that could exclusively migrate such keys. Said keys could also be certified. Thus, they were called Certified Migratable keys. An internal timer able to synchronize with the external one was added in 1.2, which has its use when signing data due to timestamps. Version 1.2 required API to provide backward compatibility for 1.1b. This increased the complexity of the new specification. The TPM 1.2 became widely used in x86 personal computers starting in 2005 and later in 2008 also in servers~\cite[p.~3]{arthur2015practical}.
+The TPM 1.2 specification was in development from 2005 to 2009 when it was standardized as ISO/IEC 11889. Its final revision was in 2011. It resolved some problems of TPM 1.1b specification, notably a requirement for dictionary attack mitigation mechanisms was added \cite[p.~36-37]{tcg_1.2_design_princ}. This specification brought a lot of new functionality and features, for example:
+\begin{itemize}
+    \item \textbf{Direct Anonymous Attestation},
+    \item \textbf{Locality} to differentiate commands between different sources,
+    \item \textbf{Delegation}, where TPM owner can enable delegate access to specific owner-authorized commands,
+    \item \textbf{Non-volatile storage} to store information,
+    \item \textbf{Internal tick counter} used for timestamps,
+    \item \textbf{Certified migration} of keys.
+\end{itemize}
+But there was also a lot of functionality which stayed the same as in TPM 1.1b. This is also related to the fact that the TPM 1.2 was required to keep the backward compatibility for TPM 1.1b \cite[p.~169]{tcg_1.2_design_princ}.
+
+% TODO: PC specific Device interface was apparently defined in another specification
+% https://trustedcomputinggroup.org/resource/pc-client-work-group-pc-client-specific-tpm-interface-specification-tis/
 
 \subsection{TPM 2.0 reasoning}
 One factor contributing to the need for yet another specification after TPM 1.2 was that in 2005, some substantial collision attacks were found against the SHA-1 hash function. Analysis regarding the use of SHA-1 in TPM revealed the attacks not being applicable~\cite{tcg_tpm1.12_sha-1_uses}. The SHA-1 hashing algorithm was used extensively in TPM 1.2. However, when its flaw was discovered, there was no way to replace it quickly. This problem fueled the idea that the new specification had to permit any hashing algorithm without making any changes to the specification. So-called digest agility. 
 
-Another problem was the lack of a symmetric algorithm required in the TPM specification. The use of RSA for encryption of serialized data was impractical because RSA operations are slow. That's why it was decided that the following specification would adopt support for symmetric encryption, which is faster and more suitable for encryption of large byte streams. Having this many problems, an overhaul of the specification would be convenient~\cite[p.~4]{arthur2015practical}.
-
+Another problem was the lack of a symmetric algorithm required in the TPM specification. The use of RSA for encryption of serialized data was impractical because RSA operations are slow. That's why it was decided that the following specification would adopt mandatory support for symmetric encryption, which is faster and more suitable for encryption of large byte streams. 
 
 
 \section{TPM 2.0}\label{sec:tpm2}
+
+
 The chance to overhaul the specification given to TPM 2.0 architects and developers, was turned into much more than support for digest agility and for symmetric cryptography algorithms. Support for algorithm agility was added which allows for various cryptographic primitives to be implemented with different algorithms. Authorization methods were unified and expanded, allowing for the building of complex authorization policies. TPM management was simplified in order for the TPM to be more useful to applications.
 
 %First sentence is prob a nonsense
@@ -101,6 +98,21 @@ According to \cite{tcg_tpm2_briefintro}, five types of a TPM are considered:
 \end{itemize}
 
 \subsection{Features}
+
+\subsubsection{Platform Configuration Registers}\label{sec:pcr}
+Platform Configuration Registers (PCRs) are dynamic memory locations inside a TPM used to store integrity metrics of software and its configuration. These locations can only be updated using \texttt{extend} operation and also read for reporting or attestation. The \texttt{extend} operation makes use of the cryptographic hash function to combine the digest stored in the PCR and the new data. Cryptographic hash function map data of arbitrary size to the output of a fixed size. Such outputs are conventionally called hashes, message digests, or digests. These functions have one-way property: when given a message digest, it is difficult  to compute the message itself. The extend operation works in the following way:
+\begin{align*}
+    d_{n+1} = h(d_{n}\ ||\ data)
+\end{align*}
+\begin{itemize}
+    \item $||$ is a concatenation of data in binary form
+    \item $ d_{n} $ is a digest stored in PCR before \texttt{extend} operation
+    \item $ d_{n+1} $ is a digest stored in PCR after \texttt{extend} operation
+    \item $ data $ is binary data to extend by
+    \item $ h $ is a cryptographic hash function
+\end{itemize}
+
+We can always recompute the final value if we possess the knowledge of members previously used in the chain and detect potential alterations.
 
 
 
@@ -141,6 +153,8 @@ Although there is no prescribed form of TPM in terms of hardware or software, th
 
 \section{Use cases}
 In this section, the use cases for TPM will be discussed. The use cases will be discussed in order from more traditional ones to more specific and state-of-the-art ones.
+
+\subsection{Measured boot}
 
 \subsection{Anonymous attestation}
 
