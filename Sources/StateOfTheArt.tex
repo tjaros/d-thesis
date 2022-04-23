@@ -29,7 +29,7 @@ Schoen in \cite{schoen2003trusted} mentions these features of Trusted Computing:
 
 
 \subsection{Roots of Trust}
-Trust is a transitive relation; if component A trusts component B, and component B trusts component C, then component A must trust component C. If this relation is applied to a trusted platform, then one component trusts another, and so on. A chain of trust is created. This chain must end somewhere, that is at a so-called root of trust. However, if this root is not trustworthy and fails, it renders the whole chain meaningless.
+Trust is a transitive relation; if component A trusts component B, and component B trusts component C, then component A must trust component C. If this relation is applied to a trusted platform, then one component trusts another, and so on. A chain of trust is created. This chain must end somewhere, that is at a so-called root of trust. However, if this root is not trustworthy and fails, it causes the whole chain to fail.
 
 The trustworthiness of the roots of trust is essential. According to the TPM specification, the roots of trust "are system elements that must be trusted because misbehavior is not detectable" \cite[p.~23]{tcg_p1_architecture}, but their trustworthiness can be assured by knowing their implementation and providing the certification of this implementation.
 
@@ -155,6 +155,8 @@ Although there is no prescribed form of TPM in terms of hardware or software, th
 In this section, the use cases for TPM will be discussed. The use cases will be discussed in order from more traditional ones to more specific and state-of-the-art ones.
 
 \subsection{Measured boot}
+
+\subsection{Disk Encryption}
 
 \subsection{Anonymous attestation}
 
