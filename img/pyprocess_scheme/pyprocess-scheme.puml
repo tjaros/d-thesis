@@ -7,20 +7,28 @@
 !include FONTAWESOME/users.puml
 !include FONTAWESOME/file.puml
 
+LAYOUT_LANDSCAPE()
 
+!$WHITE="#ffffff"
+!$BLACK="#000000"
 
-Person(user, "User", "Person who needs visualisations", $sprite="users")
+UpdateElementStyle("person", $bgColor=$WHITE, $fontColor=$BLACK, $borderColor=$BLACK, $shadowing="false")
+UpdateElementStyle("container", $bgColor=$WHITE, $fontColor=$BLACK, $borderColor=$BLACK, $shadowing="false")
 
-Container(app, "AlgTest pyProcess", "python", "Generates visualisations", $sprite="python")
-
-ContainerDb(db, "Profile database", ".csv .json", "Device profiles for visualisation", $sprite="file")
-
-ContainerDb(vis, "Visualisations", ".html .png", , $sprite="file")
-
-Rel(user, app, "Uses", "bash/powershell")
-Rel_R(app, vis, "Writes")
-Rel_R(app, db, "Reads/Writes")
+AddRelTag("blackrel", $textColor=$BLACK)
+AddRelTag("blackrel", $lineColor=$BLACK)
 
 
 
+Person(user, "User", "Person who needs visualizations", $sprite="users")
+
+Container(app, "AlgTest pyProcess", "python", "Generates visualizations", $sprite="python")
+
+ContainerDb(db, "Profile database", ".csv .json", "Device profiles for visualization", $sprite="file")
+
+ContainerDb(vis, "Visualizations", ".html .png", , $sprite="file")
+
+Rel(user, app, "Uses", "Bash/PowerShell", $tags="blackrel")
+Rel_R(app, vis, "Writes", $tags="blackrel")
+Rel_R(app, db, "Reads/Writes", $tags="blackrel")
 @enduml
