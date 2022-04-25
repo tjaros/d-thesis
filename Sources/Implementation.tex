@@ -25,28 +25,62 @@ The tool produces various types of visualization and tables in HTML pages. These
 This section describes each output of the tool.
 
 \begin{table}[H]
-    \begin{tabular*}{c|c|c|c|c|c|c}
-        Device    &  Support & Similarity & Execution time & Radar Comparative & Scalability \\ \hline
-        TPM       &  \\ \hline
-        JavaCard  &  \\
-    \end{tabular*}
+    \begin{adjustbox}{max width=\textwidth}
+    \begin{tabular}{c|c|c|c|c|c|c}
+         Device & Support & Similarity & Execution time & Radar  & Comparative & Scalability \\ \hline
+         TPM    & \cmark  & \cmark     & \cmark         & \cmark & \xmark      & \xmark  \\ \hline
+         JavaCard    & \cmark  & \cmark     & \cmark         & \cmark & \cmark      & \cmark  
+    \end{tabular}
+    \end{adjustbox}
     \caption{Results generated for each device}
 \end{table}
+
+\subsection{Support table}
+The support table contains information about support for a particular algorithm from the specific smart card. During the test for algorithm support, we can get multiple results. Either the algorithm is supported,  unsupported, error was returned, or lastly, the algorithm was not tested. Each of these results is denoted by the content and the color of the cell. By hovering over the error cell, we can find out what kind of exception or error was returned from the card. The table also provides means to filter the cards according to their support for categories of algorithms.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{img/support-table.png}
+    \caption{Support table}
+    \label{fig:support-table}
+\end{figure}
+
+\subsection{Similarity table}
+The similarity table shows how a chosen pair of cards differ in the performance of a selected group of operations. The similarity is computed for six different categories of algorithms and results in a percentage on a scale of 0 to 100, also signified by the color of each cell. The higher number indicates higher performance similarity. The cards in the table are sorted so that most similar cards are in the top left corner and the least similar are in the bottom right corner.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{img/similarity-table.png}
+    \caption{Similarity table}
+    \label{fig:similarity-table}
+\end{figure}
 
 \subsection{Algorithm execution time}
 Algorithm execution time pages are generated for each card separately and present an alternative for searching in the corresponding raw CSV file. The page contains metadata detailing the test performed on this smart card, followed by tables containing algorithm measurement values. There are multiple tables because the tested algorithms are divided into numerous categories. A quick link for each of these categories is provided as a utility to aid searching on the page.
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{img/NXP JCOP4 P71D321 execution-time table.png}
     \caption{Algorithm execution timetable of NXP JCOP4 P71D321}
     \label{fig:execution-time-table}
 \end{figure}
 
+\subsection{Radar graphs}
+Radar graphs visualize the card's performance compared to all other tested cards. A percentage describes overall performance on a scale of 0 to 100, where closer to 100 is faster. Zero value signifies either that the algorithm is not supported or not successfully tested. By hovering over the points on edge, we can see the actual average operation time for the chosen algorithm. The algorithms chosen for comparison were selected as most frequently used, and in the context of the tool, we call them Top Functions. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{img/JC30M48CR radar graph.png}
+    \caption{
+    The radar graph of the JC30M48CR card  can be considered excellent, apart from no evident support for algorithms involving Elliptic Curve Cryptography signified by a cut-out at the bottom of the graph.
+    }
+    \label{fig:radar-graph}
+\end{figure}
+
 \subsection{Comparative table}
 The comparative table allows for a simple comparison between cards. Multiple comparative tables are generated in one file divided into symmetric, asymmetric cryptography, and frequently used algorithms, also called Top Functions. The tables themselves allow for sorting of the cards just by simply clicking on the column containing values according to which rows will be sorted.
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{img/comparative-table.png}
     \caption{Comparative table}
@@ -65,37 +99,8 @@ Scalability graphs illustrate a single card's performance for a specific algorit
     \label{fig:scalability-chart}
 \end{figure}
 
-\subsection{Radar graphs}
-Radar graphs visualize the card's performance compared to all other tested cards. A percentage describes overall performance on a scale of 0 to 100, where closer to 100 is faster. Zero value signifies either that the algorithm is not supported or not successfully tested. By hovering over the points on edge, we can see the actual average operation time for the chosen algorithm. The algorithms chosen for comparison were selected as most frequently used, and in the context of the tool, we call them Top Functions. 
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=\textwidth]{img/JC30M48CR radar graph.png}
-    \caption{
-    The radar graph of the JC30M48CR card  can be considered excellent, apart from no evident support for algorithms involving Elliptic Curve Cryptography signified by a cut-out at the bottom of the graph.
-    }
-    \label{fig:radar-graph}
-\end{figure}
 
-\subsection{Support table}
-The support table contains information about support for a particular algorithm from the specific smart card. During the test for algorithm support, we can get multiple results. Either the algorithm is supported,  unsupported, error was returned, or lastly, the algorithm was not tested. Each of these results is denoted by the content and the color of the cell. By hovering over the error cell, we can find out what kind of exception or error was returned from the card. The table also provides means to filter the cards according to their support for categories of algorithms.
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=\textwidth]{img/support-table.png}
-    \caption{Support table}
-    \label{fig:support-table}
-\end{figure}
-
-\subsection{Similarity table}
-The similarity table shows how a chosen pair of cards differ in the performance of a selected group of operations. The similarity is computed for six different categories of algorithms and results in a percentage on a scale of 0 to 100, also signified by the color of each cell. The higher number indicates higher performance similarity. The cards in the table are sorted so that most similar cards are in the top left corner and the least similar are in the bottom right corner.
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=\textwidth]{img/similarity-table.png}
-    \caption{Similarity table}
-    \label{fig:similarity-table}
-\end{figure}
 
 \section{Tools}
 The \texttt{AlgTest process} tool incorporates various instruments to produce desired outputs. As the tool itself is written in Python it is able to utilize various packages from \texttt{PyPI}\footnote{\url{https://pypi.org/}} to aid future extensions.

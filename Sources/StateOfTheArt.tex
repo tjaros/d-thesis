@@ -56,14 +56,14 @@ The TPM 1.1b released in 2003 was the first broadly used TPM version. This speci
 \subsection{TPM 1.2}
 The TPM 1.2 specification was in development from 2005 to 2009 when it was standardized as ISO/IEC 11889. Its final revision was in 2011. It resolved some problems of TPM 1.1b specification, notably a requirement for dictionary attack mitigation mechanisms was added \cite[p.~36-37]{tcg_1.2_design_princ}. This specification brought a lot of new functionality and features, for example:
 \begin{itemize}
-    \item \textbf{Direct Anonymous Attestation},
+    \item \textbf{Direct Anonymous Attestation} \cite{daaSpec},
     \item \textbf{Locality} to differentiate commands between different sources,
     \item \textbf{Delegation}, where TPM owner can enable delegate access to specific owner-authorized commands,
     \item \textbf{Non-volatile storage} to store information,
     \item \textbf{Internal tick counter} used for timestamps,
     \item \textbf{Certified migration} of keys.
 \end{itemize}
-But there was also a lot of functionality which stayed the same as in TPM 1.1b. This is also related to the fact that the TPM 1.2 was required to keep the backward compatibility for TPM 1.1b \cite[p.~169]{tcg_1.2_design_princ}.
+But there was also a lot of functionality that stayed the same as in TPM 1.1b. This is also related to the fact that the TPM 1.2 was required to keep the backward compatibility for TPM 1.1b \cite[p.~169]{tcg_1.2_design_princ}.
 
 % TODO: PC specific Device interface was apparently defined in another specification
 % https://trustedcomputinggroup.org/resource/pc-client-work-group-pc-client-specific-tpm-interface-specification-tis/
@@ -160,8 +160,18 @@ In this section, the use cases for TPM will be discussed. The use cases will be 
 
 \subsection{Digital Rights Management}
 
-\subsection{Cryptographic schemes using TPM commands}
+\subsection{State-of-the-art cryptography using TPM commands}
+The TPMs contain only specific widely used cryptographic primitives. These primitives may be used independently by calling the corresponding command defined in the TPM specification, or as building blocks of more complex cryptographic protocols and schemes. 
 
+The TPM 2.0 provides one signature primitive which enables the implementation of signature schemes and cryptographic protocols using this primitive \cite{chen2013flexible}. This primitive is implemented in TPM 2.0 using five commands:
+\begin{itemize}
+    \item \textbf{TPM2\_Create} or \textbf{TPM2\_CreatePrimary} which are used for the generation of asymmetric key pairs the difference between the two is that for the latter one, the key generation uses a special secret key stored in the TPM as a seed.
+    \item \textbf{TPM2\_Load} which loads the key into the TPM. For the TPM to be able to work with the key it must be loaded, because the previously created key may not be stored inside of the TPM.
+    \item \textbf{TPM2\_ActivateCredential} which is used to certify the created key. The public portion of the generated key and public portion of TPM's endorsement key is sent by the platform associated with TPM to the Certification Authority which checks the validity of TPM's endorsement key and creates a certificate for the generated key and a new symmetric key. Then it sends both back to the platform.
+    \item \textbf{TPM2\_Commit} is a first, but optional part of the signing process defined in \cite{chen2013flexible}. The TPM generates commitment and returns associated values and a reference to the commitment value. Commitments are fundamentally used in most cryptographic protocols, for more information about commitments see~\cite{damgaard1998commitment}. 
+    \item \textbf{TPM2\_Sign} which is used to sign a given message, specifically its hash. If a TPM2\_Commit command was called before and the signature algorithm uses commitments, then the commitment is retrieved using the reference given by the TPM2\_Commit command.
+\end{itemize}
+Chen and Li \cite{chen2013flexible} also discuss the possible applications of this signature primitive for the implementation of protocols and schemes such as Direct Anonymous Attestation~\cite{daaSpec}, U-Prove~\cite{uproveSpec}, or more conventional signature schemes such as Schnorr signatures~\cite{schnorrSpec}. However, they only provide a high-level theoretical definition, but only little of implementation-specific details. 
 \section{Research}
 
 \subsection{Security analysis}
