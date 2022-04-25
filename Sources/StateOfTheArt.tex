@@ -56,7 +56,7 @@ The TPM 1.1b released in 2003 was the first broadly used TPM version. This speci
 \subsection{TPM 1.2}
 The TPM 1.2 specification was in development from 2005 to 2009 when it was standardized as ISO/IEC 11889. Its final revision was in 2011. It resolved some problems of TPM 1.1b specification, notably a requirement for dictionary attack mitigation mechanisms was added \cite[p.~36-37]{tcg_1.2_design_princ}. This specification brought a lot of new functionality and features, for example:
 \begin{itemize}
-    \item \textbf{Direct Anonymous Attestation} \cite{daaSpec},
+    \item \textbf{Direct Anonymous Attestation} \cite{daaSpec, daaDesignAndImple},
     \item \textbf{Locality} to differentiate commands between different sources,
     \item \textbf{Delegation}, where TPM owner can enable delegate access to specific owner-authorized commands,
     \item \textbf{Non-volatile storage} to store information,
@@ -152,7 +152,7 @@ Although there is no prescribed form of TPM in terms of hardware or software, th
 \end{itemize}
 
 \section{Use cases}
-In this section, the use cases for TPM will be discussed. The use cases will be discussed in order from more traditional ones to more specific and state-of-the-art ones.
+In this section, the use cases for TPM will be discussed in order from more traditional ones to more specific and state-of-the-art ones.
 
 \subsection{Measured boot}
 
@@ -161,17 +161,34 @@ In this section, the use cases for TPM will be discussed. The use cases will be 
 \subsection{Digital Rights Management}
 
 \subsection{State-of-the-art cryptography using TPM commands}
-The TPMs contain only specific widely used cryptographic primitives. These primitives may be used independently by calling the corresponding command defined in the TPM specification, or as building blocks of more complex cryptographic protocols and schemes. 
+The TPMs contain only specific widely used cryptographic primitives. These primitives can be used either independently by calling the corresponding commands from the TPM specification or as building blocks of more complex cryptographic protocols and schemes. 
 
-The TPM 2.0 provides one signature primitive which enables the implementation of signature schemes and cryptographic protocols using this primitive \cite{chen2013flexible}. This primitive is implemented in TPM 2.0 using five commands:
+The TPM 2.0 provides one signature primitive, which enables the implementation of signature schemes and cryptographic protocols using this primitive \cite{chen2013flexible}. This primitive is implemented in TPM 2.0 using five commands:
 \begin{itemize}
-    \item \textbf{TPM2\_Create} or \textbf{TPM2\_CreatePrimary} which are used for the generation of asymmetric key pairs the difference between the two is that for the latter one, the key generation uses a special secret key stored in the TPM as a seed.
-    \item \textbf{TPM2\_Load} which loads the key into the TPM. For the TPM to be able to work with the key it must be loaded, because the previously created key may not be stored inside of the TPM.
-    \item \textbf{TPM2\_ActivateCredential} which is used to certify the created key. The public portion of the generated key and public portion of TPM's endorsement key is sent by the platform associated with TPM to the Certification Authority which checks the validity of TPM's endorsement key and creates a certificate for the generated key and a new symmetric key. Then it sends both back to the platform.
-    \item \textbf{TPM2\_Commit} is a first, but optional part of the signing process defined in \cite{chen2013flexible}. The TPM generates commitment and returns associated values and a reference to the commitment value. Commitments are fundamentally used in most cryptographic protocols, for more information about commitments see~\cite{damgaard1998commitment}. 
-    \item \textbf{TPM2\_Sign} which is used to sign a given message, specifically its hash. If a TPM2\_Commit command was called before and the signature algorithm uses commitments, then the commitment is retrieved using the reference given by the TPM2\_Commit command.
+    \item \textbf{TPM2\_Create} or \textbf{TPM2\_CreatePrimary} which are used for the generation of asymmetric key pairs. The difference between the two is that the latter one's key generation uses a special secret key stored in the TPM as a seed.
+    \item \textbf{TPM2\_Load} which loads the key into the TPM. For the TPM to work with the key, the TPM must load it because the previously created key may not be stored inside the TPM.
+    \item \textbf{TPM2\_ActivateCredential} which is used to certify the created key. The public portion of the generated key and public portion of TPM's endorsement key is sent by the platform associated with TPM to the Certification Authority, which checks the validity of TPM's endorsement key and creates a certificate for the generated key and a symmetric key. Then it sends both back to the platform.
+    \item \textbf{TPM2\_Commit} is the first but optional part of the signing process defined in \cite{chen2013flexible}. The TPM generates commitment and returns associated values and a reference to the commitment value. The reference to the commitment is just a simple identifier based on which the TPM can recompute the commitment value. Commitments are fundamentally used in most cryptographic schemes and protocols. For more information about commitments in cryptographic schemes and protocols, see~\cite{damgaard1998commitment}. 
+    \item \textbf{TPM2\_Sign} which is used to sign a given message. Generally, only the hash of the given message is signed. If a TPM2\_Commit command was called before and the signature algorithm uses commitments, then the commitment value is retrieved using the reference provided by the TPM2\_Commit command.
 \end{itemize}
-Chen and Li \cite{chen2013flexible} also discuss the possible applications of this signature primitive for the implementation of protocols and schemes such as Direct Anonymous Attestation~\cite{daaSpec}, U-Prove~\cite{uproveSpec}, or more conventional signature schemes such as Schnorr signatures~\cite{schnorrSpec}. However, they only provide a high-level theoretical definition, but only little of implementation-specific details. 
+Chen and Li~\cite{chen2013flexible} also discuss the possible applications of this signature primitive for implementing protocols and schemes such as Direct Anonymous Attestation~\cite{daaSpec}, U-Prove~\cite{uproveSpec}, or more conventional signature schemes such as Schnorr signatures~\cite{schnorrSpec}. 
+% Though the ECC-DAA is adopted by TPM specification, it would be probably good to mention it.
+
+Several papers proposed various schemes using the beforementioned signature primitive in TPM 2.0. Generally most of them propose attestation schemes. 
+
+Kumar et. al~\cite{kumar2018direct} proposes DAA scheme based on ECC and addresses the problem of effective revocation in subscription systems. Subscription systems allow its subscribers to access resources. Example of that may be streaming platform which provides service of viewing movies where the subscriber needs to pay a subscription fee to be able to access this service. In such systems it may be important for the provider to be able to revoke the access to services provided by these systems. Kumar et. al consider DAA as an ideal protocol for realization of these subscription systems. Their scheme is called LASER which stands for Lightweight Anonymous Subscription with Efficient Revocation and implement this scheme using TPM in compliance to TPM 2.0 specification. They also provide a reference implementation of this scheme, which is publicly available on GitHub\footnote{\url{https://github.com/luthern/laser}}. 
+
+Another DAA scheme was proposed by Wesemeyer et. al \cite{wesemeyerDAA} which extends ECC-DAA defined by Chen and Li \cite{chen2013flexible}. They provide thorough formal verification using security verification tool called Tamarin prover \cite{meier2013tamarin} and most importantly provide implementation details of the scheme along with it's reference implementation.
+
+Wagner, Birnstill and Beyerer \cite{wagnerRemoteAttProtocol} propose remote attestation protocol based on TPM 2.0 specification which provides attestation, re-attestation, and establishment of shared key. This protocol may be used for establishment of encrypted channel between trusted platforms. Their protocol is designed to be immune to replay, insider attacks and two specific relay attacks. They also performed a formal verification of their
+protocol using Tamarin prover \cite{meier2013tamarin}, though the authors do not elaborate much on the process of formal verification they performed.
+
+Hedabou and Abdulsalam \cite{hedabou2020efficient} propose a multi-signature scheme on TPM based on BLS digital signature. The specific property of this multi-signature scheme is that it is non-interactive, meaning that the multi-signature does not require interaction between the signing parties. Their proposed scheme shows high signing efficiency and compared it to signature schemes \cite{chen2013flexible} and \cite{schnorrSpec}. An analysis showing respectable latency and computational time with up to thousand of participating signers shows that their scheme may be usable for cryptocurrency applications.
+
+
+
+
+
 \section{Research}
 
 \subsection{Security analysis}
