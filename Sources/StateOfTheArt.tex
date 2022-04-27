@@ -162,15 +162,20 @@ In this section, the use cases for TPM will be discussed in order from more trad
 
 
 \subsection{Storage Encryption}
+Data encryption provides confidentiality, which means only authorized parties can access the information. 
+
+As was mentioned in previous sections, the TPM has many capabilities, including encryption and secure storage. However, the TPM itself doesn't have the means to encrypt the whole disk and store the encrypted data in a safe location. But it can help with this process because it can generate and protect the keys used for encryption.
+
+The most notable software solution used for disk encryption that supports TPM 2.0 directly is Bitlocker, a disk encryption software developed by Microsoft. It uses the TPM to store encryption keys, though the TPM is not necessary~\cite{bitlockerMDocs}.
 
 \subsection{Digital Rights Management}
 The digital age brought an enormous increase in sharing of information. The internet allowed access to various kinds of digital content, which allowed for various business opportunities, where publishers can now sell their work, such as music, video, or software. This brought a question on how to protect the owner's rights to the digital content so that it can be accessed by paying customers only.
 
-Nowadays, the answer to this question is using Digital Rights Management (DRM) schemes. One of the first attempts to realize DRM was hiding implementation details of the protection mechanisms, a prime example of security through obscurity, which proved very ineffective because digital pirates could bypass these protection mechanisms via analysis and subsequent reverse engineering~\cite{schmidthardware}.
+Nowadays, the answer to this question is using Digital Rights Management (DRM) schemes. Attempts to implement DRM are generally realized by hiding implementation details of the protection mechanisms, a prime example of security through obscurity, which proves to be very ineffective because digital pirates can bypass these protection mechanisms via analysis and subsequent reverse engineering~\cite{liu2003digital}.
 
-Another and, most importantly, more promising candidates for the realization of DRM are the Trusted Computing platforms. Trusted Computing (TC) provides several useful features (see~\myref{Section}{sec:tc}), which could be used for enforcing policies set up by digital content providers. Many expressed their concerns about how TC would affect computing in general. Anderson in \cite{anderson2003cryptography} discusses the threat of customer lock-in, where customers become dependent on the product provided by the vendor. This combined with TC access control mechanisms, may increase the switching cost and prevent customers from migrating. Stallman in \cite{stallman2002treacherous} warns about the loss of owner control over the platform. He refers to TC as "treacherous computing" because of this and considers TPMs a total failure from a DRM standpoint. 
+Another and, most importantly, more promising candidates for the realization of DRM are the Trusted Computing platforms. Trusted Computing (TC) provides several useful features (see~\myref{Section}{sec:tc}), which could be used for enforcing policies set up by digital content providers. Many expressed their concerns about how TC would affect computing in general. Anderson in \cite{anderson2003cryptography} discusses the threat of customer lock-in, where customers become dependent on the product provided by the vendor. This, combined with TC access control mechanisms, may increase the switching cost and prevent customers from migrating. Stallman in \cite{stallman2002treacherous} warns about the loss of owner control over the platform. He refers to TC as "treacherous computing" because of this and considers TPMs a total failure from a DRM standpoint. 
 
-The only notable DRM scheme for TPMs is TBDRM, \cite{yu2009tbdrm} designed for TPM 1.2. Up till now, no TPM 2.0 based solutions for DRM seem to exist. 
+The only notable DRM scheme for TPMs is TBDRM~\cite{yu2009tbdrm}, designed for TPM 1.2. Up till now, no TPM 2.0 based solutions for DRM seem to exist. 
 
 \subsection{State-of-the-art cryptography using TPM commands}
 The TPMs contain only specific widely used cryptographic primitives. These primitives can be used either independently by calling the corresponding commands from the TPM specification or as building blocks of more complex cryptographic protocols and schemes. 
