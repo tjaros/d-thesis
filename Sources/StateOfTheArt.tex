@@ -9,7 +9,7 @@ This section provides an overview of basic concepts mentioned throughout this wo
 \subsection{Trust, trusted, and trustworthy}\label{sec:trust-def}
 The term "trust" has no uniformly formalized definition. Its interpretations vary even in the same field of study such as computer science and its subfields. The most relevant one for our needs is the TCGs' definition which states that trust is "the expectation that a device will behave in a particular manner for a specific purpose" \cite{tcg_arch_overview}. It is, however, important to note that this definition does not mention anything about the device being worthy of our trust. We only expect the specific behavior, and the device does not guarantee anything about its behavior. This means that a trusted device may fail us, whereas a trustworthy device is worthy of our trust and does not fail.
 
-\subsection{Trusted Computing}
+\subsection{Trusted Computing}\label{sec:tc}
 "Trusted computing refers to a computer system for which an entity has some level of assurance that the (part or all of) computer system behaves as expected" \cite{mitchell2005trusted}. In a sense, the definition of Trusted Computing presents a concept of trust in computing.
 
 Schoen in \cite{schoen2003trusted} mentions these features of Trusted Computing:
@@ -69,13 +69,17 @@ But there was also a lot of functionality that stayed the same as in TPM 1.1b. T
 % https://trustedcomputinggroup.org/resource/pc-client-work-group-pc-client-specific-tpm-interface-specification-tis/
 
 \subsection{TPM 2.0 reasoning}
-One factor contributing to the need for yet another specification after TPM 1.2 was that in 2005, some substantial collision attacks were found against the SHA-1 hash function. Analysis regarding the use of SHA-1 in TPM revealed the attacks not being applicable~\cite{tcg_tpm1.12_sha-1_uses}. The SHA-1 hashing algorithm was used extensively in TPM 1.2. However, when its flaw was discovered, there was no way to replace it quickly. This problem fueled the idea that the new specification had to permit any hashing algorithm without making any changes to the specification. So-called digest agility. 
+One factor contributing to the need for yet another specification after TPM 1.2 was that in 2005, some substantial collision attacks were found against the SHA-1 hash function~\cite{wang2005findingShaBroken}. Analysis regarding the use of SHA-1 in TPM revealed the attacks not being applicable~\cite{tcg_tpm1.12_sha-1_uses}. The SHA-1 hashing algorithm was used extensively in TPM 1.2. However, when its flaw was discovered, there was no way to replace it quickly. 
+
+This problem fueled the idea that the new specification had to permit any hashing algorithm without making any changes to the specification, a so-called digest agility~\cite[p.~4]{arthur2015practical}. 
 
 Another problem was the lack of a symmetric algorithm required in the TPM specification. The use of RSA for encryption of serialized data was impractical because RSA operations are slow. That's why it was decided that the following specification would adopt mandatory support for symmetric encryption, which is faster and more suitable for encryption of large byte streams. 
 
 
 \section{TPM 2.0}\label{sec:tpm2}
-
+"It is said that the best designs come about when the architects make a design and
+then, having learned all the problems they will encounter, throw away the first design and
+start over with a second" \cite[p.~4]{arthur2015practical}.
 
 The chance to overhaul the specification given to TPM 2.0 architects and developers, was turned into much more than support for digest agility and for symmetric cryptography algorithms. Support for algorithm agility was added which allows for various cryptographic primitives to be implemented with different algorithms. Authorization methods were unified and expanded, allowing for the building of complex authorization policies. TPM management was simplified in order for the TPM to be more useful to applications.
 
@@ -146,24 +150,32 @@ Although there is no prescribed form of TPM in terms of hardware or software, th
 \todo{Explain Shielded Locations}
 \item \textbf{Non-Volatile Memory} provides persistent storage space for allocation and contains Shielded Locations.
 
-\item \textbf{Random Access Memory} provides storage space that is not required to be persistent. It also contains Shielded Locations, most notably PCRs of which accumulative property is used to process logs of system state which may be subsequently validated. This is particularly useful when we want to measure the boot sequence of the system so that no malicious changes may be applied to it.
+\item \textbf{Random Access Memory} provides storage space that is not required to be persistent. It also contains Shielded Locations, most notably PCRs of which accumulative property is used to process logs of the system state, which may be subsequently validated. This is particularly useful when we want to measure the boot sequence of the system so that no malicious changes may be applied to it.
 
 \item \textbf{Power Detection Module} handles TPM power states according to platform power state changes.
 \end{itemize}
 
 \section{Use cases}
-In this section, the use cases for TPM will be discussed in order from more traditional ones to more specific and state-of-the-art ones.
+In this section, the use cases for TPM will be discussed in order from more traditional ones to more specific and state-of-the-art ones. It is also important to note that when the TPM and TPM specification is mentioned, it means TPM 2.0 and TPM 2.0 specification unless explicitly stated otherwise.
 
 \subsection{Measured boot}
+
 
 \subsection{Storage Encryption}
 
 \subsection{Digital Rights Management}
+The digital age brought an enormous increase in sharing of information. The internet allowed access to various kinds of digital content, which allowed for various business opportunities, where publishers can now sell their work, such as music, video, or software. This brought a question on how to protect the owner's rights to the digital content so that it can be accessed by paying customers only.
+
+Nowadays, the answer to this question is using Digital Rights Management (DRM) schemes. One of the first attempts to realize DRM was hiding implementation details of the protection mechanisms, a prime example of security through obscurity, which proved very ineffective because digital pirates could bypass these protection mechanisms via analysis and subsequent reverse engineering~\cite{schmidthardware}.
+
+Another and, most importantly, more promising candidates for the realization of DRM are the Trusted Computing platforms. Trusted Computing (TC) provides several useful features (see~\myref{Section}{sec:tc}), which could be used for enforcing policies set up by digital content providers. Many expressed their concerns about how TC would affect computing in general. Anderson in \cite{anderson2003cryptography} discusses the threat of customer lock-in, where customers become dependent on the product provided by the vendor. This combined with TC access control mechanisms, may increase the switching cost and prevent customers from migrating. Stallman in \cite{stallman2002treacherous} warns about the loss of owner control over the platform. He refers to TC as "treacherous computing" because of this and considers TPMs a total failure from a DRM standpoint. 
+
+The only notable DRM scheme for TPMs is TBDRM, \cite{yu2009tbdrm} designed for TPM 1.2. Up till now, no TPM 2.0 based solutions for DRM seem to exist. 
 
 \subsection{State-of-the-art cryptography using TPM commands}
 The TPMs contain only specific widely used cryptographic primitives. These primitives can be used either independently by calling the corresponding commands from the TPM specification or as building blocks of more complex cryptographic protocols and schemes. 
 
-The TPM 2.0 provides one signature primitive, which enables the implementation of signature schemes and cryptographic protocols using this primitive \cite{chen2013flexible}. This primitive is implemented in TPM 2.0 using five commands:
+The TPM 2.0 provides one signature primitive, which enables the implementation of signature schemes and cryptographic protocols using this primitive \cite{chen2013flexible}. This primitive is implemented in TPM 2.0 by providing these five commands:
 \begin{itemize}
     \item \textbf{TPM2\_Create} or \textbf{TPM2\_CreatePrimary} which are used for the generation of asymmetric key pairs. The difference between the two is that the latter one's key generation uses a special secret key stored in the TPM as a seed.
     \item \textbf{TPM2\_Load} which loads the key into the TPM. For the TPM to work with the key, the TPM must load it because the previously created key may not be stored inside the TPM.
@@ -174,16 +186,16 @@ The TPM 2.0 provides one signature primitive, which enables the implementation o
 Chen and Li~\cite{chen2013flexible} also discuss the possible applications of this signature primitive for implementing protocols and schemes such as Direct Anonymous Attestation~\cite{daaSpec}, U-Prove~\cite{uproveSpec}, or more conventional signature schemes such as Schnorr signatures~\cite{schnorrSpec}. 
 % Though the ECC-DAA is adopted by TPM specification, it would be probably good to mention it.
 
-Several papers proposed various schemes using the beforementioned signature primitive in TPM 2.0. Generally most of them propose attestation schemes. 
+Several papers proposed various schemes using the beforementioned signature primitive in TPM 2.0. Generally, they propose attestation or advanced signature schemes.
 
-Kumar et. al~\cite{kumar2018direct} proposes DAA scheme based on ECC and addresses the problem of effective revocation in subscription systems. Subscription systems allow its subscribers to access resources. Example of that may be streaming platform which provides service of viewing movies where the subscriber needs to pay a subscription fee to be able to access this service. In such systems it may be important for the provider to be able to revoke the access to services provided by these systems. Kumar et. al consider DAA as an ideal protocol for realization of these subscription systems. Their scheme is called LASER which stands for Lightweight Anonymous Subscription with Efficient Revocation and implement this scheme using TPM in compliance to TPM 2.0 specification. They also provide a reference implementation of this scheme, which is publicly available on GitHub\footnote{\url{https://github.com/luthern/laser}}. 
+Kumar et al. ~\cite{kumar2018direct} propose a DAA scheme based on ECC and addresses the problem of effective revocation in subscription systems. Subscription systems allow their subscribers to access resources. An example of that may be a streaming platform that provides the service for viewing movies where the subscriber needs to pay a subscription fee to access this service. In such systems, it may be necessary for the provider to be able to revoke the access to services provided by these systems. Kumar et al. consider DAA as an ideal protocol for realizing these subscription systems. Their scheme is called LASER, which stands for Lightweight Anonymous Subscription with Efficient Revocation. The scheme can be implemented this using TPM in compliance with TPM 2.0 specification, as shown in the provided reference implementation of this scheme, which is publicly available on GitHub\footnote{\url{https://github.com/luthern/laser}}. 
 
-Another DAA scheme was proposed by Wesemeyer et. al \cite{wesemeyerDAA} which extends ECC-DAA defined by Chen and Li \cite{chen2013flexible}. They provide thorough formal verification using security verification tool called Tamarin prover \cite{meier2013tamarin} and most importantly provide implementation details of the scheme along with it's reference implementation.
+Another DAA scheme was proposed by Wesemeyer et al.~\cite{wesemeyerDAA}, which extends ECC-DAA defined by Chen and Li \cite{chen2013flexible}. They provide thorough formal verification using a security verification tool called Tamarin prover \cite{meier2013tamarin} and provide implementation details of the scheme along with its reference implementation.
 
-Wagner, Birnstill and Beyerer \cite{wagnerRemoteAttProtocol} propose remote attestation protocol based on TPM 2.0 specification which provides attestation, re-attestation, and establishment of shared key. This protocol may be used for establishment of encrypted channel between trusted platforms. Their protocol is designed to be immune to replay, insider attacks and two specific relay attacks. They also performed a formal verification of their
+Wagner, Birnstill, and Beyerer \cite{wagnerRemoteAttProtocol} propose a remote attestation protocol based on TPM 2.0 specification, which provides attestation, re-attestation, and establishment of a shared key. This protocol may be used for the establishment of encrypted channels between trusted platforms. Their protocol is designed to be immune to replay, insider attacks, and two specific relay attacks. They also performed a formal verification of their
 protocol using Tamarin prover \cite{meier2013tamarin}, though the authors do not elaborate much on the process of formal verification they performed.
 
-Hedabou and Abdulsalam \cite{hedabou2020efficient} propose a multi-signature scheme on TPM based on BLS digital signature. The specific property of this multi-signature scheme is that it is non-interactive, meaning that the multi-signature does not require interaction between the signing parties. Their proposed scheme shows high signing efficiency and compared it to signature schemes \cite{chen2013flexible} and \cite{schnorrSpec}. An analysis showing respectable latency and computational time with up to thousand of participating signers shows that their scheme may be usable for cryptocurrency applications.
+Hedabou and Abdulsalam \cite{hedabou2020efficient} propose a multi-signature scheme on TPM based on BLS digital signature~\cite{blsSignatures}. The unique property of this multi-signature scheme is that it is non-interactive, meaning that the multi-signature does not require interaction between the signing parties. Their proposed scheme shows high signing efficiency when compared to signature schemes \cite{chen2013flexible} and \cite{schnorrSpec}. An analysis showing good latency and computational time with up to a thousand participating signers shows that their scheme may be usable for cryptocurrency applications.
 
 
 
