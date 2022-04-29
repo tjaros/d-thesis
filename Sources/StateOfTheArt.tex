@@ -156,17 +156,26 @@ Although there is no prescribed form of TPM in terms of hardware or software, th
 \end{itemize}
 
 \section{Use cases}
-In this section, the use cases for TPM will be discussed in order from more traditional ones to more specific and state-of-the-art ones. It is also important to note that when the TPM and TPM specification is mentioned, it means TPM 2.0 and TPM 2.0 specification unless explicitly stated otherwise.
+In this section, the use cases for TPM will be discussed in order from more traditional ones to more specific and state-of-the-art ones. It is also important to note that mainly the TPMs conforming to the TPM 2.0 specification are discussed, unless explicitly stated otherwise.
 
-\subsection{Measured boot}
+\subsection{Securing boot process}
+The boot process starts with running the CRTM, this starts a chain of software code measurements. All the software in the boot chain is measured before the execution and these measurements are extended into PCRs. The process of measurement generally consists of creating digests of the code which is about to be launched. This is illustrated by \myref{Figure}{fig:boot}. 
 
+The events performed during the interaction with the PCRs are recorded in the TPM event log \cite{tcg_tpm2_pcspec}, so they can be used to reconstruct and validate PCR values. Validation can be used to ensure only specific and unmodified software is executed, thus preventing execution of malicious software.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{img/boot.jpg}
+    \caption{Boot process}
+    \label{fig:boot}
+\end{figure}
 
 \subsection{Storage Encryption}
 Data encryption provides confidentiality, which means only authorized parties can access the information. 
 
 As was mentioned in previous sections, the TPM has many capabilities, including encryption and secure storage. However, the TPM itself doesn't have the means to encrypt the whole disk and store the encrypted data in a safe location. But it can help with this process because it can generate and protect the keys used for encryption.
 
-The most notable software solution used for disk encryption that supports TPM 2.0 directly is Bitlocker, a disk encryption software developed by Microsoft. It uses the TPM to store encryption keys, though the TPM is not necessary~\cite{bitlockerMDocs}.
+The most notable software solution used for disk encryption that supports TPM 1.2 and TPM 2.0 directly is Bitlocker, a disk encryption software developed by Microsoft. It prefers to use the TPM to store encryption keys, though the use of TPM can be also avoided~\cite{bitlockerMDocs}.
 
 \subsection{Digital Rights Management}
 The digital age brought an enormous increase in sharing of information. The internet allowed access to various kinds of digital content, which allowed for various business opportunities, where publishers can now sell their work, such as music, video, or software. This brought a question on how to protect the owner's rights to the digital content so that it can be accessed by paying customers only.
