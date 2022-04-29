@@ -7,14 +7,14 @@ This chapter introduces the basic concepts pertaining to TPMs, summarizes the hi
 This section provides an overview of basic concepts mentioned throughout this thesis. 
 
 \subsection{Trust, trusted, and trustworthy}\label{sec:trust-def}
-The term "trust" has no uniformly formalized definition. Its interpretations vary even in the same field of study such as computer science and its subfields. The most relevant one for our needs is the TCGs' definition which states that trust is "the expectation that a device will behave in a particular manner for a specific purpose" \cite{tcg_arch_overview}. It is, however, important to note that this definition does not mention anything about the device being worthy of our trust. We only expect the specific behavior, and the device does not guarantee anything about its behavior, that is why it is important to distinguish the terms trusted and trustworthy. 
+The term "trust" has no uniformly formalized definition. Its interpretations vary even in the same field of study such as computer science and its subfields. The most relevant one for our needs is the TCGs' definition which states that trust is "the expectation that a device will behave in a particular manner for a specific purpose" \cite{tcg_arch_overview}. It is, however, important to note that this definition does not mention anything about the device being worthy of our trust. We only expect the specific behavior, and the device does not guarantee anything about its behavior. That is why it is essential to distinguish the terms trusted and trustworthy. 
 
-Anderson differentiates between the terms in a following way:
+Anderson differentiates between the terms in the following way:
 \begin{quote}
 A trusted system or component is one whose failure can break the security policy, while a trustworthy system or component is one that won’t fail~\cite{andersonSecEng}.
 \end{quote}
 
-This means, that a trusted, but not trustworthy entity may betray our trust and behave in an undesirable way.
+This means that a trusted but not trustworthy entity may betray our trust and behave in an undesirable way.
 
 \subsection{Trusted Computing}\label{sec:tc}
 "Trusted computing refers to a computer system for which an entity has some level of assurance that the (part or all of) computer system behaves as expected" \cite{mitchell2005trusted}. In a sense, the definition of Trusted Computing presents a concept of trust in computing.
@@ -42,7 +42,7 @@ The trustworthiness of the roots of trust is essential. According to the TPM spe
 There are three kinds of roots of trust required:
 \begin{itemize}
     \item \textbf{Root of Trust for Measurement (RTM)} is trusted to reliably generate integrity measurements of software running on the platform. The measurements should ideally proceed from the boot of the platform. The entry point for the measurement is called Core Root of Trust for Measurement (CRTM), and it is generally found in the Bios boot block \cite[p.~185]{Tomlinson2017}. Generated integrity measurements are extended into PCR (see \myref{Section}{sec:pcr}) for the purpose of reporting.
-    \item \textbf{Root of Trust for Storage (RTS)} is trusted to provide memory access control. The whole data it may protect is generally not stored in the TPM directly, but the TPM only guards a key to access the data stored externally. Although some memory locations in the TPM are not so sensitive to disclosure, such as a PCR and its current contents. 
+    \item \textbf{Root of Trust for Storage (RTS)} is trusted to provide memory access control. The whole data it may protect is generally not stored in the TPM directly, but the TPM only guards a key to access the data stored externally. However, some memory locations in the TPM are not so sensitive to disclosure, such as a PCR and its current contents. 
     \item \textbf{Root of Trust for Reporting (RTR)} is trusted for reporting the current system state stored in RTS and attests to the authenticity of this information.
 \end{itemize}
 
@@ -65,7 +65,7 @@ We can always recompute the final value if we possess the knowledge of members p
 \section{History}
 The development of the TPM specification spans multiple years and multiple versions of this specification. However, the most notable versions of the specification are TPM 1.1b, TPM 1.2, and the latest TPM 2.0. 
 
-In this section the history behind the versions 1.1b and 1.2 will be briefly described. Then some reasoning behind the creation of the latest version 2.0 will be provided.
+This section will briefly describe the history behind versions 1.1b and 1.2, then some reasoning behind the creation of the latest version 2.0 will be provided.
 
 \subsection{TPM 1.1b}
 The TPM 1.1b released in 2003 was the first broadly used TPM version. This specification already defined some essential functionality found in modern TPMs, such as:
@@ -77,7 +77,7 @@ The TPM 1.1b released in 2003 was the first broadly used TPM version. This speci
 \end{itemize}
 
 \subsection{TPM 1.2}
-The TPM 1.2 specification was in development from 2005 to 2009 when it was standardized as ISO/IEC 11889. Its final revision was in 2011. It resolved some problems of TPM 1.1b specification, notably a requirement for dictionary attack mitigation mechanisms was added \cite[p.~36-37]{tcg_1.2_design_princ}. This specification brought a lot of new functionality and features, for example:
+The TPM 1.2 specification was in development from 2005 to 2009 when it was standardized as ISO/IEC 11889. Its final revision was in 2011. It resolved some problems of TPM 1.1b specification, notably, a requirement for dictionary attack mitigation mechanisms was added \cite[p.~36-37]{tcg_1.2_design_princ}. This specification brought a lot of new functionality and features, for example:
 \begin{itemize}
     \item \textbf{Direct Anonymous Attestation} \cite{daaSpec, daaDesignAndImple},
     \item \textbf{Locality} to differentiate commands between different sources,
@@ -112,7 +112,7 @@ The main goal of the new specification was to provide a library describing featu
 This section describes various types of TPMs and their architecture.
 
 \subsection{Types}
-There is no single correct way how should TPM 2.0 be implemented. TPM specification does not dictate if a TPM should be implemented in hardware or software. Different usage scenarios may require a different type of TPM. The TPM specification only defines functionality to be adhered to by its implementations. 
+There is no single correct way how TPM 2.0 should be implemented. TPM specification does not dictate if a TPM should be implemented in hardware or software. Different usage scenarios may require a different type of TPM. The TPM specification only defines functionality to be adhered to by its implementations. 
 
 According to \cite{tcg_tpm2_briefintro}, five types of a TPM are considered:
 
@@ -154,7 +154,7 @@ Although there is no prescribed form of TPM in terms of hardware or software, th
 
 \item \textbf{Authorization Subsystem} which tests that each executed command has required authorization to access sensitive memory locations inside TPM. The TPM specification \cite{tcg_p1_architecture} defines three types of authorization: password, HMAC, and policy. Any command may require up to two authorizations.
 
-\item \textbf{Non-Volatile Memory} provides persistent storage space for allocation. It also contains sensitive memory locations which can by accessed only by the TPM and manipulated only by specific operations.
+\item \textbf{Non-Volatile Memory} provides persistent storage space for allocation. It also contains sensitive memory locations, which can be accessed only by the TPM and manipulated by specific TPM operations.
 
 \item \textbf{Random Access Memory} provides storage space that is not required to be persistent. Notably, it also contains the PCRs of which accumulative property is used to process logs of the system state, which may be subsequently validated. This is particularly useful when we want to measure the boot sequence of the system so that no malicious changes may be applied to it.
 
@@ -162,12 +162,12 @@ Although there is no prescribed form of TPM in terms of hardware or software, th
 \end{itemize}
 
 \section{Use cases}
-In this section, the use cases for TPM will be discussed in order from more traditional ones to more specific and state-of-the-art ones. It is also important to note that mainly the TPMs conforming to the TPM 2.0 specification are discussed, unless explicitly stated otherwise.
+In this section, the use cases for TPM will be discussed in order from more traditional ones to more specific and state-of-the-art ones. It is also important to note that mainly the TPMs conforming to the TPM 2.0 specification are discussed unless explicitly stated otherwise.
 
 \subsection{Securing boot process}
-The boot process starts with running the CRTM, this starts a chain of software code measurements. All the software in the boot chain is measured before the execution and these measurements are extended into PCRs. The process of measurement generally consists of creating digests of the code which is about to be launched. This is illustrated by \myref{Figure}{fig:boot}. 
+The boot process starts with running the CRTM, and this starts a chain of software code measurements. All the software in the boot chain is measured before the execution, and these measurements are extended into PCRs. The measurement process generally consists of creating digests of the code that is about to be launched. This is illustrated by \myref{Figure}{fig:boot}. 
 
-The events performed during the interaction with the PCRs are recorded in the TPM event log \cite{tcg_tpm2_pcspec}, so they can be used to reconstruct and validate PCR values. Validation can be used to ensure only specific and unmodified software is executed, thus preventing execution of malicious software.
+The events performed during the interaction with the PCRs are recorded in the TPM event log \cite{tcg_tpm2_pcspec} to be used to reconstruct and validate PCR values. Validation can ensure only specific and unmodified software is executed, thus preventing the execution of malicious software.
 
 \begin{figure}[H]
     \centering
@@ -179,16 +179,16 @@ The events performed during the interaction with the PCRs are recorded in the TP
 \subsection{Storage Encryption}
 Data encryption provides confidentiality, which means only authorized parties can access the information. 
 
-As was mentioned in previous sections, the TPM has many capabilities, including encryption and secure storage. However, the TPM itself doesn't have the means to encrypt the whole disk and store the encrypted data in a safe location. But it can help with this process because it can generate and protect the keys used for encryption.
+As was mentioned in previous sections, the TPM has many capabilities, including encryption and secure storage. However, the TPM itself doesn't have the means to encrypt the whole disk and store the encrypted data safely. But it can help with this process because it can generate and protect the keys used for encryption.
 
-The most notable software solution used for disk encryption that supports TPM 1.2 and TPM 2.0 directly is Bitlocker, a disk encryption software developed by Microsoft. It prefers to use the TPM to store encryption keys, though the use of TPM can be also avoided~\cite{bitlockerMDocs}.
+The most notable software solution used for disk encryption that supports TPM 1.2 and TPM 2.0 is Bitlocker, a disk encryption software developed by Microsoft. It prefers to use the TPM to store encryption keys, though the use of TPM can be also avoided completely~\cite{bitlockerMDocs}.
 
 \subsection{Digital Rights Management}
 The digital age brought an enormous increase in sharing of information. The internet allowed access to various kinds of digital content, which allowed for various business opportunities, where publishers can now sell their work, such as music, video, or software. This brought a question on how to protect the owner's rights to the digital content so that it can be accessed by paying customers only.
 
 Nowadays, the answer to this question is using Digital Rights Management (DRM) schemes. Attempts to implement DRM are generally realized by hiding implementation details of the protection mechanisms, a prime example of security through obscurity, which proves to be very ineffective because digital pirates can bypass these protection mechanisms via analysis and subsequent reverse engineering~\cite{liu2003digital}.
 
-Another and, most importantly, more promising candidates for the realization of DRM are the Trusted Computing platforms. Trusted Computing (TC) provides several useful features (see~\myref{Section}{sec:tc}), which could be used for enforcing policies set up by digital content providers. Many expressed their concerns about how TC would affect computing in general. Anderson in \cite{anderson2003cryptography} discusses the threat of customer lock-in, where customers become dependent on the product provided by the vendor. This, combined with TC access control mechanisms, may increase the switching cost and prevent customers from migrating. Stallman in \cite{stallman2002treacherous} warns about the loss of owner control over the platform. He refers to TC as "treacherous computing" because of this, but considers TPMs a total failure from a DRM standpoint. 
+Another and, most importantly, more promising candidates for the realization of DRM are the Trusted Computing platforms. Trusted Computing (TC) provides several useful features (see~\myref{Section}{sec:tc}), which could be used for enforcing policies set up by digital content providers. Many expressed their concerns about how TC would affect computing in general. Anderson in \cite{anderson2003cryptography} discusses the threat of customer lock-in, where customers become dependent on the product provided by the vendor. This, combined with TC access control mechanisms, may increase the switching cost and prevent customers from migrating. Stallman in \cite{stallman2002treacherous} warns about the loss of owner control over the platform. He refers to TC as "treacherous computing" because of this but considers TPMs a total failure from a DRM standpoint. 
 
 The only notable DRM scheme for TPMs is TBDRM~\cite{yu2009tbdrm}, designed for TPM 1.2. Up till now, no TPM 2.0 based solutions for DRM seem to exist. 
 
