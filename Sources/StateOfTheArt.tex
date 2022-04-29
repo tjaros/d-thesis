@@ -42,7 +42,7 @@ The trustworthiness of the roots of trust is essential. According to the TPM spe
 There are three kinds of roots of trust required:
 \begin{itemize}
     \item \textbf{Root of Trust for Measurement (RTM)} is trusted to reliably generate integrity measurements of software running on the platform. The measurements should ideally proceed from the boot of the platform. The entry point for the measurement is called Core Root of Trust for Measurement (CRTM), and it is generally found in the Bios boot block \cite[p.~185]{Tomlinson2017}. Generated integrity measurements are extended into PCR (see \myref{Section}{sec:pcr}) for the purpose of reporting.
-    \item \textbf{Root of Trust for Storage (RTS)} is trusted to provide memory access control. The whole data it may protect is generally not stored in the Shielded Locations directly, but the TPM only guards a key to access the data stored externally. Although some memory locations in the TPM are not so sensitive to disclosure, such as a PCR and its current contents. 
+    \item \textbf{Root of Trust for Storage (RTS)} is trusted to provide memory access control. The whole data it may protect is generally not stored in the TPM directly, but the TPM only guards a key to access the data stored externally. Although some memory locations in the TPM are not so sensitive to disclosure, such as a PCR and its current contents. 
     \item \textbf{Root of Trust for Reporting (RTR)} is trusted for reporting the current system state stored in RTS and attests to the authenticity of this information.
 \end{itemize}
 
@@ -156,7 +156,7 @@ Although there is no prescribed form of TPM in terms of hardware or software, th
 
 \item \textbf{Non-Volatile Memory} provides persistent storage space for allocation. It also contains sensitive memory locations which can by accessed only by the TPM and manipulated only by specific operations.
 
-\item \textbf{Random Access Memory} provides storage space that is not required to be persistent. It also contains Shielded Locations, most notably PCRs of which accumulative property is used to process logs of the system state, which may be subsequently validated. This is particularly useful when we want to measure the boot sequence of the system so that no malicious changes may be applied to it.
+\item \textbf{Random Access Memory} provides storage space that is not required to be persistent. Notably, it also contains the PCRs of which accumulative property is used to process logs of the system state, which may be subsequently validated. This is particularly useful when we want to measure the boot sequence of the system so that no malicious changes may be applied to it.
 
 \item \textbf{Power Detection Module} handles TPM power states according to platform power state changes.
 \end{itemize}
