@@ -1,13 +1,20 @@
 \chapter{Trusted Platform Module}
 The Trusted Platform Module is a system component used as a cryptographic co-processor. The TPM specification was defined and is currently maintained by Trusted Computing Group (TCG), formerly known as Trusted Computing Platform Alliance. The specification was also standardized by International Organization for Specification (ISO) and International Electrotechnical Commission (IEC) as ISO/IEC 11889.
 
-This chapter introduces the basic concepts pertaining to TPMs, summarizes the history of their development, describes the TPM 2.0 specification, and reports on research also with regard to their various use cases. 
+This chapter introduces the basic concepts pertaining to TPMs, summarizes the history of their development, describes the TPM 2.0 specification, informs about use cases of TPMs, and reports on TPM research and development.
 
 \section{Basic concepts}
-This section provides an overview of basic concepts mentioned throughout this work.
+This section provides an overview of basic concepts mentioned throughout this thesis. 
 
 \subsection{Trust, trusted, and trustworthy}\label{sec:trust-def}
-The term "trust" has no uniformly formalized definition. Its interpretations vary even in the same field of study such as computer science and its subfields. The most relevant one for our needs is the TCGs' definition which states that trust is "the expectation that a device will behave in a particular manner for a specific purpose" \cite{tcg_arch_overview}. It is, however, important to note that this definition does not mention anything about the device being worthy of our trust. We only expect the specific behavior, and the device does not guarantee anything about its behavior. This means that a trusted device may fail us, whereas a trustworthy device is worthy of our trust and does not fail.
+The term "trust" has no uniformly formalized definition. Its interpretations vary even in the same field of study such as computer science and its subfields. The most relevant one for our needs is the TCGs' definition which states that trust is "the expectation that a device will behave in a particular manner for a specific purpose" \cite{tcg_arch_overview}. It is, however, important to note that this definition does not mention anything about the device being worthy of our trust. We only expect the specific behavior, and the device does not guarantee anything about its behavior, that is why it is important to distinguish the terms trusted and trustworthy. 
+
+Anderson differentiates between the terms in a following way:
+\begin{quote}
+A trusted system or component is one whose failure can break the security policy, while a trustworthy system or component is one that won’t fail~\cite{andersonSecEng}.
+\end{quote}
+
+This means, that a trusted, but not trustworthy entity may betray our trust and behave in an undesirable way.
 
 \subsection{Trusted Computing}\label{sec:tc}
 "Trusted computing refers to a computer system for which an entity has some level of assurance that the (part or all of) computer system behaves as expected" \cite{mitchell2005trusted}. In a sense, the definition of Trusted Computing presents a concept of trust in computing.
@@ -16,7 +23,6 @@ Schoen in \cite{schoen2003trusted} mentions these features of Trusted Computing:
 
 \begin{itemize}
 
-%\item \textbf{Endorsement Key} (EK) is a key stored permanently in TPM and is unique to each TPM. It is typically installed physically into the TPM during the manufacturing process. The EK consists of public and private key pair, where the private part never leaves the TPM. A certificate containing a public portion of EK and information about TPM can be signed by a certification authority to attest to the validity of EK and TPM itself. The EK is directly used only for the process of taking ownership of TPM and creating Attestation Identity Key  certificates \cite[p.~179-180]{Tomlinson2017}.
 
 \item \textbf{Secure I/O} goal is to prevent spyware threats such as key loggers that record every keystroke or screen grabbers that adversaries may use to monitor user activities. Secure I/O provides a hardware "tunnel" between the user and the application so that no spying on the contents of their communication is possible.
 
@@ -40,9 +46,26 @@ There are three kinds of roots of trust required:
     \item \textbf{Root of Trust for Reporting (RTR)} is trusted for reporting the current system state stored in RTS and attests to the authenticity of this information.
 \end{itemize}
 
+\subsection{Platform Configuration Registers}\label{sec:pcr}
+Platform Configuration Registers (PCRs) are dynamic memory locations inside a TPM used to store integrity metrics of software and its configuration. These locations can only be updated using \texttt{extend} operation and also read for reporting or attestation. The \texttt{extend} operation makes use of the cryptographic hash function to combine the digest stored in the PCR and the new data. Cryptographic hash function map data of arbitrary size to the output of a fixed size. Such outputs are conventionally called hashes, message digests, or digests. These functions have one-way property: when given a message digest, it is difficult  to compute the message itself. The extend operation works in the following way:
+\begin{align*}
+    d_{n+1} = h(d_{n}\ ||\ data)
+\end{align*}
+\begin{itemize}
+    \item $||$ is a concatenation of data in binary form
+    \item $ d_{n} $ is a digest stored in PCR before \texttt{extend} operation
+    \item $ d_{n+1} $ is a digest stored in PCR after \texttt{extend} operation
+    \item $ data $ is binary data to extend by
+    \item $ h $ is a cryptographic hash function
+\end{itemize}
+
+We can always recompute the final value if we possess the knowledge of members previously used in the chain and detect potential alterations.
+
 
 \section{History}
 The development of the TPM specification spans multiple years and multiple versions of this specification. However, the most notable versions of the specification are TPM 1.1b, TPM 1.2, and the latest TPM 2.0. 
+
+In this section the history behind the versions 1.1b and 1.2 will be briefly described. Then some reasoning behind the creation of the latest version 2.0 will be provided.
 
 \subsection{TPM 1.1b}
 The TPM 1.1b released in 2003 was the first broadly used TPM version. This specification already defined some essential functionality found in modern TPMs, such as:
@@ -69,9 +92,9 @@ But there was also a lot of functionality that stayed the same as in TPM 1.1b. T
 % https://trustedcomputinggroup.org/resource/pc-client-work-group-pc-client-specific-tpm-interface-specification-tis/
 
 \subsection{TPM 2.0 reasoning}
-One factor contributing to the need for yet another specification after TPM 1.2 was that in 2005, some substantial collision attacks were found against the SHA-1 hash function~\cite{wang2005findingShaBroken}. Analysis regarding the use of SHA-1 in TPM revealed the attacks not being applicable~\cite{tcg_tpm1.12_sha-1_uses}. The SHA-1 hashing algorithm was used extensively in TPM 1.2. However, when its flaw was discovered, there was no way to replace it quickly. 
+One factor contributing to the need for yet another specification after TPM 1.2 was that in 2005, some substantial collision attacks were found against the SHA-1 hash function~\cite{wang2005findingShaBroken}. 
 
-This problem fueled the idea that the new specification had to permit any hashing algorithm without making any changes to the specification, a so-called digest agility~\cite[p.~4]{arthur2015practical}. 
+Although the analysis regarding the use of SHA-1 in TPM 1.2 revealed the attacks not being applicable~\cite{tcg_tpm1.2_sha-1_uses}, the problem was that there was no way to replace the algorithm quickly. This problem fueled the idea that the new specification had to permit any hashing algorithm without making any changes to the specification, a so-called digest agility~\cite[p.~4]{arthur2015practical}. 
 
 Another problem was the lack of a symmetric algorithm required in the TPM specification. The use of RSA for encryption of serialized data was impractical because RSA operations are slow. That's why it was decided that the following specification would adopt mandatory support for symmetric encryption, which is faster and more suitable for encryption of large byte streams. 
 
@@ -86,7 +109,7 @@ The chance to overhaul the specification given to TPM 2.0 architects and develop
 %First sentence is prob a nonsense
 The main goal of the new specification was to provide a library describing features and commands available for implementation. This architecture allows designers to choose the required level of security, which may vary for different use cases. 
 
-This section describes various types of TPMs, their basic features, and use cases.
+This section describes various types of TPMs and their architecture.
 
 \subsection{Types}
 There is no single correct way how should TPM 2.0 be implemented. TPM specification does not dictate if a TPM should be implemented in hardware or software. Different usage scenarios may require a different type of TPM. The TPM specification only defines functionality to be adhered to by its implementations. 
@@ -101,24 +124,8 @@ According to \cite{tcg_tpm2_briefintro}, five types of a TPM are considered:
     \item \textbf{Software TPM} is implemented as an emulator ideally used for testing and system prototyping purposes. It does not run inside of an isolated environment and may be prone to tampering.
 \end{itemize}
 
-\subsection{Features}
 
-\subsubsection{Platform Configuration Registers}\label{sec:pcr}
-Platform Configuration Registers (PCRs) are dynamic memory locations inside a TPM used to store integrity metrics of software and its configuration. These locations can only be updated using \texttt{extend} operation and also read for reporting or attestation. The \texttt{extend} operation makes use of the cryptographic hash function to combine the digest stored in the PCR and the new data. Cryptographic hash function map data of arbitrary size to the output of a fixed size. Such outputs are conventionally called hashes, message digests, or digests. These functions have one-way property: when given a message digest, it is difficult  to compute the message itself. The extend operation works in the following way:
-\begin{align*}
-    d_{n+1} = h(d_{n}\ ||\ data)
-\end{align*}
-\begin{itemize}
-    \item $||$ is a concatenation of data in binary form
-    \item $ d_{n} $ is a digest stored in PCR before \texttt{extend} operation
-    \item $ d_{n+1} $ is a digest stored in PCR after \texttt{extend} operation
-    \item $ data $ is binary data to extend by
-    \item $ h $ is a cryptographic hash function
-\end{itemize}
-
-We can always recompute the final value if we possess the knowledge of members previously used in the chain and detect potential alterations.
-
-
+%\item \textbf{Endorsement Key (EK)} is a key stored permanently in TPM and is unique to each TPM. It is typically installed physically into the TPM during the manufacturing process. The EK consists of public and private key pair, where the private part never leaves the TPM. A certificate containing a public portion of EK and information about TPM can be signed by a certification authority to attest to the validity of EK and TPM itself. The EK is directly used only for the process of taking ownership of TPM and creating Attestation Identity Key  certificates \cite[p.~179-180]{Tomlinson2017}.
 
 
 \subsection{Architecture}
@@ -145,10 +152,9 @@ Although there is no prescribed form of TPM in terms of hardware or software, th
     \item Key Generation uses RNG value either directly as a secret key or as a seed to derive from applying some approved key derivation function.
 \end{itemize}
 
-\item \textbf{Authorization Subsystem} which tests that each executed command has required authorization to access Shielded Locations. 
+\item \textbf{Authorization Subsystem} which tests that each executed command has required authorization to access sensitive memory locations inside TPM. The TPM specification \cite{tcg_p1_architecture} defines three types of authorization: password, HMAC, and policy. Any command may require up to two authorizations.
 
-\todo{Explain Shielded Locations}
-\item \textbf{Non-Volatile Memory} provides persistent storage space for allocation and contains Shielded Locations.
+\item \textbf{Non-Volatile Memory} provides persistent storage space for allocation. It also contains sensitive memory locations which can by accessed only by the TPM and manipulated only by specific operations.
 
 \item \textbf{Random Access Memory} provides storage space that is not required to be persistent. It also contains Shielded Locations, most notably PCRs of which accumulative property is used to process logs of the system state, which may be subsequently validated. This is particularly useful when we want to measure the boot sequence of the system so that no malicious changes may be applied to it.
 
@@ -182,7 +188,7 @@ The digital age brought an enormous increase in sharing of information. The inte
 
 Nowadays, the answer to this question is using Digital Rights Management (DRM) schemes. Attempts to implement DRM are generally realized by hiding implementation details of the protection mechanisms, a prime example of security through obscurity, which proves to be very ineffective because digital pirates can bypass these protection mechanisms via analysis and subsequent reverse engineering~\cite{liu2003digital}.
 
-Another and, most importantly, more promising candidates for the realization of DRM are the Trusted Computing platforms. Trusted Computing (TC) provides several useful features (see~\myref{Section}{sec:tc}), which could be used for enforcing policies set up by digital content providers. Many expressed their concerns about how TC would affect computing in general. Anderson in \cite{anderson2003cryptography} discusses the threat of customer lock-in, where customers become dependent on the product provided by the vendor. This, combined with TC access control mechanisms, may increase the switching cost and prevent customers from migrating. Stallman in \cite{stallman2002treacherous} warns about the loss of owner control over the platform. He refers to TC as "treacherous computing" because of this and considers TPMs a total failure from a DRM standpoint. 
+Another and, most importantly, more promising candidates for the realization of DRM are the Trusted Computing platforms. Trusted Computing (TC) provides several useful features (see~\myref{Section}{sec:tc}), which could be used for enforcing policies set up by digital content providers. Many expressed their concerns about how TC would affect computing in general. Anderson in \cite{anderson2003cryptography} discusses the threat of customer lock-in, where customers become dependent on the product provided by the vendor. This, combined with TC access control mechanisms, may increase the switching cost and prevent customers from migrating. Stallman in \cite{stallman2002treacherous} warns about the loss of owner control over the platform. He refers to TC as "treacherous computing" because of this, but considers TPMs a total failure from a DRM standpoint. 
 
 The only notable DRM scheme for TPMs is TBDRM~\cite{yu2009tbdrm}, designed for TPM 1.2. Up till now, no TPM 2.0 based solutions for DRM seem to exist. 
 
@@ -206,14 +212,9 @@ Kumar et al. ~\cite{kumar2018direct} propose a DAA scheme based on ECC and addre
 
 Another DAA scheme was proposed by Wesemeyer et al.~\cite{wesemeyerDAA}, which extends ECC-DAA defined by Chen and Li \cite{chen2013flexible}. They provide thorough formal verification using a security verification tool called Tamarin prover \cite{meier2013tamarin} and provide implementation details of the scheme along with its reference implementation.
 
-Wagner, Birnstill, and Beyerer \cite{wagnerRemoteAttProtocol} propose a remote attestation protocol based on TPM 2.0 specification, which provides attestation, re-attestation, and establishment of a shared key. This protocol may be used for the establishment of encrypted channels between trusted platforms. Their protocol is designed to be immune to replay, insider attacks, and two specific relay attacks. They also performed a formal verification of their
-protocol using Tamarin prover \cite{meier2013tamarin}, though the authors do not elaborate much on the process of formal verification they performed.
+Wagner, Birnstill, and Beyerer \cite{wagnerRemoteAttProtocol} propose a remote attestation protocol based on TPM 2.0 specification, which provides attestation, re-attestation, and establishment of a shared key. This protocol may be used for the establishment of encrypted channels between trusted platforms. Their protocol is designed to be immune to several attacks. They also performed a formal verification of their protocol using Tamarin prover \cite{meier2013tamarin}, though the authors do not elaborate much on the process of formal verification they performed.
 
 Hedabou and Abdulsalam \cite{hedabou2020efficient} propose a multi-signature scheme on TPM based on BLS digital signature~\cite{blsSignatures}. The unique property of this multi-signature scheme is that it is non-interactive, meaning that the multi-signature does not require interaction between the signing parties. Their proposed scheme shows high signing efficiency when compared to signature schemes \cite{chen2013flexible} and \cite{schnorrSpec}. An analysis showing good latency and computational time with up to a thousand participating signers shows that their scheme may be usable for cryptocurrency applications.
-
-
-
-
 
 \section{Research}
 
