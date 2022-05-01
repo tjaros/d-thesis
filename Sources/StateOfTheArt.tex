@@ -208,7 +208,7 @@ Chen and Li~\cite{chen2013flexible} also discuss the possible applications of th
 
 Several papers proposed various schemes using the beforementioned signature primitive in TPM 2.0. Generally, they propose attestation or advanced signature schemes.
 
-Kumar et al. ~\cite{kumar2018direct} propose a DAA scheme based on ECC and addresses the problem of effective revocation in subscription systems. Subscription systems allow their subscribers to access resources. An example of that may be a streaming platform that provides the service for viewing movies where the subscriber needs to pay a subscription fee to access this service. In such systems, it may be necessary for the provider to be able to revoke the access to services provided by these systems. Kumar et al. consider DAA as an ideal protocol for realizing these subscription systems. Their scheme is called LASER, which stands for Lightweight Anonymous Subscription with Efficient Revocation. The scheme can be implemented this using TPM in compliance with TPM 2.0 specification, as shown in the provided reference implementation of this scheme, which is publicly available on GitHub\footnote{\url{https://github.com/luthern/laser}}. 
+Kumar et al. ~\cite{kumar2018direct} propose a DAA scheme based on ECC and addresses the problem of effective revocation in subscription systems. Subscription systems allow their subscribers to access resources. An example of that may be a streaming platform that provides the service for viewing movies where the subscriber needs to pay a subscription fee to access this service. In such systems, it may be necessary for the provider to be able to revoke the access to services provided by these systems. Kumar et al. consider DAA as an ideal protocol for realizing these subscription systems. Their scheme is called LASER, which stands for Lightweight Anonymous Subscription with Efficient Revocation. The scheme can be implemented this using TPM in compliance with TPM 2.0 specification, as shown in the provided reference implementation of this scheme, which is publicly available. 
 
 Another DAA scheme was proposed by Wesemeyer et al.~\cite{wesemeyerDAA}, which extends ECC-DAA defined by Chen and Li \cite{chen2013flexible}. They provide thorough formal verification using a security verification tool called Tamarin prover \cite{meier2013tamarin} and provide implementation details of the scheme along with its reference implementation.
 
@@ -216,11 +216,50 @@ Wagner, Birnstill, and Beyerer \cite{wagnerRemoteAttProtocol} propose a remote a
 
 Hedabou and Abdulsalam \cite{hedabou2020efficient} propose a multi-signature scheme on TPM based on BLS digital signature~\cite{blsSignatures}. The unique property of this multi-signature scheme is that it is non-interactive, meaning that the multi-signature does not require interaction between the signing parties. Their proposed scheme shows high signing efficiency when compared to signature schemes \cite{chen2013flexible} and \cite{schnorrSpec}. An analysis showing good latency and computational time with up to a thousand participating signers shows that their scheme may be usable for cryptocurrency applications.
 
-\section{Research}
+Another attestation scheme, but with a different targeted use case was proposed by Arfaoui et al. \cite{arfaoui2021deepAttestation}. This scheme is used to attest hypervisors and their virtual machines. They implemented this scheme using TPM 2.0 and the implementation is publicly available.
 
-\subsection{Security analysis}
 
-\subsection{Performance analysis}
+\subsection{Conclusion}
+\begin{table}[H]
+\centering
+    \begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+ & \cite{kumar2018direct} & \cite{arfaoui2021deepAttestation} & \cite{wesemeyerDAA} & \cite{wagnerRemoteAttProtocol} \\ \hline
+TPM 2.0 & \cmark & \cmark & \cmark & \cmark \\ \hline
+Reference Implementation & \cmark & \cmark & \cmark & \cmark \\ \hline
+AES & \xmark & \xmark & \cmark & \cmark \\ \hline
+CFB & \xmark & \xmark & \cmark & \cmark \\ \hline
+ECC & \cmark & \xmark & \cmark & \xmark \\ \hline
+ECDAA & \cmark & \xmark & \cmark & \xmark \\ \hline
+ECDH & \xmark & \xmark & \xmark & \cmark \\ \hline
+KEYEDHASH & \xmark & \xmark & \cmark & \xmark \\ \hline
+RSA & \xmark & \cmark & \cmark & \xmark \\ \hline
+RSASSA & \xmark & \cmark & \xmark & \cmark \\ \hline
+SHA-256 & \cmark & \cmark & \cmark & \cmark \\ \hline
+XOR & \cmark & \xmark & \xmark & \xmark \\ \hline
+BN P256 & \cmark & \xmark & \cmark & \xmark \\ \hline
+NIST P256 & \xmark & \xmark & \cmark & \cmark \\ \hline
+\end{tabular}
+    \end{adjustbox}
+    \caption{Papers and their use of algorithms in TPM 2.0}
+    \label{table:schemes}
+\end{table}
+
+Several research papers were mentioned in the previous sections. However, only some provide implementation details by mentioning the exact cryptographic algorithms used or providing a reference implementation.
+
+The \myref{Table}{table:schemes} shows several papers and the cryptographic algorithms used when implementing a particular use case with TPM. Not all of the algorithms were mentioned directly by these papers, but the code of reference implementations had to be studied more often.
+
+\section{Research & Development}
+This section provides a brief overview of TPM research and development.
+
+
+
+
+
+
+
+
 
 %\subsection{tpm2-algtest}
 %The \texttt{tpm2-algtest}\footnote{https://github.com/crocs-muni/tpm2-algtest} is a tool for automatic gathering of information about the TPM2 devices \cite{Struk2019thesis}. The tool uses libraries implementing Trusted Computing Group's TPM2 Software Stack\footnote{https://github.com/tpm2-software/tpm2-tss} which allows for simplification of development when programming applications supposed to interact with the TPM. The tool tests for support of specific commands and supporting routines, values of structures defined in the TPM 2.0 specification \cite{tcg_p3_commands, tcg_p4_supproutines, tcg_p2_structures}. Supported cryptographic algorithms are also subject to performance analysis where the time to execute such an algorithm is repeatedly measured and recorded. Additionally, the tool uses the TPM to generate key pairs for RSA and ECC-based algorithms so that they can be further analyzed by various means.
