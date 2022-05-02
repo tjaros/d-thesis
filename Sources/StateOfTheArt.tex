@@ -192,7 +192,7 @@ Another and, most importantly, more promising candidates for the realization of 
 
 The only notable DRM scheme for TPMs is TBDRM~\cite{yu2009tbdrm}, designed for TPM 1.2. Up till now, no TPM 2.0 based solutions for DRM seem to exist. 
 
-\subsection{State-of-the-art cryptography using TPM commands}
+\subsection{State-of-the-art cryptography using TPM commands}\label{sec:soacryptotpmcommands}
 The TPMs contain only specific widely used cryptographic primitives. These primitives can be used either independently by calling the corresponding commands from the TPM specification or as building blocks of more complex cryptographic protocols and schemes. 
 
 The TPM 2.0 provides one signature primitive, which enables the implementation of signature schemes and cryptographic protocols using this primitive \cite{chen2013flexible}. This primitive is implemented in TPM 2.0 by providing these five commands:
@@ -248,18 +248,22 @@ NIST P256 & \xmark & \xmark & \cmark & \cmark \\ \hline
 
 Several research papers were mentioned in the previous sections. However, only some provide implementation details by mentioning the exact cryptographic algorithms used or providing a reference implementation.
 
-The \myref{Table}{table:schemes} shows several papers and the cryptographic algorithms used when implementing a particular use case with TPM. Not all of the algorithms were mentioned directly by these papers, but the code of reference implementations had to be studied more often.
+The \myref{Table}{table:schemes} shows several papers and the cryptographic algorithms used when implementing a particular use case with TPM. These papers mentioned not all of the algorithms directly, but the code of reference implementations had to be studied more often.
 
-\section{Research & Development}
-This section provides a brief overview of TPM research and development.
+\section{Research \& Development}
+This section provides an overview of TPM research and development. Firstly a TPM security research will be shortly mentioned, then related work will be presented.
+
+\subsection{TPM Security}
+Security researchers, in general, focus on various problems. Some of their work has a practical use, and other is less practical but essential nonetheless. 
+
+A lot of research on the TPMs intends to reveal possible weaknesses and find ways to mitigate these weaknesses. In the last few years, several papers presenting practical attacks which also affected TPM devices were presented.
+
+Nemec et al. revealed a vulnerability in RSA key generation used in many security-critical chips, including TPMs \cite{2017-ccs-nemec}. This vulnerability allowed them to factorize the RSA public modulus and recover the private primes. Han et al. \cite{han2018sleep} showed that the TPMs were susceptible to power management attacks, where it was possible to forge the PCRs. Moghimi et al. \cite{moghimi2020fail} found out that some TPMs were vulnerable to side-channel attacks on elliptic-curve-based signatures. Side-channel attacks analyze the information gained from studying the actual  implementation of algorithms. These attacks may measure various metrics such as time, power consumption, or electromagnetic field to gather the information that could be taken advantage of.
 
 
 
 
+\subsection{Related work}
 
-
-
-
-
-%\subsection{tpm2-algtest}
-%The \texttt{tpm2-algtest}\footnote{https://github.com/crocs-muni/tpm2-algtest} is a tool for automatic gathering of information about the TPM2 devices \cite{Struk2019thesis}. The tool uses libraries implementing Trusted Computing Group's TPM2 Software Stack\footnote{https://github.com/tpm2-software/tpm2-tss} which allows for simplification of development when programming applications supposed to interact with the TPM. The tool tests for support of specific commands and supporting routines, values of structures defined in the TPM 2.0 specification \cite{tcg_p3_commands, tcg_p4_supproutines, tcg_p2_structures}. Supported cryptographic algorithms are also subject to performance analysis where the time to execute such an algorithm is repeatedly measured and recorded. Additionally, the tool uses the TPM to generate key pairs for RSA and ECC-based algorithms so that they can be further analyzed by various means.
+\subsubsection{tpm2-algtest}
+ The \texttt{tpm2-algtest}\footnote{\url{https://github.com/crocs-muni/tpm2-algtest}} is a tool for automatic gathering of information about the TPM 2.0 devices \cite{Struk2019thesis}. The tool uses libraries implementing Trusted Computing Group's TPM2 Software Stack\footnote{\url{https://github.com/tpm2-software/tpm2-tss}} which allows for simplification of development when programming applications supposed to interact with the TPM. The tool tests for support of specific commands and supporting routines, values of structures defined in the TPM 2.0 specification \cite{tcg_p3_commands, tcg_p4_supproutines, tcg_p2_structures}. Supported cryptographic algorithms are also subject to performance analysis, where the time to execute such an algorithm is repeatedly measured and recorded. Additionally, the tool uses the TPM to gather cryptographic properties such as generated key pairs for RSA and ECC-based algorithms so that they can be further analyzed by various means.
