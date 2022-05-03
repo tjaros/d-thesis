@@ -40,7 +40,7 @@ In this section, the improvements for the \texttt{JCAlgTest process} tool will b
 \subsection{Object design}
 As mentioned in \myref{Section}{subsec:design-problems}, the object design of the tool needed some improvements. The new design should provide classes mapping the information contained in input files. They will be referred to as device profiles. The device stands for either TPM 2.0 or JavaCard smart card. The data is in the form of CSV files. However, the format of some files does not conform to any specific implementation for CSV format, as there is no header for the data, and the count of delimiters is variable on each line. This effectively results in the need to parse files using custom-made parser procedures instead of relying on library functions.
 
-\subsubsection{Device profile types}
+\subsubsection{Device profile types}\label{sec:device-profiles}
 There are three main types of device profiles:
 \begin{enumerate}
     \item \textbf{Support} In the case of TPM devices, it contains information about the support of specific algorithms, commands, or structures defined in the TPM 2.0 specification. However, in the case of JavaCard smart cards, the information is about supported cryptographic algorithms defined in JavaCard API. Along with this information, it also contains basic information about the devices. This information ranges from vendor information to memory limits.
