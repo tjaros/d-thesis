@@ -32,7 +32,7 @@ These visualizations may be helpful for various types of audiences:
     \item \texttt{The developers} of software for these devices who want to get the knowledge of the device they are supposed to develop applications for. Insight into the supported algorithms and their performance may enable them to make tailor-made adjustments that may improve the developed application's performance and functionality.
 \end{itemize}
 
-The \myref{Table}{table:results} shows the available visualizations for both TPMs and JavaCard smart cards. In the following sections, each result will be described. A pictures of each visualization are shown in \myref{Appendix}{appendix:visualizations}.
+The \myref{Table}{table:results} shows the available visualizations for both TPMs and JavaCard smart cards. In the following sections, each result will be described. Pictures of each visualization are shown in \myref{Appendix}{appendix:visualizations}.
 
 \begin{table}[H]
     \begin{adjustbox}{max width=\textwidth}
@@ -68,7 +68,15 @@ Support tables for both TPMs and JavaCards contain information extracted from Su
 %\end{figure}
 
 \subsection{Similarity table}
-The similarity table shows how a chosen pair of cards differ in the performance of a selected group of operations. The similarity is computed for six different categories of algorithms and results in a percentage on a scale of 0 to 100, also signified by the color of each cell. The higher number indicates higher performance similarity. The cards in the table are sorted so that most similar cards are in the top left corner and the least similar are in the bottom right corner.
+The similarity table shows how a chosen pair of devices differ in the performance of selected groups of algorithms. High performance similarity may mean that the pair of devices have a very similar if not identical underlying hardware.
+
+To compute pair similarity, firstly the groups of algorithms need to be selected. Then for each profile, the algorithm operation times have to be normalized, which means they will be scaled to range from 0 to 1 depending on the maximum value across all operation times for a particular algorithm. Then we can compute similarity for pairs of profiles, the measure used is based on the Euclidean distance formula.
+
+\begin{align*}
+    d(x, y) = \sqrt{\sum_{i=1}^{n}(x - y)^{2}} 
+\end{align*}
+
+Where $x$ and $y$ are normalized operation times for one algorithm supported by both devices, and $n$ is the number of these algorithms. The similarity value is finally computed as $abs(d(x, y) - 1)$ which results in a percentage in the range of 0 to 100.
 
 %\begin{figure}[H]
 %    \centering
