@@ -32,17 +32,18 @@ These visualizations may be helpful for various types of audiences:
     \item \texttt{The developers} of software for these devices who want to get the knowledge of the device they are supposed to develop applications for. Insight into the supported algorithms and their performance may enable them to make tailor-made adjustments that may improve the developed application's performance and functionality.
 \end{itemize}
 
-The \myref{Table}{table:results} shows the available visualizations for both TPMs and JavaCard smart cards. In the following sections, each result will be described. Pictures of each visualization are shown in \myref{Appendix}{appendix:visualizations}.
+The \myref{Table}{table:results} shows the available visualizations for both TPMs and JavaCard smart cards. In the following sections, each result will be described. Examples of each visualization are shown in \myref{Appendix}{appendix:visualizations}.
 
 \begin{table}[H]
     \begin{adjustbox}{max width=\textwidth}
     \begin{tabular}{c|c|c|c|c|c|c|c}
-         Device     & Support & Similarity & Execution time & Radar  & Heatmap   & Comparative & Scalability \\ \hline
+                    & Support & Similarity & Execution time & Radar  & Heatmap   & Comparative & Scalability \\ \hline
+         Profile    & S       & P          & P              & P      & C         & P           & P V \\ \hline
          TPM        & \cmark  & \cmark     & \cmark         & \cmark & \cmark    & \xmark      & \xmark  \\ \hline
          JavaCard   & \cmark  & \cmark     & \cmark         & \cmark & \xmark    & \cmark      & \cmark  
     \end{tabular}
     \end{adjustbox}
-    \caption{Results generated for each device}
+    \caption{Results generated for each device. S means Support device profile, P means Performance device profile, C means cryptographic properties, and P V means variable data length}
     \label{table:results}
 \end{table}
 
@@ -86,7 +87,9 @@ Where $x$ and $y$ are normalized operation times for one algorithm supported by 
 %\end{figure}
 
 \subsection{Algorithm execution time}
-Algorithm execution time pages are generated for each card separately and present an alternative for searching in the corresponding raw CSV file. The page contains metadata detailing the test performed on this smart card, followed by tables containing algorithm measurement values. There are multiple tables because the tested algorithms are divided into numerous categories. A quick link for each of these categories is provided as a utility to aid searching on the page.
+Algorithm execution page present an alternative to searching in the corresponding raw CSV file representing the Performance device profiles which are mentioned in  \myref{Section}{sec:device-profiles}. 
+
+Firstly, a basic information about the device is displayed, following that several tables containing test measurements representing various algorithms with possibly differing configurations are shown. Each table represent a certain category of an algorithm. The table rows generally contain parameters of the algorithm, its configuration along with operation times and information about the number of successful or unsuccessful iterations.
 
 %\begin{figure}[H]
 %    \centering
@@ -96,16 +99,13 @@ Algorithm execution time pages are generated for each card separately and presen
 %\end{figure}
 
 \subsection{Radar graphs}
-Radar graphs visualize the card's performance compared to all other tested cards. A percentage describes overall performance on a scale of 0 to 100, where closer to 100 is faster. Zero value signifies either that the algorithm is not supported or not successfully tested. By hovering over the points on edge, we can see the actual average operation time for the chosen algorithm. The algorithms chosen for comparison were selected as most frequently used, and in the context of the tool, we call them Top Functions. 
+Radar graphs visualize the device's performance compared to all other tested cards. They can be also used for similarity comparison between two or more devices.
 
-%\begin{figure}[H]
-%    \centering
-%    \includegraphics[width=\textwidth]{img/JC30M48CR radar graph.png}
-%    \caption{
-%    The radar graph of the JC30M48CR card  can be considered excellent, apart from no evident support for algorithms involving Elliptic Curve Cryptography signified by a cut-out at the bottom of the graph.
-%    }
-%    \label{fig:radar-graph}
-%\end{figure}
+Likewise as in the case for similarity table, all algorithm operation times from a selected group need to be normalized, that is scaled into range from 0 to 1. After the normalization, the resulting data is transformed into JavaScript object which is compatible with the implementation of Radar chart visualization. Technical details of the tools used are mentioned in \myref{Section}{sec:tools}. The normalized values correspond to percentages, where the closer to 100 percent, the better the device performs compared to other devices. By hovering over the edge, the algorithm identifier with an actual operation time value is shown, this is necessary in case there are many plot axes and their captions overlap each other.
+
+
+\subsection{Heatmap}
+WIP
 
 \subsection{Comparative table}
 The comparative table allows for a simple comparison between cards. Multiple comparative tables are generated in one file divided into symmetric, asymmetric cryptography, and frequently used algorithms, also called Top Functions. The tables themselves allow for sorting of the cards just by simply clicking on the column containing values according to which rows will be sorted.
@@ -132,7 +132,7 @@ Scalability graphs illustrate a single card's performance for a specific algorit
 
 
 
-\section{Tools}
+\section{Tools}\label{sec:tools}
 The \texttt{AlgTest process} tool incorporates various instruments to produce desired outputs. As the tool itself is written in Python it is able to utilize various packages from \texttt{PyPI}\footnote{\url{https://pypi.org/}} to aid future extensions.
 
 \begin{itemize}

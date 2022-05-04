@@ -71,10 +71,15 @@ The script process.py provides a CLI in the following way:
 \end{lstlisting}
 
 \renewcommand{\thechapter}{B}
-\chapter{Diagrams}
+\chapter{Diagrams and Visualizations}\label{appendix:diagrams-visualizations}
 
-\renewcommand{\thechapter}{C}
-\chapter{Visualizations}\label{appendix:visualizations}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth,height=\textheight-4.5cm, keepaspectratio]{img/diagrams/object_diagram.png}
+    \caption{Diagram of Device profiles}
+    \label{fig:dev-profiles-diagram}
+\end{figure}
+
 \begin{landscape}
     \begin{figure}[!t]
         \includegraphics[width=\linewidth, height=\textwidth]{img/visualizations/tpm-support-data.png}
@@ -96,5 +101,35 @@ The script process.py provides a CLI in the following way:
     \end{figure}
 \end{landscape}
 
-\renewcommand{\thechapter}{D}
+\begin{landscape}
+\begin{figure}[!t]
+    \centering
+    \includegraphics[width=\linewidth]{img/visualizations/JC30M48CR radar graph.png}
+    \caption{
+    The radar graph of the JC30M48CR smart card. Its performance can be considered excellent, apart from no evident support for algorithms involving Elliptic Curve Cryptography signified by a cut-out at the bottom of the graph.
+    }
+\end{figure}
+\end{landscape}
+
+\begin{landscape}
+\begin{figure}[!t]
+    \centering
+    \includegraphics[width=\linewidth]{img/visualizations/INTC_Intel_302.12.0.0 radar graph.png}
+    \caption{
+    The radar graph of the INTC Intel 302.12.0.0 TPM.
+    }
+\end{figure}
+\end{landscape}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth,height=\textheight-1.5cm, keepaspectratio]{img/visualizations/rsa.png}
+    \caption{TPM chart showing the heatmap and several histograms of most significant bytes of gathered 1024 bit RSA keys.}
+    \label{fig:dev-profiles-diagram}
+\end{figure}
+
+
+
+
+
+\renewcommand{\thechapter}{C}
 \chapter{Data Attachments}

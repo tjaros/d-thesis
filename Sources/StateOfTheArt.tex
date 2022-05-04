@@ -156,7 +156,7 @@ Although there is no prescribed form of TPM in terms of hardware or software, th
 
 \item \textbf{Non-Volatile Memory} provides persistent storage space for allocation. It also contains sensitive memory locations, which can be accessed only by the TPM and manipulated by specific TPM operations.
 
-\item \textbf{Random Access Memory} provides storage space that is not required to be persistent. Notably, it also contains the PCRs of which accumulative property is used to process logs of the system state, which may be subsequently validated. This is particularly useful when we want to measure the boot sequence of the system so that no malicious changes may be applied to it.
+\item \textbf{Random Access Memory} provides storage space that is not required to be persistent. Notably, it also contains the PCRs of which accumulative property is used to process logs of the system state, which may be subsequently validated. This is particularly useful when measuring the system's boot sequence so that no malicious changes may be applied to this sequence.
 
 \item \textbf{Power Detection Module} handles TPM power states according to platform power state changes.
 \end{itemize}
