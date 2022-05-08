@@ -41,7 +41,7 @@ The trustworthiness of the roots of trust is essential. According to the TPM spe
 
 There are three kinds of roots of trust required:
 \begin{itemize}
-    \item \textbf{Root of Trust for Measurement (RTM)} is trusted to reliably generate integrity measurements of software running on the platform. The measurements should ideally proceed from the boot of the platform. The entry point for the measurement is called Core Root of Trust for Measurement (CRTM), and it is generally found in the Bios boot block \cite[p.~185]{Tomlinson2017}. Generated integrity measurements are extended into PCR (see \myref{Section}{sec:pcr}) for the purpose of reporting.
+    \item \textbf{Root of Trust for Measurement (RTM)} is trusted to reliably generate integrity measurements of software running on the platform. The measurements should ideally proceed from the boot of the platform. The entry point for the measurement is called Core Root of Trust for Measurement (CRTM), and it is generally found in the BIOS boot block \cite[p.~185]{Tomlinson2017}. Generated integrity measurements are extended into PCR (see \myref{Section}{sec:pcr}) for the purpose of reporting.
     \item \textbf{Root of Trust for Storage (RTS)} is trusted to provide memory access control. The whole data it may protect is generally not stored in the TPM directly, but the TPM only guards a key to access the data stored externally. However, some memory locations in the TPM are not so sensitive to disclosure, such as a PCR and its current contents. 
     \item \textbf{Root of Trust for Reporting (RTR)} is trusted for reporting the current system state stored in RTS and attests to the authenticity of this information.
 \end{itemize}
@@ -70,7 +70,7 @@ This section will briefly describe the history behind versions 1.1b and 1.2, the
 \subsection{TPM 1.1b}
 The TPM 1.1b released in 2003 was the first broadly used TPM version. This specification already defined some essential functionality found in modern TPMs, such as:
 \begin{itemize}
-    \item \textbf{Cryptography} consisting of hashing, asymmetric key operations and random number generation.
+    \item \textbf{Cryptographic operations} consisting of hashing, asymmetric key operations and random number generation.
     \item \textbf{Secure storage} to store secrets,
     \item \textbf{Endorsement Key and Attestation Identity Keys} for platform identity and attestation with cooperation of privacy CA,
     \item \textbf{Integrity collection and reporting} utilizing PCRs (see \myref{Section}{sec:pcr}).
@@ -225,24 +225,24 @@ Another attestation scheme, but with a different targeted use case was proposed 
     \begin{adjustbox}{max width=\textwidth}
 \begin{tabular}{|c|c|c|c|c|}
 \hline
- & \cite{kumar2018direct} & \cite{arfaoui2021deepAttestation} & \cite{wesemeyerDAA} & \cite{wagnerRemoteAttProtocol} \\ \hline
-TPM 2.0 & \cmark & \cmark & \cmark & \cmark \\ \hline
-Reference Implementation & \cmark & \cmark & \cmark & \cmark \\ \hline
-AES & \xmark & \xmark & \cmark & \cmark \\ \hline
-CFB & \xmark & \xmark & \cmark & \cmark \\ \hline
-ECC & \cmark & \xmark & \cmark & \xmark \\ \hline
-ECDAA & \cmark & \xmark & \cmark & \xmark \\ \hline
-ECDH & \xmark & \xmark & \xmark & \cmark \\ \hline
-KEYEDHASH & \xmark & \xmark & \cmark & \xmark \\ \hline
-RSA & \xmark & \cmark & \cmark & \xmark \\ \hline
-RSASSA & \xmark & \cmark & \xmark & \cmark \\ \hline
+ & LASER \cite{kumar2018direct} & ADAtt \cite{arfaoui2021deepAttestation} & ECCDAA \cite{wesemeyerDAA} & RAtt \cite{wagnerRemoteAttProtocol} \\ \hline
+\rowcolor{Gray}TPM 2.0 & \cmark & \cmark & \cmark & \cmark \\ \hline
+\rowcolor{Gray}Reference Implementation & \cmark & \cmark & \cmark & \cmark \\ \hline
+AES & $\boxtimes$ & $\boxtimes$ & \cmark & \cmark \\ \hline
+CFB & $\boxtimes$ & $\boxtimes$ & \cmark & \cmark \\ \hline
+ECC & \cmark & $\boxtimes$ & \cmark & $\boxtimes$ \\ \hline
+ECDAA & \cmark & $\boxtimes$ & \cmark & $\boxtimes$ \\ \hline
+ECDH & $\boxtimes$ & $\boxtimes$ & $\boxtimes$ & \cmark \\ \hline
+KEYEDHASH & $\boxtimes$ & $\boxtimes$ & \cmark & $\boxtimes$ \\ \hline
+RSA & $\boxtimes$ & \cmark & \cmark & $\boxtimes$ \\ \hline
+RSASSA & $\boxtimes$ & \cmark & $\boxtimes$ & \cmark \\ \hline
 SHA-256 & \cmark & \cmark & \cmark & \cmark \\ \hline
-XOR & \cmark & \xmark & \xmark & \xmark \\ \hline
-BN P256 & \cmark & \xmark & \cmark & \xmark \\ \hline
-NIST P256 & \xmark & \xmark & \cmark & \cmark \\ \hline
+XOR & \cmark & $\boxtimes$ & $\boxtimes$ & $\boxtimes$ \\ \hline
+BN P256 & \cmark & $\boxtimes$ & \cmark & $\boxtimes$ \\ \hline
+NIST P256 & $\boxtimes$ & $\boxtimes$ & \cmark & \cmark \\ \hline
 \end{tabular}
     \end{adjustbox}
-    \caption{Papers and their use of algorithms in TPM 2.0}
+    \caption{Use of TPM 2.0 cryptographic algorithms}
     \label{table:schemes}
 \end{table}
 
@@ -250,20 +250,16 @@ Several research papers were mentioned in the previous sections. However, only s
 
 The \myref{Table}{table:schemes} shows several papers and the cryptographic algorithms used when implementing a particular use case with TPM. These papers mentioned not all of the algorithms directly, but the code of reference implementations had to be studied more often.
 
-\section{Research \& Development}
-This section provides an overview of TPM research and development. Firstly a TPM security research will be shortly mentioned, then related work will be presented.
+\section{TPM Vulnerabilities}
+Security researchers, in general, focus on various problems. Some of their work has a practical use, and other is less practical but essential nonetheless. A lot of research on the TPMs intends to reveal possible weaknesses and find ways to mitigate these weaknesses. In the last few years, several papers presenting practical attacks which also affected TPM devices were presented.
 
-\subsection{TPM Security}
-Security researchers, in general, focus on various problems. Some of their work has a practical use, and other is less practical but essential nonetheless. 
-
-A lot of research on the TPMs intends to reveal possible weaknesses and find ways to mitigate these weaknesses. In the last few years, several papers presenting practical attacks which also affected TPM devices were presented.
-
-Nemec et al. revealed a vulnerability in RSA key generation used in many security-critical chips, including TPMs \cite{2017-ccs-nemec}. This vulnerability allowed them to factorize the RSA public modulus and recover the private primes. Han et al. \cite{han2018sleep} showed that the TPMs were susceptible to power management attacks, where it was possible to forge the PCRs. Moghimi et al. \cite{moghimi2020fail} found out that some TPMs were vulnerable to side-channel attacks on elliptic-curve-based signatures. Side-channel attacks analyze the information gained from studying the actual  implementation of algorithms. These attacks may measure various metrics such as time, power consumption, or electromagnetic field to gather the information that could be taken advantage of.
+Nemec et al. revealed a vulnerability in RSA key generation used in many security-critical chips, including TPMs \cite{2017-ccs-nemec}. This vulnerability allowed them to factorize the RSA public modulus and recover the private primes. Han et al. \cite{han2018sleep} showed that the TPMs were susceptible to power management attacks, where it was possible to forge the PCRs. Moghimi et al. \cite{moghimi2020fail} found out that some TPMs were vulnerable to side-channel attacks on elliptic-curve-based signatures. Side-channel attacks analyze the information gained from studying the actual implementation of algorithms. These attacks may measure various metrics such as time, power consumption, or electromagnetic field to gather the information that the malicious adversary could take advantage of.
 
 
 
+\section{Related work}
+Secure hardware performance and capabilities testing is a topic closely related to this thesis. That is because the tool created as the main contribution of this thesis is designed to visualize the data collected by the tools that perform this testing. The names of these tools are \texttt{JCAlgTest}\footnote{\url{https://github.com/crocs-muni/JCAlgTest}} and \texttt{tpm2-algtest}\footnote{\url{https://github.com/crocs-muni/tpm2-algtest}}, designed for JavaCard smart card and TPM 2.0 testing respectively. Both are being developed under the Centre for Research on Cryptography and Security (CRoCS) patronage at Masaryk University Faculty of Informatics.
 
-\subsection{Related work}
+Details on the \texttt{JCAlgTest} suite of tools are described in the following chapter, \myref{Section}{sec:jcalgtest}, but to contextualize, the \texttt{JCAlgTest} suite has not only tools for performance and capabilities testing of JavaCard smart cards, but also a tool for visualization of the data from testing of both JavaCard smart cards and TPMs. The visualization tool in its current state is the result of a bachelor thesis by Rudolf Kvašňovský~\cite{Kvasnovsky2016thesis}. Šimon Struk extended the visualizations to be available for TPMs as a part of his master thesis~\cite{Struk2019thesis}. Imrich Nagy reworked the similarity comparison of JavaCard smartcards in his bachelor thesis~\cite{Nagy2019thesis}.
 
-\subsubsection{tpm2-algtest}
- The \texttt{tpm2-algtest}\footnote{\url{https://github.com/crocs-muni/tpm2-algtest}} is a tool for automatic gathering of information about the TPM 2.0 devices \cite{Struk2019thesis}. The tool uses libraries implementing Trusted Computing Group's TPM2 Software Stack\footnote{\url{https://github.com/tpm2-software/tpm2-tss}} which allows for simplification of development when programming applications supposed to interact with the TPM. The tool tests for support of specific commands and supporting routines, values of structures defined in the TPM 2.0 specification \cite{tcg_p3_commands, tcg_p4_supproutines, tcg_p2_structures}. Supported cryptographic algorithms are also subject to performance analysis, where the time to execute such an algorithm is repeatedly measured and recorded. Additionally, the tool uses the TPM to gather cryptographic properties such as generated key pairs for RSA and ECC-based algorithms so that they can be further analyzed by various means.
+ The \texttt{tpm2-algtest} is a tool for the automatic gathering of information about the TPM 2.0 devices created by Šimon Struk as the main goal of his master thesis~\cite{Struk2019thesis}. It uses libraries implementing Trusted Computing Group's TPM2 Software Stack\footnote{\url{https://github.com/tpm2-software/tpm2-tss}} which allows for simplification of development when programming applications supposed to interact with the TPM. The \texttt{tpm2-algtest} tool tests for support of specific commands and supporting routines and values of structures defined in the TPM 2.0 specification \cite{tcg_p3_commands, tcg_p4_supproutines, tcg_p2_structures}. It also does performance testing of supported cryptographic algorithms and gathers cryptographic properties such as generated key pairs for RSA and ECC-based algorithms.

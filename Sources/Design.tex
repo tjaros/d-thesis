@@ -3,7 +3,7 @@ One of the objectives of this work was the creation of a tool for processing and
 
 This chapter describes the original tool for generating visualizations and discusses its problems. Then solutions to those problems are proposed, and then it is described how they have been used in the reimplementation.
 
-\section{JCAlgTest}
+\section{JCAlgTest}\label{sec:jcalgtest}
 The \texttt{JCAlgTest}\footnote{\url{https://github.com/crocs-muni/JCAlgTest}} is a suite of tools used for automated analysis of cryptographic smartcards, specifically those running the JavaCard platform. It takes advantage of the officially available JavaCard API to test for support of specific algorithms, measures their performance characteristics, and collects general information about the tested smart card. The suite consists of three modules:
 \begin{itemize}
   \item
@@ -28,7 +28,7 @@ An \texttt{Apache Ant} command-line tool is used to build the application. It us
 The \texttt{JCAlgTest process} provides a command-line API. The users can specify the input, output directory, and the type of visualization they want to generate.
 
 \subsection{Problems}\label{subsec:design-problems}
-The whole \texttt{JCAlgTest} suite was developed over several years by various people. An initial version of \texttt{JCAlgTest process} along with the rest of \texttt{JCAlgTest} suite was created by doc. Petr Švenda, my supervisor. Following that, Rudolf Kvašňovský further developed the \texttt{JCAlgTest process} tool as a part of his bachelor's thesis. From there on, several more minor updates from various people were performed. The application serves its intended purpose well, however, any extensions to it require lots of code analysis and patience so that nothing breaks and no new issues arise.
+The whole \texttt{JCAlgTest} suite was developed over several years by various people. An initial version of \texttt{JCAlgTest process} along with the rest of \texttt{JCAlgTest} suite was created by doc. Petr Švenda, my supervisor. Following that, Rudolf Kvašňovský further developed the \texttt{JCAlgTest process} tool as a part of his bachelor's thesis~\cite{Kvasnovsky2016thesis}. From there on, several more minor updates from various people were performed. The application serves its intended purpose well, however, any extensions to it require lots of code analysis and patience so that nothing breaks and no new issues arise.
 
 One of the problems of the application is the lack of object representation of device profiles. The data is primarily stored in simple Java array lists or maps. That is why a relatively simple task of extending functionality may prove to be very difficult. 
 

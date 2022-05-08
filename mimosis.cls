@@ -15,7 +15,7 @@
            toc=bibliography,
            toc=index,]{scrbook}
 
-\RequirePackage{ifpdf}
+\RequirePackage{ifpdf}/
 \RequirePackage{ifxetex}
 \RequirePackage{ifluatex}
 
