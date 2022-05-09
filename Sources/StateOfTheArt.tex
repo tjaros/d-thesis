@@ -233,10 +233,10 @@ CFB & $\boxtimes$ & $\boxtimes$ & \cmark & \cmark \\ \hline
 ECC & \cmark & $\boxtimes$ & \cmark & $\boxtimes$ \\ \hline
 ECDAA & \cmark & $\boxtimes$ & \cmark & $\boxtimes$ \\ \hline
 ECDH & $\boxtimes$ & $\boxtimes$ & $\boxtimes$ & \cmark \\ \hline
-KEYEDHASH & $\boxtimes$ & $\boxtimes$ & \cmark & $\boxtimes$ \\ \hline
 RSA & $\boxtimes$ & \cmark & \cmark & $\boxtimes$ \\ \hline
 RSASSA & $\boxtimes$ & \cmark & $\boxtimes$ & \cmark \\ \hline
 SHA-256 & \cmark & \cmark & \cmark & \cmark \\ \hline
+HMAC & \cmark & $\boxtimes$ & $\boxtimes$ & $\boxtimes$ \\ \hline
 XOR & \cmark & $\boxtimes$ & $\boxtimes$ & $\boxtimes$ \\ \hline
 BN P256 & \cmark & $\boxtimes$ & \cmark & $\boxtimes$ \\ \hline
 NIST P256 & $\boxtimes$ & $\boxtimes$ & \cmark & \cmark \\ \hline
@@ -246,9 +246,11 @@ NIST P256 & $\boxtimes$ & $\boxtimes$ & \cmark & \cmark \\ \hline
     \label{table:schemes}
 \end{table}
 
-Several research papers were mentioned in the previous sections. However, only some provide implementation details by mentioning the exact cryptographic algorithms used or providing a reference implementation.
+Several schemes which use TPM cryptographic operations are presented in the previous section. However, only some of these schemes provide implementation details and mention the exact cryptographic algorithms used, or point to reference implementation. 
 
-The \myref{Table}{table:schemes} shows several papers and the cryptographic algorithms used when implementing a particular use case with TPM. These papers mentioned not all of the algorithms directly, but the code of reference implementations had to be studied more often.
+The \myref{Table}{table:schemes} shows the schemes and the cryptographic algorithms, which were found to be used when implementing a particular scheme. The papers describing these schemes mostly did not mention all of the algorithms directly, but the code of reference implementations had to be studied more often.
+
+The wide use of the SHA-256 hash algorithm is not surprising, because all of these schemes use signature primitives provided by the TPM and signatures usually involve signing only the hash of the data. From the less used algorithms, the HMAC and XOR are used for authorization session establishment in the TPM, whereas ECDH is used for key establishment. The remainder of the algorithms are used for signatures, either ECC or RSA based, namely ECDAA and RSASSA. The RSA and ECC rows mean the algorithms such as public and private key generation.
 
 \section{TPM Vulnerabilities}
 Security researchers, in general, focus on various problems. Some of their work has a practical use, and other is less practical but essential nonetheless. A lot of research on the TPMs intends to reveal possible weaknesses and find ways to mitigate these weaknesses. In the last few years, several papers presenting practical attacks which also affected TPM devices were presented.
