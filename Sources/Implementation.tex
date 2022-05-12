@@ -43,7 +43,7 @@ TPM & \cmark & \cmark & \cmark & \cmark & \cmark & \xmark & \xmark \\ \hline
 JavaCard & \cmark & \cmark & \cmark & \cmark & \xmark & \cmark & \cmark
 \end{tabular}
     \end{adjustbox}
-    \caption{Results generated for each device. S means Support device profile, P means Performance device profile, C means cryptographic properties, and P V means variable data length}
+    \caption{Results generated for each device. S means Support device profile, P means Performance device profile, C means cryptographic properties, and P V means variable data length}.
     \label{table:results}
 \end{table}
 
@@ -56,7 +56,7 @@ The table itself may contain up to six types of cells as of now:
 \begin{itemize}
     \item Green cell containing 'yes' means algorithm is supported,
     \item Red cell containing 'no' means algorithm is not supported,
-    \item White cell containing 'error' means an error was returned, which is generally equivalent to an algorithm not being supported. Hovering over this cell shows the specific error name,
+    \item White cell containing 'error' means an error was returned, which is generally equivalent to an unsupported algorithm. Hovering over this cell shows the specific error name,
     \item Red cell containing '-' means algorithm or property was not tested or retrieved from the device, similarly as for the error cell, this generally means that the algorithm is not supported
     \item Gray cell contains various numerical or textual values for device properties.
 \end{itemize}
@@ -76,7 +76,7 @@ Firstly, basic information about the device is displayed. Then several tables co
 
 
 \subsection{Similarity table}
-The similarity table shows how a chosen pair of devices differ in the performance of selected groups of algorithms. High performance similarity may mean that the pair of devices have a very similar if not identical underlying hardware.
+The similarity table shows how a chosen pair of devices differ in the performance of selected groups of algorithms. A high performance similarity may mean that the pair of devices have a very similar if not identical underlying hardware.
 
 To compute pair similarity, firstly the groups of algorithms need to be selected. Then for each profile, the algorithm operation times have to be normalized, which means they will be scaled to range from 0 to 1 depending on the maximum value across all operation times for a particular algorithm. Then we can compute similarity for pairs of profiles, the measure used is based on the Euclidean distance formula.
 
@@ -90,7 +90,7 @@ Where $x$ and $y$ are normalized operation times for one algorithm supported by 
 \begin{figure}[!tbp]
     \centering
     \includegraphics[width=\textwidth]{img/visualizations/tpm-similarity-intext.png}
-    \caption{Similarity table comparison of five TPMs. Each cell containing similarity values has either green or red shade which depends on this value. Cells where similarity could not be computed are white.}
+    \caption{Similarity table comparison of five TPMs. Each cell containing similarity values has either a green or red shade which depends on this value. Cells, where similarity could not be computed, are white.}
     \label{fig:simtable-intext}
 \end{figure}
 
@@ -113,7 +113,7 @@ Likewise, as in the case of the similarity table, all algorithm operation times 
   \subfloat[TPM radar graph]{\includegraphics[width=0.48\textwidth]{img/visualizations/INTC_Intel_302.12.0.0 radar graph.png}\label{fig:radar-tpm}}
   \hfill
   \subfloat[JC radar graph]{\includegraphics[width=0.48\textwidth]{img/visualizations/JC30M48CR radar graph.png}\label{fig:radar-jc}}
-  \caption{Radar graph visualizations.The algorithm identifier with an actual operation time value is shown by hovering over the edge, which is necessary in case there are too many plot axes and their captions overlap each other.}
+  \caption{Radar graph visualizations. The algorithm identifier with an actual operation time value is shown by hovering over the edge, which is necessary in case there are too many plot axes and their captions overlap each other.}
 \end{figure}
 
 \subsection{Heatmap}
@@ -128,7 +128,7 @@ The heatmap chart design is inspired by Nemec \cite{Nemec2016thesis}, but his R 
   \subfloat{\includegraphics[width=0.48\textwidth]{img/visualizations/rsa.png}\label{fig:rsa-10000-1024}}
   \hfill
   \subfloat{\includegraphics[width=0.48\textwidth]{img/visualizations/rsa1.png}\label{fig:rsa-100-2048}}
-  \caption{Heatmaps of two different TPM devices, the left one visualizes ten thousand of RSA 1024-bit keypairs, whereas the right heatmap visualizes only hundred of RSA 2048-bit key pairs}
+  \caption{Heatmaps of two different TPM devices, the left one visualizes ten thousand RSA 1024-bit key pairs, whereas the right heatmap visualizes only a hundred RSA 2048-bit key pairs}
 \end{figure}
 
 
@@ -173,10 +173,10 @@ One graph is generated for each method that was successfully measured. By hoveri
 The \texttt{AlgTest process} tool incorporates various instruments to produce desired outputs. As the tool itself is written in Python it is able to utilize various packages from \texttt{PyPI}\footnote{\url{https://pypi.org/}} to aid future extensions.
 
 \begin{itemize}
-    \item For creation and manipulation of HTML documents a Python library called \texttt{dominate}\footnote{\url{https://pypi.org/project/dominate/}} is used. Its usage is relatively straightforward, and the code you write is in pure python instead of using additional templating language as in popular web frameworks.
-    \item For creation of the heatmaps another Python library called \texttt{matplotlib} was used.
-    \item The styling is taken care of by a CSS framework called \texttt{bootstrap}\footnote{\url{https://getbootstrap.com/}} which allows for designing responsive web pages using premade CSS classes and Javascript. The framework itself is extensively used and regularly updated with new versions.
-    \item \texttt{Google Charts API}\footnote{\url{https://developers.google.com/chart}}  is utilized for Scalability graph visualisation.
-    \item \texttt{D3.js library}\footnote{\url{https://d3js.org/}}  is used for visualisation of Radar graphs.
+    \item A Python library \texttt{dominate}\footnote{\url{https://pypi.org/project/dominate/}} is used for creation and manipulation of HTML documents. Its usage is relatively straightforward, and the code you write is in pure Python instead of using additional templating language as in popular web frameworks.
+    \item A CSS framework \texttt{bootstrap}\footnote{\url{https://getbootstrap.com/}} takes care of the styling of the HTML outputs. It allows for designing responsive web pages using premade CSS classes and Javascript. The framework itself is extensively used and regularly updated with new versions.
+    \item A Python library called \texttt{matplotlib} is used for plotting the heatmaps.
+    \item \texttt{Google Charts API}\footnote{\url{https://developers.google.com/chart}} is utilized for Scalability graph visualization.
+    \item \texttt{D3.js library}\footnote{\url{https://d3js.org/}}  is used for visualization of Radar graphs.
 \end{itemize}
 

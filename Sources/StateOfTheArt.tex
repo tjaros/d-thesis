@@ -7,7 +7,7 @@ This chapter introduces the basic concepts pertaining to TPMs, summarizes the hi
 This section provides an overview of basic concepts mentioned throughout this thesis. 
 
 \subsection{Trust, trusted, and trustworthy}\label{sec:trust-def}
-The term "trust" has no uniformly formalized definition. Its interpretations vary even in the same field of study such as computer science and its subfields. The most relevant one for our needs is the TCGs' definition which states that trust is "the expectation that a device will behave in a particular manner for a specific purpose" \cite{tcg_arch_overview}. It is, however, important to note that this definition does not mention anything about the device being worthy of our trust. We only expect the specific behavior, and the device does not guarantee anything about its behavior. That is why it is essential to distinguish the terms trusted and trustworthy. 
+The term "trust" has no uniformly formalized definition. Its interpretations vary even in the same field of study such as computer science and its subfields. The most relevant one for our needs is the TCG's definition which states that trust is "the expectation that a device will behave in a particular manner for a specific purpose" \cite{tcg_arch_overview}. It is, however, important to note that this definition does not mention anything about the device being worthy of our trust. We only expect the specific behavior, and the device does not guarantee anything about its behavior. That is why it is essential to distinguish the terms trusted and trustworthy. 
 
 Anderson differentiates between the terms in the following way:
 \begin{quote}
@@ -65,28 +65,28 @@ We can always recompute the final value if we possess the knowledge of members p
 \section{History}
 The development of the TPM specification spans multiple years and multiple versions of this specification. However, the most notable versions of the specification are TPM 1.1b, TPM 1.2, and the latest TPM 2.0. 
 
-This section will briefly describe the history behind versions 1.1b and 1.2, then some reasoning behind the creation of the latest version 2.0 will be provided.
+This section will briefly describe the history behind versions 1.1b and 1.2. Then some reasoning behind the creation of the latest version 2.0 will be provided.
 
 \subsection{TPM 1.1b}
 The TPM 1.1b released in 2003 was the first broadly used TPM version. This specification already defined some essential functionality found in modern TPMs, such as:
 \begin{itemize}
     \item \textbf{Cryptographic operations} consisting of hashing, asymmetric key operations and random number generation.
     \item \textbf{Secure storage} to store secrets,
-    \item \textbf{Endorsement Key and Attestation Identity Keys} for platform identity and attestation with cooperation of privacy CA,
+    \item \textbf{Endorsement Key (EK) and Attestation Identity Keys (AIK)} for platform identity and attestation with cooperation of privacy certificate authority (Privacy CA) whose role is being a trusted third party (TTP) which can publish a certificate on an AIK provided that the TPM holds a valid EK~\cite{chenPrivacyCA},
     \item \textbf{Integrity collection and reporting} utilizing PCRs (see \myref{Section}{sec:pcr}).
 \end{itemize}
 
 \subsection{TPM 1.2}
-The TPM 1.2 specification was in development from 2005 to 2009 when it was standardized as ISO/IEC 11889. Its final revision was in 2011. It resolved some problems of TPM 1.1b specification, notably, a requirement for dictionary attack mitigation mechanisms was added \cite[p.~36-37]{tcg_1.2_design_princ}. This specification brought a lot of new functionality and features, for example:
+The TPM 1.2 specification was in development from 2005 to 2009 when it was standardized as ISO/IEC 11889. Its final revision was in 2011. It resolved some problems of TPM 1.1b specification, notably, a requirement for dictionary attack mitigation mechanisms was added \cite[p.~36-37]{tcg_1.2_design_princ}. This specification brought a non-trivial amount of new functionality and features, for example:
 \begin{itemize}
-    \item \textbf{Direct Anonymous Attestation} \cite{daaSpec, daaDesignAndImple},
+    \item \textbf{Direct Anonymous Attestation} is a protocol that enables platform attestation without relying on TTP to issue AIK certificates, because such reliance requires the TTP to be highly available to process every transaction and secure to prevent disclosure of the transaction information which could uniquely identify the platform~\cite{daaSpec, daaDesignAndImple},
     \item \textbf{Locality} to differentiate commands between different sources,
     \item \textbf{Delegation}, where TPM owner can enable delegate access to specific owner-authorized commands,
     \item \textbf{Non-volatile storage} to store information,
     \item \textbf{Internal tick counter} used for timestamps,
     \item \textbf{Certified migration} of keys.
 \end{itemize}
-But there was also a lot of functionality that stayed the same as in TPM 1.1b. This is also related to the fact that the TPM 1.2 was required to keep the backward compatibility for TPM 1.1b \cite[p.~169]{tcg_1.2_design_princ}.
+Nevertheless, there was also a lot of functionality that stayed the same as in TPM 1.1b. This is also related to the fact that the TPM 1.2 was required to keep the backward compatibility for TPM 1.1b \cite[p.~169]{tcg_1.2_design_princ}.
 
 % TODO: PC specific Device interface was apparently defined in another specification
 % https://trustedcomputinggroup.org/resource/pc-client-work-group-pc-client-specific-tpm-interface-specification-tis/
@@ -96,7 +96,7 @@ One factor contributing to the need for yet another specification after TPM 1.2 
 
 Although the analysis regarding the use of SHA-1 in TPM 1.2 revealed the attacks not being applicable~\cite{tcg_tpm1.2_sha-1_uses}, the problem was that there was no way to replace the algorithm quickly. This problem fueled the idea that the new specification had to permit any hashing algorithm without making any changes to the specification, a so-called digest agility~\cite[p.~4]{arthur2015practical}. 
 
-Another problem was the lack of a symmetric algorithm required in the TPM specification. The use of RSA for encryption of serialized data was impractical because RSA operations are slow. That's why it was decided that the following specification would adopt mandatory support for symmetric encryption, which is faster and more suitable for encryption of large byte streams. 
+Another problem was the lack of a symmetric algorithm required in the TPM specification. The use of RSA for encryption of serialized data was impractical because RSA operations are slow. That is why it was decided that the following specification would adopt mandatory support for symmetric encryption, which is faster and more suitable for encryption of large byte streams. 
 
 
 \section{TPM 2.0}\label{sec:tpm2}
@@ -181,16 +181,16 @@ Data encryption provides confidentiality, which means only authorized parties ca
 
 As was mentioned in previous sections, the TPM has many capabilities, including encryption and secure storage. However, the TPM itself doesn't have the means to encrypt the whole disk and store the encrypted data safely. But it can help with this process because it can generate and protect the keys used for encryption.
 
-The most notable software solution used for disk encryption that supports TPM 1.2 and TPM 2.0 is Bitlocker, a disk encryption software developed by Microsoft. It prefers to use the TPM to store encryption keys, though the use of TPM can be also avoided completely~\cite{bitlockerMDocs}.
+A widely used software solution for disk encryption that supports TPM 1.2 and TPM 2.0 is Bitlocker, a disk encryption software developed by Microsoft. It prefers to use the TPM to store encryption keys, though the use of TPM can be also avoided completely~\cite{bitlockerMDocs}.
 
 \subsection{Digital Rights Management}
 The digital age brought an enormous increase in sharing of information. The internet allowed access to various kinds of digital content, which allowed for various business opportunities, where publishers can now sell their work, such as music, video, or software. This brought a question on how to protect the owner's rights to the digital content so that it can be accessed by paying customers only.
 
-Nowadays, the answer to this question is using Digital Rights Management (DRM) schemes. Attempts to implement DRM are generally realized by hiding implementation details of the protection mechanisms, a prime example of security through obscurity, which proves to be very ineffective because digital pirates can bypass these protection mechanisms via analysis and subsequent reverse engineering~\cite{liu2003digital}.
+Nowadays, the answer to this question is using Digital Rights Management (DRM) schemes. Attempts to implement DRM are generally realized by hiding implementation details of the protection mechanisms, a prime example of security through obscurity~\cite{liu2003digital}. This approach often may not be sufficient because digital pirates could bypass these protection mechanisms via analysis and subsequent reverse engineering.
 
-Another and, most importantly, more promising candidates for the realization of DRM are the Trusted Computing platforms. Trusted Computing (TC) provides several useful features (see~\myref{Section}{sec:tc}), which could be used for enforcing policies set up by digital content providers. Many expressed their concerns about how TC would affect computing in general. Anderson in \cite{anderson2003cryptography} discusses the threat of customer lock-in, where customers become dependent on the product provided by the vendor. This, combined with TC access control mechanisms, may increase the switching cost and prevent customers from migrating. Stallman in \cite{stallman2002treacherous} warns about the loss of owner control over the platform. He refers to TC as "treacherous computing" because of this but considers TPMs a total failure from a DRM standpoint. 
+Trusted Computing platforms are another candidates for the realization of DRM. Trusted Computing (TC) provides several useful features (see~\myref{Section}{sec:tc}), which could be used for enforcing policies set up by digital content providers. Many expressed their concerns about how TC would affect computing in general. Anderson in \cite{anderson2003cryptography} discusses the threat of customer lock-in, where customers become dependent on the product provided by the vendor. This, combined with TC access control mechanisms, may increase the switching cost and prevent customers from migrating. Stallman in \cite{stallman2002treacherous} warns about the loss of owner control over the platform, that is why he refers to TC as "treacherous computing". Stallman \cite{stallman2002treacherous} also published a more recent update on the state of "treacherous computing". He labels the TPM implementation of TC as "not dangerous" because it was not successful in practically utilizing the remote attestation for DRM purposes. 
 
-The only notable DRM scheme for TPMs is TBDRM~\cite{yu2009tbdrm}, designed for TPM 1.2. Up till now, no TPM 2.0 based solutions for DRM seem to exist. 
+Though it would be incorrect to say that there were no attempts to realize DRM using TPMs. Yu et al. in \cite{yu2009tbdrm} proposed a TPM based DRM architecture called TBDRM, which provides basic security guarantees with regards to digital license. They also described the implementation details on this scheme using TPM 1.2. 
 
 \subsection{State-of-the-art cryptography using TPM commands}\label{sec:soacryptotpmcommands}
 The TPMs contain only specific widely used cryptographic primitives. These primitives can be used either independently by calling the corresponding commands from the TPM specification or as building blocks of more complex cryptographic protocols and schemes. 
@@ -264,4 +264,4 @@ Secure hardware performance and capabilities testing is a topic closely related 
 
 Details on the \texttt{JCAlgTest} suite of tools are described in the following chapter, \myref{Section}{sec:jcalgtest}. Nevertheless, to contextualize, the JCAlgTest suite has not only tools for performance and capabilities testing of JavaCard smart cards but also a tool for testing result visualization of both JavaCards and TPMs. The visualization tool in its current state is the result of a bachelor thesis by Rudolf Kvašňovský~\cite{Kvasnovsky2016thesis}. Šimon Struk extended the visualizations to be available for TPMs as a part of his master thesis~\cite{Struk2019thesis}. Imrich Nagy reworked the similarity comparison of JavaCard smartcards in his bachelor thesis~\cite{Nagy2019thesis}.
 
- The \texttt{tpm2-algtest} is a tool for the automatic gathering of information about the TPM 2.0 devices created by Šimon Struk as the main goal of his master thesis~\cite{Struk2019thesis}. It uses libraries implementing TCG's TPM2 Software Stack\footnote{\url{https://github.com/tpm2-software/tpm2-tss}} which allows for simplification of development when programming applications supposed to interact with the TPM. The \texttt{tpm2-algtest} tool tests for support of specific commands, supporting routines, and values of structures defined in the TPM 2.0 specification \cite{tcg_p3_commands, tcg_p4_supproutines, tcg_p2_structures}. It also does performance testing of supported cryptographic algorithms and gathers cryptographic properties such as generated key pairs for RSA and ECC-based algorithms. For collection of TPM data using \texttt{tpm2-algtest}, a bootable Linux image\footnote{\url{https://github.com/danzatt/tpm2_algtest_live}} along with user interface for \texttt{tpm2-algtest} was created by Daniel Zaťovič as a part of his bachelor thesis~\cite{Zatovic2020thesis}. Tomáš Došlík, in his master thesis \cite{Doslik2021thesis}, also contributed to the \texttt{tpm2-algtest} project by extending the tests for a wider range of ECC curves. Additionally, he created a script for TPM result visualization. 
+ The \texttt{tpm2-algtest} is a tool for the automatic gathering of information about the TPM 2.0 devices created by Šimon Struk as the main goal of his master thesis~\cite{Struk2019thesis}. It uses libraries implementing TCG's TPM2 Software Stack\footnote{\url{https://github.com/tpm2-software/tpm2-tss}} which allows for simplification of development when programming applications supposed to interact with the TPM. The \texttt{tpm2-algtest} tool tests for support of specific commands, supporting routines, and values of structures defined in the TPM 2.0 specification \cite{tcg_p3_commands, tcg_p4_supproutines, tcg_p2_structures}. It also does performance testing of supported cryptographic algorithms and gathers cryptographic properties such as generated key pairs for RSA and ECC-based algorithms. For collection of TPM data using \texttt{tpm2-algtest}, a bootable Linux image\footnote{\url{https://github.com/danzatt/tpm2_algtest_live}} along with user interface for \texttt{tpm2-algtest} was created by Daniel Zaťovič as a part of his bachelor thesis~\cite{Zatovic2020thesis}. Tomáš Došlík, in his master thesis \cite{Doslik2021thesis}, also contributed to the \texttt{tpm2-algtest} project by extending the tests for a wider range of ECC curves and created a script for TPM data visualization. 
