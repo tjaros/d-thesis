@@ -1,2 +1,11 @@
 \chapter{Conclusion}
 % Conclusion and future work.
+The objective of this thesis was to design and implement a tool for the visualization of data containing information about supported capabilities, performance characteristics, and cryptographic properties collected by automatic testing tools targeted at TPM and JavaCard smart card devices. 
+
+This thesis provided an overview of the TPM technology. It informed about the relevant concepts related to TPMs, such as history, current state, use cases, and vulnerabilities. It also put the outcome of this thesis into the context of capability and performance testing of secure hardware.
+
+The tool created as the outcome of this thesis provides several types of visualizations for TPM and JavaCard smart card devices, including similarity and capabilities comparisons across all tested devices and performance characteristics visualizations of individual devices. Additionally, it supports visualizations of cryptographic properties of RSA keys.
+
+This thesis results in a functional tool thanks to which the users, such as potential buyers and developers, can grasp what properties a particular device has compared to different devices and get an insight into the ecosystems of secure hardware devices.
+
+Future work could extend the \texttt{AlgTest pyProcess} to support other secure hardware devices. Candidates for this task could be secure keys and hardware security modules such as those made by Yubico or hardware wallets such as those made by Ledger. To realize this task, it would be necessary to create testing tools that can interact with these devices and collect information about the performance, capabilities, and cryptographic properties. To accomplish that, these devices need to provide API to interact with, which seems to be the case for all three devices mentioned above \cite{yubicoDEV, ledgerDEV}.

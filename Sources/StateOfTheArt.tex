@@ -1,7 +1,7 @@
 \chapter{Trusted Platform Module}
 The Trusted Platform Module is a system component used as a cryptographic co-processor. The TPM specification was defined and is currently maintained by Trusted Computing Group (TCG), formerly known as Trusted Computing Platform Alliance. The specification was also standardized by International Organization for Specification (ISO) and International Electrotechnical Commission (IEC) as ISO/IEC 11889.
 
-This chapter introduces the basic concepts pertaining to TPMs, summarizes the history of their development, describes the TPM 2.0 specification, informs about use cases of TPMs, and reports on TPM research and development.
+This chapter introduces the basic concepts pertaining to TPMs, summarizes the history of their development, describes the TPM 2.0 specification, informs about use cases of TPMs, reports on TPM vulnerabilities, and sets the basis for this thesis.
 
 \section{Basic concepts}
 This section provides an overview of basic concepts mentioned throughout this thesis. 
@@ -257,7 +257,7 @@ Security researchers, in general, focus on various problems. Some of their work 
 
 Nemec et al. revealed a vulnerability in RSA key generation used in many security-critical chips, including TPMs \cite{2017-ccs-nemec}. This vulnerability allowed them to factorize the RSA public modulus and recover the private primes. Han et al. \cite{han2018sleep} showed that the TPMs were susceptible to power management attacks, where it was possible to forge the PCRs. Moghimi et al. \cite{moghimi2020fail} found out that some TPMs were vulnerable to side-channel attacks on elliptic-curve-based signatures. Side-channel attacks analyze the information gained from studying the actual implementation of algorithms. These attacks may measure various metrics such as time, power consumption, or electromagnetic field to gather the information that the malicious adversary could take advantage of.
 
-\section{Basis for this work}
+\section{Basis for this thesis}
 Secure hardware performance and capabilities testing is a topic closely related to this thesis. That is because the tool created as the main contribution of this thesis is designed to visualize the data collected by the tools that perform this testing. The names of these tools are \texttt{JCAlgTest}\footnote{\url{https://github.com/crocs-muni/JCAlgTest}} and \texttt{tpm2-algtest}\footnote{\url{https://github.com/crocs-muni/tpm2-algtest}}, designed for JavaCard smart card and TPM 2.0 testing respectively. Both are being developed under the Centre for Research on Cryptography and Security (CRoCS) patronage at Masaryk University Faculty of Informatics.
 
 Details on the \texttt{JCAlgTest} suite of tools are described in the following chapter, \myref{Section}{sec:jcalgtest}. Nevertheless, to contextualize, the JCAlgTest suite has not only tools for performance and capabilities testing of JavaCard smart cards but also a tool for testing result visualization of both JavaCards and TPMs. The visualization tool in its current state is the result of a bachelor thesis by Rudolf Kvašňovský~\cite{Kvasnovsky2016thesis}. Šimon Struk extended the visualizations to be available for TPMs as a part of his master thesis~\cite{Struk2019thesis}. Imrich Nagy reworked the similarity comparison of JavaCard smartcards in his bachelor thesis~\cite{Nagy2019thesis}.
