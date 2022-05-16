@@ -1,5 +1,5 @@
 \chapter{AlgTest pyProcess tool}
-This chapter describes the development details behind the tool called \texttt{AlgTest pyProcess}, the creation of which was the main goal of this thesis. Its development began as a reimplementation of a tool called \texttt{JCAlgTest Process}. The reasons behind the reimplementation are mentioned in the previous chapter.
+This chapter describes the development details behind the tool called \texttt{AlgTest pyProcess}, the creation of which was the main goal of this thesis. Its development began as a reimplementation of \texttt{JCAlgTest Process}. The reasons behind the reimplementation are mentioned in the previous chapter.
 
 The \texttt{AlgTest pyProcess} tool is responsible for the following tasks:
 \begin{itemize}
@@ -32,7 +32,7 @@ These visualizations may be helpful for various types of audiences:
     \item \texttt{The developers} of software for these devices who want to get the knowledge of the device they are supposed to develop applications for. Insight into the supported algorithms and their performance may enable them to make tailor-made adjustments that may improve the developed application's performance and functionality.
 \end{itemize}
 
-The \myref{Table}{table:results} shows the available visualizations for both TPMs and JavaCard smart cards. In the following sections, each result will be described. Several examples of results are shown in the following sections, but some need high resolution to be readable, that is why these examples are also shown in \myref{Appendix}{appendix:diagrams-visualizations}.
+The \myref{Table}{table:results} shows the available visualizations for both TPMs and JavaCard smart cards. In the following sections, each result is described. Several examples of results are shown in the following sections, but some need high resolution to be readable. That is why these examples are also shown in \myref{Appendix}{appendix:diagrams-visualizations}.
 
 \begin{table}[H]
     \begin{adjustbox}{max width=\textwidth}
@@ -54,11 +54,11 @@ Support tables for both TPMs and JavaCards contain information extracted from Su
 
 The table itself may contain up to six types of cells as of now:
 \begin{itemize}
-    \item Green cell containing 'yes' means algorithm is supported,
-    \item Red cell containing 'no' means algorithm is not supported,
-    \item White cell containing 'error' means an error was returned, which is generally equivalent to an unsupported algorithm. Hovering over this cell shows the specific error name,
-    \item Red cell containing '-' means algorithm or property was not tested or retrieved from the device, similarly as for the error cell, this generally means that the algorithm is not supported
-    \item Gray cell contains various numerical or textual values for device properties.
+    \item A green cell containing 'yes' means the algorithm is supported.
+    \item A red cell containing 'no' means the algorithm is not supported.
+    \item A white cell containing 'error' means an error was returned, which is generally equivalent to an unsupported algorithm. Hovering over this cell shows the specific error name.
+    \item A red cell containing '-' means the algorithm or property was not tested or retrieved from the device. Similarly, as for the error cell, this generally means that the algorithm is not supported.
+    \item A gray cell contains various numerical or textual values for device properties.
 \end{itemize}
 
 
@@ -72,36 +72,29 @@ The table itself may contain up to six types of cells as of now:
 \subsection{Algorithm execution time}
 The algorithm execution page presents an alternative to searching in the corresponding raw CSV file representing the Performance device profiles which are mentioned in  \myref{Section}{sec:device-profiles}. 
 
-Firstly, basic information about the device is displayed. Then several tables containing test measurements representing various algorithms with possibly differing configurations are shown. Each table represents a particular category of an algorithm. The table rows generally contain parameters of the algorithm, configuration, operation times, and information about the number of successful or unsuccessful iterations.
+Firstly, this visualization displays the basic information about the device. Then it shows several tables containing test measurements representing various algorithms with possibly differing configurations. Each table represents a particular category of an algorithm. The table rows generally contain parameters of the algorithm, configuration, operation times, and information about the number of successful or unsuccessful iterations.
 
 
 \subsection{Similarity table}
 The similarity table shows how a chosen pair of devices differ in the performance of selected groups of algorithms. A high performance similarity may mean that the pair of devices have a very similar if not identical underlying hardware.
 
-To compute pair similarity, firstly the groups of algorithms need to be selected. Then for each profile, the algorithm operation times have to be normalized, which means they will be scaled to range from 0 to 1 depending on the maximum value across all operation times for a particular algorithm. Then we can compute similarity for pairs of profiles, the measure used is based on the Euclidean distance formula.
-
-
+To compute pair similarity, firstly the groups of algorithms need to be selected. Then for each profile, the algorithm operation times have to be normalized, which means they will be scaled to range from 0 to 1 depending on the maximum value across all operation times for a particular algorithm. Then we can compute similarity for pairs of profiles. This computation uses a measure used based on the Euclidean distance formula.
 \begin{align*}
     d(x, y) = \sqrt{\sum_{i=1}^{n}(x - y)^{2}} 
 \end{align*}
-
 Where $x$ and $y$ are normalized operation times for one algorithm supported by both devices, and $n$ is the number of these algorithms. The similarity value is finally computed as $abs(d(x, y) - 1)$, which results in a percentage in the range of 0 to 100.
-
 \begin{figure}[!tbp]
     \centering
-    \includegraphics[width=\textwidth]{img/visualizations/tpm-similarity-intext.png}
+    \includegraphics[width=\textwidth-0.54cm]{img/visualizations/tpm-similarity-intext.png}
     \caption{Similarity table comparison of five TPMs. Each cell containing similarity values has either a green or red shade which depends on this value. Cells, where similarity could not be computed, are white.}
     \label{fig:simtable-intext}
 \end{figure}
-
-
 %\begin{figure}[H]
 %    \centering
 %    \includegraphics[width=\textwidth]{img/similarity-table.png}
 %    \caption{Similarity table}
 %    \label{fig:similarity-table}
 %\end{figure}
-
 
 \subsection{Radar graphs}
 Radar graphs visualize the device's performance compared to all other tested cards. They can also be used for similarity comparison between two or more devices.
@@ -172,11 +165,13 @@ One graph is generated for each method that was successfully measured. By hoveri
 \section{Tools}\label{sec:tools}
 The \texttt{AlgTest process} tool incorporates various instruments to produce desired outputs. As the tool itself is written in Python it is able to utilize various packages from \texttt{PyPI}\footnote{\url{https://pypi.org/}} to aid future extensions.
 
+Notable tools used while developing the \texttt{AlgTest pyProcess}:
 \begin{itemize}
-    \item A Python library \texttt{dominate}\footnote{\url{https://pypi.org/project/dominate/}} is used for creation and manipulation of HTML documents. Its usage is relatively straightforward, and the code you write is in pure Python instead of using additional templating language as in popular web frameworks.
-    \item A CSS framework \texttt{bootstrap}\footnote{\url{https://getbootstrap.com/}} takes care of the styling of the HTML outputs. It allows for designing responsive web pages using premade CSS classes and Javascript. The framework itself is extensively used and regularly updated with new versions.
-    \item A Python library called \texttt{matplotlib} is used for plotting the heatmaps.
-    \item \texttt{Google Charts API}\footnote{\url{https://developers.google.com/chart}} is utilized for Scalability graph visualization.
-    \item \texttt{D3.js library}\footnote{\url{https://d3js.org/}}  is used for visualization of Radar graphs.
+    \item A Python library \texttt{dominate} is used for creation and manipulation of HTML documents.
+    \item A Python library \texttt{matplotlib} is used for plotting the heatmaps.
+    \item A Python library \texttt{pandas} is used for parsing cryptographic propertiesm, namely CSV files containing RSA key pairs
+    \item A CSS framework \texttt{bootstrap} takes care of the styling of the HTML outputs.
+    \item \texttt{Google Charts API} is utilized for Scalability graph visualization.
+    \item \texttt{D3.js library} is used for visualization of Radar graphs.
 \end{itemize}
 

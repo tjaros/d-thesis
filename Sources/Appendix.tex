@@ -27,7 +27,7 @@
 \lstset{style=mystyle}
 
 \section{Installation}
-After cloning into repository containing \texttt{AlgTest process} tool, it is necessary to install a few dependencies. The project includes a script called \texttt{setup.py} which, when ran installs required packages. It may be convenient to create a Python virtual environment that allows us to install and manage Python project packages locally without unnecessary global installation. It is important to create and source a virtual environment before running the setup script.
+After cloning into the repository containing \texttt{AlgTest process} tool, it is necessary to install a few dependencies. The project includes a script called \texttt{setup.py} which, when ran installs required packages. It may be convenient to create a Python virtual environment that allows us to install and manage Python project packages locally without unnecessary global installation. It is important to create and source a virtual environment before running the setup script.
 \begin{lstlisting}[language=bash]
     $ python -m venv venv
     $ source venv/bin/activate
@@ -41,7 +41,7 @@ After cloning into repository containing \texttt{AlgTest process} tool, it is ne
             \item \texttt{modules} -- folder containing \texttt{algtestprocess} modules.
                 \begin{itemize}
                     \item \texttt{components} -- folder containing reusable code for parts of HTML documents. Each file contains classes, constants related to one component.
-                    \item \texttt{pages} -- folder containing files with classes corresponding to generated HTML pages, each page has a separate file containing class which is responsible for page creation.
+                    \item \texttt{pages} -- folder containing files with classes corresponding to generated HTML pages, each page has a separate file containing classes that are responsible for page creation.
                     \item \texttt{visualization} -- folder containing specific standalone visualizations which can be used independently or as a part of created pages.
                     \item \texttt{parser}
                         \begin{itemize}
@@ -49,12 +49,12 @@ After cloning into repository containing \texttt{AlgTest process} tool, it is ne
                             \item \texttt{tpm} -- folder containing parser implementations for TPM profiles
                         \end{itemize}
                     \item \texttt{config.py} -- file containing classes for choice of algorithms used in specific pages
-                    \item \texttt{jcalgtest.py} -- file containing classes for storage of Java Card profiles
-                    \item \texttt{tpmalgtest.py} -- file containing classes for storage of TPM profiles
+                    \item \texttt{jcalgtest.py} -- file containing classes for storage of Java Card device profiles
+                    \item \texttt{tpmalgtest.py} -- file containing classes for storage of TPM device profiles
                 \end{itemize}
         \end{itemize}
-    \item \texttt{assets} -- folder which contains CSS and JavaScript assets which are used in visualizations
-    \item \texttt{setup.py} -- script for installation of dependencies and download of results from their official GitHub repository\footnote{\url{https://github.com/crocs-muni/jcalgtest_results}}
+    \item \texttt{assets} -- folder which contains CSS and JavaScript assets which are used in visualizations, the folder was created from CSS and JavaScript assets which were used by \texttt{JCAlgTest process}.
+    \item \texttt{setup.py} -- script for installation of dependencies and download of results from their official GitHub repository\footnote{\url{https://github.com/crocs-muni/jcalgtest_results}}. It is important to note that this repository at the time of writing contains only a subset of tested TPMs with no cryptographic properties. Complete datasets for TPMs are not publicly available for now.
     \item \texttt{process.py} -- main entrypoint for generation of outputs, its usage is described in following section
 \end{itemize}
 
@@ -63,7 +63,7 @@ The script process.py provides following CLI arguments and options:
 
 \begin{itemize}
     \item Device type which is either \texttt{tpm} or \texttt{javacard}.
-    \item Set of operations from \texttt{process, all, execution-time, comparative, radar, scalability, similarity, support}. All of them except the special \texttt{process} and \texttt{all} signify a type of visualization.
+    \item Set of operations from \texttt{process, all, execution-time, comparative, radar, scalability, similarity, support, compare, heatmap}. All of them except the special \texttt{process} and \texttt{all} signify a type of visualization.
     
     A set of operation can be selected, but when generating visualizations for JavaCards, then a \texttt{process} operation needs to be run at least once so that some issues with CSV files are fixed, and JSON outputs are generated for the following operations which use them. In the subsequent runs the \texttt{process} argument is not necessary.
     
@@ -84,28 +84,29 @@ The script process.py provides following CLI arguments and options:
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth,height=\textheight-5cm, keepaspectratio]{img/diagrams/object_diagram.png}
-    \caption{Diagram of Performance and Support device profiles for TPMs and JavaCards}
+    \caption{Diagram of Performance and Support device profiles for TPMs and JavaCards.}
     \label{fig:dev-profiles-diagram}
 \end{figure}
 
+
 \begin{landscape}
     \begin{figure}[!t]
-        \includegraphics[width=\linewidth, height=\textwidth]{img/visualizations/tpm-execution-time.png}
-        \caption{Parts of Execution time visualization for INTC Intel 401.1.0.0}
+        \includegraphics[width=\linewidth, height=\textwidth]{img/visualizations/tpm-support-data.png}
+        \caption{A part of the Support table for the TPMs.}
     \end{figure}
 \end{landscape}
 
 \begin{landscape}
     \begin{figure}[!t]
-        \includegraphics[width=\linewidth, height=\textwidth]{img/visualizations/tpm-support-data.png}
-        \caption{A part of Support table visualization for the TPMs}
+        \includegraphics[width=\linewidth, height=\textwidth]{img/visualizations/tpm-execution-time.png}
+        \caption{A part of Execution time visualization for INTC Intel 401.1.0.0}
     \end{figure}
 \end{landscape}
 
 \begin{landscape}
     \begin{figure}[!t]
         \includegraphics[width=\linewidth, height=\textwidth]{img/visualizations/tpm-similarity.png}
-        \caption{Similarity table for TPMs}
+        \caption{A similarity table for TPMs. The table shows only a subset of visualized TPMs.}
     \end{figure}
 \end{landscape}
 
@@ -143,8 +144,27 @@ The script process.py provides following CLI arguments and options:
     \label{fig:heatmap-rsa-100-2048}
 \end{figure}
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{img/visualizations/NXP J3A080-scalability-DES3.png}
+    \caption{NXP J30808 JavaCard smart card scalability chart}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{img/visualizations/jc-comparative-table.png}
+    \caption{A part of the comparative table for JavaCard smart cards}
+    \label{fig:my_label}
+\end{figure}
+
 
 
 
 \renewcommand{\thechapter}{C}
 \chapter{Data Attachments}
+\begin{itemize}
+    \item \texttt{AlgTest\_pyProcess} folder containing the implementation of \texttt{AlgTest pyProcess} tool
+    \item \texttt{jcalgtest\_visualizations} folder containing the JavaCard smart card visualizations generated by \texttt{AlgTest pyProcess} tool. Stylesheets and JavaScript is provided in \texttt{assets} folder and some decorative images are provided in \texttt{pics} folder. Decorative images were taken from \texttt{crocs-muni/jcalgtest\_results} on GitHub.
+    
+    \item \texttt{tpmalgtest\_visualizations} folder containing the TPM visualizations generated by \texttt{AlgTest pyProcess} tool. Stylesheets and JavaScript is provided in \texttt{assets} folder 
+\end{itemize}
