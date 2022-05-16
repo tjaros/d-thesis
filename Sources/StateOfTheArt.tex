@@ -83,6 +83,7 @@ The TPM 1.2 specification was in development from 2005 to 2009 when it was stand
     \item \textbf{Locality} to differentiate commands between different sources,
     \item \textbf{Delegation}, where TPM owner can enable delegate access to specific owner-authorized commands,
     \item \textbf{Non-volatile storage} to store information,
+    \item \textbf{Monotonic counter}, an always increasing value for external use,
     \item \textbf{Internal tick counter} used for timestamps,
     \item \textbf{Certified migration} of keys.
 \end{itemize}
@@ -133,7 +134,7 @@ Although there is no prescribed form of TPM in terms of hardware or software, th
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth-5cm]{img/tpm-arch-diagram.png}
+    \includegraphics[width=\textwidth-4.5cm]{img/tpm-arch-diagram.png}
     \caption{Important blocks of TPM architecture}
     \label{fig:tpm-arch-scheme}
 \end{figure}
@@ -161,6 +162,7 @@ Although there is no prescribed form of TPM in terms of hardware or software, th
 \item \textbf{Power Detection Module} handles TPM power states according to platform power state changes.
 \end{itemize}
 
+\newpage
 \section{Use cases}
 In this section, the use cases for TPM will be discussed in order from more traditional ones to more specific and state-of-the-art ones. It is also important to note that mainly the TPMs conforming to the TPM 2.0 specification are discussed unless explicitly stated otherwise.
 
@@ -190,7 +192,7 @@ Nowadays, the answer to this question is using Digital Rights Management (DRM) s
 
 Trusted Computing platforms are another candidates for the realization of DRM. Trusted Computing (TC) provides several useful features (see~\myref{Section}{sec:tc}), which could be used for enforcing policies set up by digital content providers. Many expressed their concerns about how TC would affect computing in general. Anderson in \cite{anderson2003cryptography} discusses the threat of customer lock-in, where customers become dependent on the product provided by the vendor. This, combined with TC access control mechanisms, may increase the switching cost and prevent customers from migrating. Stallman in \cite{stallman2002treacherous} warns about the loss of owner control over the platform, that is why he refers to TC as "treacherous computing". Stallman \cite{stallman2002treacherous} also published a more recent update on the state of "treacherous computing". He labels the TPM implementation of TC as "not dangerous" because it was not successful in practically utilizing the remote attestation for DRM purposes. 
 
-Though it would be incorrect to say that there were no attempts to realize DRM using TPMs. Yu et al. in \cite{yu2009tbdrm} proposed a TPM based DRM architecture called TBDRM, which provides basic security guarantees with regards to digital license. They also described the implementation details on this scheme using TPM 1.2. 
+Though it would be incorrect to say that there are no attempts to realize DRM using TPMs. Cooper and Martin in~\cite{cooperMartinDRM2006} proposed a DRM architecture which uses TPM monotonic counters for time based DRM restrictions and TPM storage for protection of encryption keys. Yu et al. in \cite{yu2009tbdrm} proposed a TPM based DRM architecture called TBDRM, which provides basic security guarantees with regards to digital license. They also described the implementation details on this scheme using TPM 1.2. A modern example of using TPM 2.0 to enforce DRM is prevention of cheating in online games~\cite{gamesDrmTpm}. As the TPM can be used to store unique identification keys, it is possible to identify past offenders and block the access to the game.
 
 \subsection{State-of-the-art cryptography using TPM commands}\label{sec:soacryptotpmcommands}
 The TPMs contain only specific widely used cryptographic primitives. These primitives can be used either independently by calling the corresponding commands from the TPM specification or as building blocks of more complex cryptographic protocols and schemes. 
@@ -216,10 +218,16 @@ Wagner, Birnstill, and Beyerer \cite{wagnerRemoteAttProtocol} propose a remote a
 
 Hedabou and Abdulsalam \cite{hedabou2020efficient} propose a multi-signature scheme on TPM based on BLS digital signature~\cite{blsSignatures}. The unique property of this multi-signature scheme is that it is non-interactive, meaning that the multi-signature does not require interaction between the signing parties. Their proposed scheme shows high signing efficiency when compared to signature schemes \cite{chen2013flexible} and \cite{schnorrSpec}. An analysis showing good latency and computational time with up to a thousand participating signers shows that their scheme may be usable for cryptocurrency applications.
 
-Another attestation scheme, but with a different targeted use case was proposed by Arfaoui et al. \cite{arfaoui2021deepAttestation}. This scheme is used to attest hypervisors and their virtual machines. They implemented this scheme using TPM 2.0 and the implementation is publicly available.
+Another attestation scheme, but with a different targeted use case was proposed by Arfaoui et al. \cite{arfaoui2021deepAttestation}. This scheme is used to attest hypervisors and their virtual machines. They implemented this scheme using TPM 2.0 and the implementation is publicly available. 
 
 
 \subsection{Conclusion}
+Several schemes which use TPM cryptographic operations are presented in the previous section. However, only some of these schemes provide implementation details and mention the exact cryptographic algorithms used, or point to reference implementation. 
+
+The \myref{Table}{table:schemes} shows the schemes and the cryptographic algorithms, which were found to be used when implementing a particular scheme. The papers describing these schemes mostly did not mention all of the algorithms directly, but the code of reference implementations had to be studied more often.
+
+The wide use of the SHA-256 hash algorithm is not surprising, because all of these schemes use signature primitives provided by the TPM and signatures usually involve signing only the hash of the data. From the less used algorithms, the HMAC and XOR are used for authorization session establishment in the TPM, whereas ECDH is used for key establishment. The remainder of the algorithms are used for signatures, either ECC or RSA based, namely ECDAA and RSASSA. The RSA and ECC rows mean the algorithms such as public and private key generation.
+
 \begin{table}[H]
 \centering
     \begin{adjustbox}{max width=\textwidth}
@@ -228,29 +236,23 @@ Another attestation scheme, but with a different targeted use case was proposed 
  & LASER \cite{kumar2018direct} & ADAtt \cite{arfaoui2021deepAttestation} & ECCDAA \cite{wesemeyerDAA} & RAtt \cite{wagnerRemoteAttProtocol} \\ \hline
 \rowcolor{Gray}TPM 2.0 & \cmark & \cmark & \cmark & \cmark \\ \hline
 \rowcolor{Gray}Reference Implementation & \cmark & \cmark & \cmark & \cmark \\ \hline
-AES & $\boxtimes$ & $\boxtimes$ & \cmark & \cmark \\ \hline
-CFB & $\boxtimes$ & $\boxtimes$ & \cmark & \cmark \\ \hline
-ECC & \cmark & $\boxtimes$ & \cmark & $\boxtimes$ \\ \hline
-ECDAA & \cmark & $\boxtimes$ & \cmark & $\boxtimes$ \\ \hline
-ECDH & $\boxtimes$ & $\boxtimes$ & $\boxtimes$ & \cmark \\ \hline
-RSA & $\boxtimes$ & \cmark & \cmark & $\boxtimes$ \\ \hline
-RSASSA & $\boxtimes$ & \cmark & $\boxtimes$ & \cmark \\ \hline
+AES & - & - & \cmark & \cmark \\ \hline
+CFB & - & - & \cmark & \cmark \\ \hline
+ECC & \cmark & - & \cmark & - \\ \hline
+ECDAA & \cmark & - & \cmark & - \\ \hline
+ECDH & - & - & - & \cmark \\ \hline
+RSA & - & \cmark & \cmark & - \\ \hline
+RSASSA & - & \cmark & - & \cmark \\ \hline
 SHA-256 & \cmark & \cmark & \cmark & \cmark \\ \hline
-HMAC & \cmark & $\boxtimes$ & $\boxtimes$ & $\boxtimes$ \\ \hline
-XOR & \cmark & $\boxtimes$ & $\boxtimes$ & $\boxtimes$ \\ \hline
-BN P256 & \cmark & $\boxtimes$ & \cmark & $\boxtimes$ \\ \hline
-NIST P256 & $\boxtimes$ & $\boxtimes$ & \cmark & \cmark \\ \hline
+HMAC & \cmark & - & - & - \\ \hline
+XOR & \cmark & - & - & - \\ \hline
+BN P256 & \cmark & - & \cmark & - \\ \hline
+NIST P256 & - & - & \cmark & \cmark \\ \hline
 \end{tabular}
     \end{adjustbox}
-    \caption{Use of TPM 2.0 cryptographic algorithms}
+    \caption{Use of TPM 2.0 cryptographic algorithms in discussed schemes. The \cmark symbol signifies that the algorithm was used in this scheme, whereas - symbol means that this algorithm was not used.}
     \label{table:schemes}
 \end{table}
-
-Several schemes which use TPM cryptographic operations are presented in the previous section. However, only some of these schemes provide implementation details and mention the exact cryptographic algorithms used, or point to reference implementation. 
-
-The \myref{Table}{table:schemes} shows the schemes and the cryptographic algorithms, which were found to be used when implementing a particular scheme. The papers describing these schemes mostly did not mention all of the algorithms directly, but the code of reference implementations had to be studied more often.
-
-The wide use of the SHA-256 hash algorithm is not surprising, because all of these schemes use signature primitives provided by the TPM and signatures usually involve signing only the hash of the data. From the less used algorithms, the HMAC and XOR are used for authorization session establishment in the TPM, whereas ECDH is used for key establishment. The remainder of the algorithms are used for signatures, either ECC or RSA based, namely ECDAA and RSASSA. The RSA and ECC rows mean the algorithms such as public and private key generation.
 
 \section{TPM Vulnerabilities}
 Security researchers, in general, focus on various problems. Some of their work has a practical use, and other is less practical but essential nonetheless. A lot of research on the TPMs intends to reveal possible weaknesses and find ways to mitigate these weaknesses. In the last few years, several papers presenting practical attacks which also affected TPM devices were presented.

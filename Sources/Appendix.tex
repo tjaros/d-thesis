@@ -54,7 +54,7 @@ After cloning into the repository containing \texttt{AlgTest process} tool, it i
                 \end{itemize}
         \end{itemize}
     \item \texttt{assets} -- folder which contains CSS and JavaScript assets which are used in visualizations, the folder was created from CSS and JavaScript assets which were used by \texttt{JCAlgTest process}.
-    \item \texttt{setup.py} -- script for installation of dependencies and download of results from their official GitHub repository\footnote{\url{https://github.com/crocs-muni/jcalgtest_results}}. It is important to note that this repository at the time of writing contains only a subset of tested TPMs with no cryptographic properties. Complete datasets for TPMs are not publicly available for now.
+    \item \texttt{setup.py} -- script for installation of dependencies and download of results from their official GitHub repository\footnote{\url{https://github.com/crocs-muni/jcalgtest_results}}, which is an official repository for JavaCard datasets, but also contains some TPM datasets. This repository at the time of writing contains only a subset of tested TPMs with no cryptographic properties. Complete datasets for TPMs are not publicly available for now. 
     \item \texttt{process.py} -- main entrypoint for generation of outputs, its usage is described in following section
 \end{itemize}
 
@@ -158,9 +158,15 @@ The script process.py provides following CLI arguments and options:
 \end{figure}
 
 
-
-
 \renewcommand{\thechapter}{C}
+\chapter{Dataset examples}
+\begin{lstlisting}[language=bash]
+    \include{}
+\end{lstlisting}
+
+
+
+\renewcommand{\thechapter}{D}
 \chapter{Data Attachments}
 \begin{itemize}
     \item \texttt{AlgTest\_pyProcess} folder containing the implementation of \texttt{AlgTest pyProcess} tool
