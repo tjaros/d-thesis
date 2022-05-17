@@ -1,0 +1,38 @@
+CIPHER - TYPE_RSA_CRT_PUBLIC LENGTH_RSA_4096 ALG_RSA_PKCS1 - variable data - BEGIN
+
+method name:; TYPE_RSA_CRT_PUBLIC LENGTH_RSA_4096 ALG_RSA_PKCS1 Cipher_doFinal()
+measurement config:;appletPrepareINS;31;appletMeasureINS;43;config;00 11 00 0a 00 02 00 04 10 00 00 07 01 00 ff ff 00 02 00 05 00 01
+NO_SUCH_ALGORITHM
+
+
+CIPHER - TYPE_RSA_CRT_PUBLIC LENGTH_RSA_4096 ALG_RSA_PKCS1_OAEP - variable data - BEGIN
+
+method name:; TYPE_RSA_CRT_PUBLIC LENGTH_RSA_4096 ALG_RSA_PKCS1_OAEP Cipher_doFinal()
+measurement config:;appletPrepareINS;31;appletMeasureINS;43;config;00 11 00 0f 00 02 00 04 10 00 00 07 01 00 ff ff 00 02 00 05 00 01
+NO_SUCH_ALGORITHM
+
+
+CIPHER - END
+
+
+SIGNATURE
+
+
+SIGNATURE - TYPE_AES LENGTH_AES_128 ALG_AES_MAC_128_NOPAD - variable data - BEGIN
+
+method name:; TYPE_AES LENGTH_AES_128 ALG_AES_MAC_128_NOPAD Signature_sign()
+measurement config:;appletPrepareINS;32;appletMeasureINS;49;config;00 12 00 12 ff ff 00 0f 00 80 00 0a 00 10 ff ff ff ff 00 05 00 01
+baseline measurements (ms):;85.00;94.00;83.00;85.00;70.00;
+baseline stats (ms):;avg:;86.75;min:;70.00;max:;94.00;;;CHECK
+operation raw measurements (ms):;-7.75;14.25;13.25;13.25;-1.75;
+operation stats (ms/op):;avg op:;1.25;min op:;-1.55;max op:;2.85;;CHECK
+operation info:;data length;16;total iterations;25;total invocations;25;
+
+method name:; TYPE_AES LENGTH_AES_128 ALG_AES_MAC_128_NOPAD Signature_sign()
+measurement config:;appletPrepareINS;32;appletMeasureINS;49;config;00 12 00 12 ff ff 00 0f 00 80 00 0a 00 20 ff ff ff ff 00 05 00 01
+baseline measurements (ms):;85.00;85.00;85.00;83.00;85.00;
+baseline stats (ms):;avg:;85.00;min:;83.00;max:;85.00;
+operation raw measurements (ms):;15.00;17.00;14.00;9.00;0.00;
+operation stats (ms/op):;avg op:;2.20;min op:;0.00;max op:;3.40;;CHECK
+operation info:;data length;32;total iterations;25;total invocations;25;
+...

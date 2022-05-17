@@ -1,0 +1,39 @@
+Tested and provided by;
+Execution date/time; 2022/02/26 17:09:09
+Manufacturer; INTC
+Vendor string; Intel
+Firmware version; 401.1.0.0
+Image tag; v1.0
+
+TPM2_Create
+
+Key parameters:;ECC 0x0003
+operation stats (ms/op):;avg op:;45.78;min op:;41.12;max op:;63.56
+operation info:;total iterations:;100;successful:;100;failed:;0;error:;None
+
+Key parameters:;ECC 0x0010
+operation stats (ms/op):;avg op:;129.27;min op:;123.31;max op:;146.33
+operation info:;total iterations:;100;successful:;100;failed:;0;error:;None
+
+Key parameters:;HMAC
+operation stats (ms/op):;avg op:;7.15;min op:;6.64;max op:;9.44
+operation info:;total iterations:;100;successful:;100;failed:;0;error:;None
+
+Key parameters:;RSA 1024
+operation stats (ms/op):;avg op:;836.69;min op:;196.39;max op:;2355.76
+operation info:;total iterations:;100;successful:;100;failed:;0;error:;None
+
+Key parameters:;RSA 2048
+operation stats (ms/op):;avg op:;4572.95;min op:;16.30;max op:;18330.41
+operation info:;total iterations:;100;successful:;100;failed:;0;error:;None
+
+Key parameters:;SYMCIPHER 0x0006 128
+operation stats (ms/op):;avg op:;7.06;min op:;6.61;max op:;7.60
+operation info:;total iterations:;100;successful:;100;failed:;0;error:;None
+
+Key parameters:;SYMCIPHER 0x0006 256
+operation stats (ms/op):;avg op:;7.08;min op:;6.62;max op:;7.83
+operation info:;total iterations:;100;successful:;100;failed:;0;error:;None
+
+TPM2_EncryptDecrypt
+...
