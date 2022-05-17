@@ -63,7 +63,7 @@ The script process.py provides following CLI arguments and options:
 
 \begin{itemize}
     \item Device type which is either \texttt{tpm} or \texttt{javacard}.
-    \item Set of operations from \texttt{process, all, execution-time, comparative, radar, scalability, similarity, support, compare, heatmap}. All of them except the special \texttt{process} and \texttt{all} signify a type of visualization.
+    \item Set of operations from \texttt{process, all, execution-time, comparative, radar, scalability, similarity, support, compare, and heatmap}. All of them except for the special operations \texttt{process} and \texttt{all} signify a type of visualization.
     
     A set of operations can be selected, but when generating visualizations for JavaCards, then a \texttt{process} operation needs to be run at least once so that some issues with CSV files are fixed, and JSON outputs are generated for the following operations which use them. In the subsequent runs the \texttt{process} argument is not necessary.
     
@@ -82,13 +82,27 @@ The script process.py provides following CLI arguments and options:
 \renewcommand{\thechapter}{B}
 \chapter{Visualizations}\label{appendix:diagrams-visualizations}
 
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}{\linewidth}
+    \centering
+    \includegraphics[width=.8\linewidth]{img/visualizations/tpm-support-properties.png}
+    \caption{TPM properties}
+  \end{subfigure}
+  
+  \begin{subfigure}{\linewidth}
+    \centering
+    \includegraphics[width=.8\linewidth]{img/visualizations/tpm-support-algorithms.png}
+    \caption{TPM algorithms}
+  \end{subfigure}  
 
-\begin{landscape}
-    \begin{figure}[!t]
-        \includegraphics[width=\linewidth, height=\textwidth,keepaspectratio]{img/visualizations/tpm-support-data.png}
-        \caption{A part of the Support table for the TPMs.}
-    \end{figure}
-\end{landscape}
+  \begin{subfigure}{\linewidth}
+    \centering
+    \includegraphics[width=.8\linewidth]{img/visualizations/tpm-support-commands.png}
+    \caption{TPM commands}
+  \end{subfigure}  
+  \caption{Parts of TPM support table}  
+\end{figure} 
 
 \begin{landscape}
     \begin{figure}[!t]

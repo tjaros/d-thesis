@@ -4,7 +4,9 @@ One of the objectives of this work was the creation of a tool for processing and
 This chapter describes the original tool for generating visualizations and discusses its problems. Then solutions to those problems are proposed, and it is described how they have been used in the reimplementation.
 
 \section{JCAlgTest}\label{sec:jcalgtest}
-The \texttt{JCAlgTest}\footnote{\url{https://github.com/crocs-muni/JCAlgTest}} is a suite of tools used for automated analysis of cryptographic smartcards, specifically those running the JavaCard platform. It takes advantage of the officially available JavaCard API to test for support of specific algorithms, measures their performance characteristics, and collects general information about the tested smart card. The suite consists of three modules:
+The \texttt{JCAlgTest}\footnote{\url{https://github.com/crocs-muni/JCAlgTest}} is a suite of tools used for automated analysis of cryptographic smartcards, specifically those running the JavaCard platform. It takes advantage of the officially available JavaCard API to test for support of specific algorithms, measures their performance characteristics, and collects general information about the tested smart card.
+
+The \texttt{JCAlgTest} suite consists of three modules:
 \begin{itemize}
   \item
         \texttt{JCAlgTestJavaCard} is a JavaCard applet that needs to be uploaded onto the tested smart card. According to instructions from \texttt{JCAlgTestClient} application to execute code for specified operation. Firstly it tries to instantiate a particular object belonging to the operation. If it succeeds, that means that the operation is supported, and in the case of performance testing, it can proceed further with the execution. If the instantiation was unsuccessful, a specific exception is thrown, which usually means that the operation is not supported.
@@ -15,7 +17,7 @@ The \texttt{JCAlgTest}\footnote{\url{https://github.com/crocs-muni/JCAlgTest}} i
 \end{itemize}
 
 \section{JCAlgTest process}
-The \texttt{JCAlgTest process} is an application used for tabular and chart visualisations of JavaCard smart card and TPM 2.0 run time data created by \texttt{JCAlgTest} and \texttt{tpm2-algtest} tools respectively. 
+The \texttt{JCAlgTest process} is an application used for tabular and chart visualizations of JavaCard smart card and TPM 2.0 data collected by performance and capabilities testing tools \texttt{JCAlgTest} and \texttt{tpm2-algtest} tools. 
 
 This section will describe the application's current state and its problems.
 \subsection{Current state}
@@ -32,7 +34,7 @@ The whole \texttt{JCAlgTest} suite was developed over several years by various p
 
 One of the problems of the application is the lack of object representation of device profiles. The data is primarily stored in simple Java array lists or maps. That is why a relatively simple task of extending functionality may prove to be very difficult. 
 
-Another problem is the amount of hard-coded HTML tags into strings. One unintentional mistake of deleted angle bracket may corrupt the whole HTML output. To change, for instance, something in the metadata of each generated HTML, it is needed to manually change the string, which creates the body part of the HTML document. 
+Another problem is the amount of hard-coded HTML tags into strings. One unintentional mistake of deleted angle bracket may corrupt the whole HTML output. %To change, for instance, something in the metadata of each generated HTML, it is needed to manually change the string, which creates the body part of the HTML document. 
 
 \section{Improvements}
 In this section, the improvements for the \texttt{JCAlgTest process} tool will be discussed along with how they have been applied to its reimplementation.
@@ -45,7 +47,7 @@ There are three main types of device profiles:
 \begin{enumerate}
     \item \textbf{Support} In the case of TPM devices, it contains information about the support of specific algorithms, commands, or structures defined in the TPM 2.0 specification. However, in the case of JavaCard smart cards, the information is about supported cryptographic algorithms defined in JavaCard API. Along with this information, it also contains basic information about the devices. This information ranges from vendor information to memory limits.
     
-    \item \textbf{Performance} Contain run time benchmarks for cryptographic algorithms. Similarly, as in the previous case, the tested algorithms, commands, or structures originate from either TPM 2.0 specification for TPMs, or JavaCard API in the case of JavaCard smart cards. In the case of JavaCard smart cards, the performance results are divided into fixed and variable results. Variable-length performance results measure data length dependant performance, whereas fixed-length performance results measure it with static data length depending on a particular algorithm.
+    \item \textbf{Performance} Contain the run time benchmarks for cryptographic algorithms. Similarly, as in the previous case, the tested algorithms, commands, or structures originate from either TPM 2.0 specification for TPMs, or JavaCard API in the case of JavaCard smart cards. In the case of JavaCard smart cards, the performance results are divided into fixed and variable results. Variable-length performance results measure data length dependant performance, whereas fixed-length performance results measure it with static data length depending on a particular algorithm.
     
     \item \textbf{Cryptographic Properties} They contain information about the execution time duration for cryptographic algorithms supported by the TPM, additionally, they record the key pairs generated using RSA or ECC algorithms for analysis. The information is split into multiple data sets, and each data set contains only specific information about the tested TPM. The TPM is mentioned specifically because cryptographic properties in this form are recorded only for TPM devices.
 \end{enumerate}
