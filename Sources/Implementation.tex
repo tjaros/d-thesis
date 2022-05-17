@@ -17,7 +17,7 @@ The \texttt{AlgTest pyProcess} tool is responsible for the following tasks:
 \section{Parsing}
 The \texttt{AlgTest pyProcess} tool is working with datasets that were generated and collected over the years in parallel with the development of the testing tools which generate these datasets. The outputs of these testing tools have been changing over the years too, that is why the testing form of output format for tested devices may differ depending on the version of the testing tool.
 
-There is no prescribed schema for the datasets, but they generally look very similar\footnote{Examples of CSV device profiles are shown in Appendix}. That is why it is convenient to design suitable means of accessing the data contained in them. Such means are provided by mapping these profiles onto class representation. But the first step in order to accomplish that is the parsing of the CSV files which represent the device profiles. 
+There is no prescribed schema for the datasets, but they generally look very similar\footnote{Examples of CSV device profiles are shown in \myref{Appendix}{appendix:diagram-profiles}}. That is why it is convenient to design suitable means of accessing the data contained in them. Such means are provided by mapping these profiles onto class representation. But the first step in order to accomplish that is the parsing of the CSV files which represent the device profiles. 
 
 
 
@@ -32,15 +32,15 @@ These visualizations may be helpful for various types of audiences:
     \item \texttt{The developers} of software for these devices who want to get the knowledge of the device they are supposed to develop applications for. Insight into the supported algorithms and their performance may enable them to make tailor-made adjustments that may improve the developed application's performance and functionality.
 \end{itemize}
 
-The \myref{Table}{table:results} shows the available visualizations for both TPMs and JavaCard smart cards. In the following sections, each result is described. Several examples of results are shown in the following sections, but some need high resolution to be readable. That is why these examples are also shown in \myref{Appendix}{appendix:diagrams-visualizations}.
+The \myref{Table}{table:results} shows the available visualizations for both TPMs and JavaCard smart cards. In the following sections, each result is described. Several examples of results are shown in the following sections, but some need high resolution to be readable. That is why all of the visualization examples are shown in \myref{Appendix}{appendix:diagrams-visualizations}.
 
 \begin{table}[H]
     \begin{adjustbox}{max width=\textwidth}
 \begin{tabular}{c|c|c|c|c|c|c|c}
  & Support & Execution time & Similarity & Radar & Heatmap & Comparative & Scalability \\ \hline
 Profile & S & P & P & P & C & P & P V \\ \hline
-TPM & \cmark & \cmark & \cmark & \cmark & \cmark & \xmark & \xmark \\ \hline
-JavaCard & \cmark & \cmark & \cmark & \cmark & \xmark & \cmark & \cmark
+TPM & \cmark & \cmark & \cmark & \cmark & \cmark & - & - \\ \hline
+JavaCard & \cmark & \cmark & \cmark & \cmark & - & \cmark & \cmark
 \end{tabular}
     \end{adjustbox}
     \caption{Results generated for each device. S means Support device profile, P means Performance device profile, C means cryptographic properties, and P V means variable data length}.
@@ -50,7 +50,7 @@ JavaCard & \cmark & \cmark & \cmark & \cmark & \xmark & \cmark & \cmark
 \subsection{Support table}
 The support table presents the information about the support of particular algorithms and generic information such as vendor information or memory limits for each device.
 
-Support tables for both TPMs and JavaCards contain information extracted from Support device profiles, which are mentioned in \myref{Section}{sec:device-profiles}. All possible algorithms and properties retrieved by the testing tools are put into separate rows, then the profiles are searched. Depending on the existence and contents of the result, an appropriate cell type is shown. 
+Support tables for both TPMs and JavaCards contain information extracted from Support device profiles, which are mentioned in \myref{Section}{sec:device-profiles}. All possible algorithms, commands and properties retrieved by the testing tools are put into separate rows, then the profiles are searched. Depending on the existence and contents of the result, an appropriate cell type is shown. 
 
 The table itself may contain up to six types of cells as of now:
 \begin{itemize}
@@ -169,7 +169,7 @@ Notable tools used while developing the \texttt{AlgTest pyProcess}:
 \begin{itemize}
     \item A Python library \texttt{dominate} is used for creation and manipulation of HTML documents.
     \item A Python library \texttt{matplotlib} is used for plotting the heatmaps.
-    \item A Python library \texttt{pandas} is used for parsing cryptographic propertiesm, namely CSV files containing RSA key pairs
+    \item A Python library \texttt{pandas} is used for parsing cryptographic properties, namely CSV files containing RSA key pairs
     \item A CSS framework \texttt{bootstrap} takes care of the styling of the HTML outputs.
     \item \texttt{Google Charts API} is utilized for Scalability graph visualization.
     \item \texttt{D3.js library} is used for visualization of Radar graphs.

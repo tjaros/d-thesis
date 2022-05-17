@@ -53,9 +53,9 @@ After cloning into the repository containing \texttt{AlgTest process} tool, it i
                     \item \texttt{tpmalgtest.py} -- file containing classes for storage of TPM device profiles
                 \end{itemize}
         \end{itemize}
-    \item \texttt{assets} -- folder which contains CSS and JavaScript assets which are used in visualizations, the folder was created from CSS and JavaScript assets which were used by \texttt{JCAlgTest process}.
+    \item \texttt{assets} -- folder which contains CSS and JavaScript assets that are used in visualizations, the folder was created from CSS and JavaScript assets which were used by \texttt{JCAlgTest process}.
     \item \texttt{setup.py} -- script for installation of dependencies and download of results from their official GitHub repository\footnote{\url{https://github.com/crocs-muni/jcalgtest_results}}, which is an official repository for JavaCard datasets, but also contains some TPM datasets. This repository at the time of writing contains only a subset of tested TPMs with no cryptographic properties. Complete datasets for TPMs are not publicly available for now. 
-    \item \texttt{process.py} -- main entrypoint for generation of outputs, its usage is described in following section
+    \item \texttt{process.py} -- main entry point for the generation of outputs, its usage is described in the following section
 \end{itemize}
 
 \section{Usage}
@@ -65,9 +65,9 @@ The script process.py provides following CLI arguments and options:
     \item Device type which is either \texttt{tpm} or \texttt{javacard}.
     \item Set of operations from \texttt{process, all, execution-time, comparative, radar, scalability, similarity, support, compare, heatmap}. All of them except the special \texttt{process} and \texttt{all} signify a type of visualization.
     
-    A set of operation can be selected, but when generating visualizations for JavaCards, then a \texttt{process} operation needs to be run at least once so that some issues with CSV files are fixed, and JSON outputs are generated for the following operations which use them. In the subsequent runs the \texttt{process} argument is not necessary.
+    A set of operations can be selected, but when generating visualizations for JavaCards, then a \texttt{process} operation needs to be run at least once so that some issues with CSV files are fixed, and JSON outputs are generated for the following operations which use them. In the subsequent runs the \texttt{process} argument is not necessary.
     
-    The \texttt{all} operation tells the script to generate all posible visualizations for given device.
+    The \texttt{all} operation tells the script to generate all possible visualizations for a given device.
     \item \texttt{-i/-{}-results-dir} A directory with device profiles. It is important that profiles of only one device type are contained in the children directories.
     \item \texttt{-o/-{}-output-dir} Output directory to which the HTML outputs are stored. 
 \end{itemize}
@@ -80,18 +80,12 @@ The script process.py provides following CLI arguments and options:
 \end{lstlisting}
 
 \renewcommand{\thechapter}{B}
-\chapter{Diagrams and Visualizations}\label{appendix:diagrams-visualizations}
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\textwidth,height=\textheight-5cm, keepaspectratio]{img/diagrams/object_diagram.png}
-    \caption{Diagram of Performance and Support device profiles for TPMs and JavaCards.}
-    \label{fig:dev-profiles-diagram}
-\end{figure}
+\chapter{Visualizations}\label{appendix:diagrams-visualizations}
 
 
 \begin{landscape}
     \begin{figure}[!t]
-        \includegraphics[width=\linewidth, height=\textwidth]{img/visualizations/tpm-support-data.png}
+        \includegraphics[width=\linewidth, height=\textwidth,keepaspectratio]{img/visualizations/tpm-support-data.png}
         \caption{A part of the Support table for the TPMs.}
     \end{figure}
 \end{landscape}
@@ -159,12 +153,50 @@ The script process.py provides following CLI arguments and options:
 
 
 \renewcommand{\thechapter}{C}
-\chapter{Dataset examples}
-\begin{lstlisting}[language=bash]
-    \include{}
-\end{lstlisting}
+\chapter{Diagram and Dataset examples}\label{appendix:diagram-profiles}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth,height=\textheight-6cm, keepaspectratio]{img/diagrams/object_diagram.png}
+    \caption{Diagram of Performance and Support device profiles for TPMs and JavaCards.}
+    \label{fig:dev-profiles-diagram}
+\end{figure}
 
 
+\begin{figure}
+    \centering
+    \lstinputlisting[]{img/datasets/tpm-perf/tpm-perf.csv}
+    \caption{A part of the performance device profile for TPMs. The initial information in the upper part of the figure corresponds to \texttt{test\_info} attribute of \texttt{ProfileTPM} class, whereas the rest of the figure shows TPM performance results corresponding to \texttt{PerformanceResultTPM} class. Both of the mentioned classes could be seen in \myref{Figure}{fig:dev-profiles-diagram}. Ellipses mean skipped lines and are not a part of any device profiles.}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \lstinputlisting[]{img/datasets/tpm-support/tpm-support.csv}
+    \caption{A shortened support device profile for TPMs. Hexadecimal numbers in the lower half of the profile are identifiers of supported algorithms, commands, and curves.}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \lstinputlisting[]{img/datasets/jc-header/jc-tinfo.csv}
+    \caption{This is a common part of all device profiles for JavaCard smart cards, initial contents are very similar. All three parts correspond to attributes in \texttt{ProfileJC} class seen in \myref{Figure}{fig:dev-profiles-diagram}. First part corresponds to \texttt{test\_info} attribute, second corresponds to \texttt{jc\_system} attribute and last one corresponds to \texttt{cplc} attribute.}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \lstinputlisting[]{img/datasets/jc-fixed/fix-results.csv}
+    \caption{This corresponds to a part of the performance device profile for JavaCard smart cards where fixed data length performance was measured. Noticeably, many items in each measurement correspond to the attributes of \texttt{PerformanceResultJC} class seen in \myref{Figure}{fig:dev-profiles-diagram}.}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \lstinputlisting[]{img/datasets/jc-variable/var-results.csv}
+    \caption{This is a part of the performance device profile for JavaCard smart cards, where variable data length performance was measured. As can be seen in the upper half of the figure, some measurements could not be performed because the device does not support such algorithms. In the lower half of the figure, two successful measurements were performed for 16 and 32-byte data lengths.}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \lstinputlisting[]{img/datasets/jc-support/jc-support.csv}
+    \caption{A part of the support device profile for JavaCard smart cards.}
+\end{figure}
 
 \renewcommand{\thechapter}{D}
 \chapter{Data Attachments}
