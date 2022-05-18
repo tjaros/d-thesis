@@ -37,11 +37,9 @@ Schoen~\cite{schoen2003trusted} mentions these features of Trusted Computing:
 \subsection{Roots of Trust}
 Trust is a transitive relation; if component A trusts component B, and component B trusts component C, then component A must trust component C. If this relation is applied to a trusted platform, then one component trusts another, and so on. A chain of trust is created. This chain must end somewhere, that is at a so-called root of trust. However, if this root is not trustworthy and fails, it causes the whole chain to fail.
 
-The trustworthiness of the roots of trust is essential. According to the TPM specification, the roots of trust "are system elements that must be trusted because misbehavior is not detectable" \cite[p.~23]{tcg_p1_architecture}, but their trustworthiness can be assured by knowing their implementation and providing the certification of this implementation.
+The trustworthiness of the roots of trust is essential. According to the TPM specification, the roots of trust "are system elements that must be trusted because misbehavior is not detectable" \cite[p.~23]{tcg_p1_architecture}, but their trustworthiness can be assured by knowing their implementation and by providing the certification of this implementation.
 
-
-
-
+\clearpage
 There are three kinds of roots of trust required:
 \begin{itemize}
     \item \textbf{Root of Trust for Measurement (RTM)} is trusted to reliably generate integrity measurements of software running on the platform. The measurements should ideally proceed from the boot of the platform. The entry point for the measurement is called Core Root of Trust for Measurement (CRTM), and it is generally found in the BIOS boot block \cite[p.~185]{Tomlinson2017}. Generated integrity measurements are extended into PCR (see \myref{Section}{sec:pcr}) for the purpose of reporting.
